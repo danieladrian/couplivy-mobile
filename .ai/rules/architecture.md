@@ -78,6 +78,23 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   positive/negative yang membingungkan). `CouplivyApp` (StatefulWidget)
   bikin instance baru tiap kali di-construct via `late final _router =
   createAppRouter()`.
+- **PENTING — `PopScope(canPop: false)` di layar dengan TextField (Sign
+  Up, Login):** hardware back Android SEHARUSNYA tutup keyboard dulu
+  (kalau ada TextField fokus) sebelum benar-benar pindah halaman —
+  behavior standar semua app Android. TAPI `PopScope(canPop: false)`
+  intercept SEMUA pop request tanpa pandang bulu, termasuk yang harusnya
+  cuma dismiss keyboard, jadi tanpa penanganan manual back PERTAMA
+  langsung `context.go('/welcome')` walau user cuma mau tutup keyboard —
+  ketemu nyata pas user coba isi form Login manual di device fisik (form
+  ke-reset gara-gara balik ke Welcome). Fix: `_backToWelcome()` cek dulu
+  ada `EditableText` di ancestor `FocusManager.instance.primaryFocus` —
+  kalau ada, `unfocus()` saja (back pertama), baru back berikutnya benar2
+  `context.go('/welcome')`. JANGAN cek `FocusScope.of(context).hasFocus`
+  atau `primaryFocus?.context != null` — keduanya SELALU `true`/non-null
+  walau tidak ada TextField yang fokus secara visual (false positive).
+  Lihat `LoginScreen._backToWelcome()`/`SignUpScreen._backToWelcome()` dan
+  test `'Back from Sign Up with keyboard open dismisses keyboard first...'`
+  di `test/widget_test.dart`.
 
 ## Auth — API Layer & Shared Widgets
 
@@ -201,6 +218,62 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   (`features/discover/`) — placeholder sementara, Discover (feed utama)
   belum dibangun; jadi titik akhir alur onboarding/login supaya bisa
   diverifikasi end-to-end tanpa nyangkut di halaman yang belum ada.
+
+## Onboarding — Step 2-10 Discover (Name, DOB, dst) — Draft Lokal, Submit di Akhir
+
+- Step 2-10 (spesifik jalur "Mencari koneksi baru") dipisah dari Gateway
+  Choice (step 1, netral) — sama pola pemisahan di backend
+  (`DiscoverOnboardingController`/`Service`, route
+  `/api/onboarding/discover/*`, lihat `.ai/rules/architecture.md` backend).
+- **BUKAN per-step ke API** (keputusan awal sempat begitu, DIUBAH) — step
+  2-10 diisi & disimpan LOKAL:
+  - `features/onboarding/discover/discover_onboarding_draft_storage.dart`
+    (`DiscoverOnboardingDraftStorage`) — SharedPreferences, 1 key per
+    field (mis. `onboarding_discover_draft_name`), prefix
+    `onboarding_discover_draft_` supaya tidak bentrok key lain. TIDAK ADA
+    network call di sini — murni baca/tulis lokal.
+  - Tiap screen step (mis. `name_step_screen.dart`) baca draft-nya sendiri
+    di `initState` (pre-fill kalau user pernah isi & balik lagi), simpan
+    ke draft storage saat "Continue" ditekan, lalu `context.go` ke step
+    berikutnya — TIDAK ada API call, TIDAK ada loading state untuk
+    network (makanya tidak ada provider/Notifier terpisah untuk tiap step
+    seperti `NameStepController` yang SEMPAT ADA lalu dihapus).
+  - `features/onboarding/discover_onboarding_repository.dart` —
+    `DiscoverOnboardingRepository.complete(Map<String, dynamic> fields)`,
+    SATU-SATUNYA network call untuk step 2-10, dipanggil SEKALI di step
+    TERAKHIR (Preview, belum ada) dengan SEMUA field draft dikumpulkan
+    jadi 1 payload. Sesudah sukses, panggil
+    `DiscoverOnboardingDraftStorage.clear()`.
+  - Kalau jalur Together dibuat nanti, ikuti pola yang sama:
+    `together_onboarding_draft_storage.dart`,
+    `together_onboarding_repository.dart`, `features/onboarding/together/`,
+    JANGAN campur dengan Discover.
+- **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
+  di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
+  (SharedPreferences) hilang — user mulai dari step 1 (Name) lagi saat
+  onboarding berikutnya. Ini disengaja demi kesederhanaan (tidak perlu
+  network call tiap step). SharedPreferences BERTAHAN walau app di-kill
+  (bukan cuma minimize) — cuma hilang kalau uninstall.
+- `OnboardingStatus.resumeRoute` (`core/models/`) — SELALU ke
+  `/onboarding/discover/name` (step 1 pengisian profil, BUKAN step
+  spesifik tempat user terakhir berhenti) kalau `mode == 'discover'` dan
+  `!completed`. Server memang tidak tahu progress di tengah step 2-10
+  (data itu cuma ada di draft lokal device yang bersangkutan) — lihat
+  penjelasan detail di `.ai/rules/architecture.md` backend.
+- `OnboardingStepHeader` (`shared/widgets/`) — back arrow + progress bar +
+  label "x/total", dipakai SEMUA step Discover (dan Together nanti). Param
+  `step` 1-indexed (bukan 0-indexed).
+- Route path pola `/onboarding/discover/<step-name>` (mis.
+  `/onboarding/discover/name`).
+- Back di tiap step (header ATAU hardware, via `PopScope(canPop: false)`)
+  SELALU `context.go('/<step-sebelumnya>')` eksplisit (bukan `pop()`) —
+  sama alasan seperti back Sign Up/Login. Draft yang sudah diisi TETAP ADA
+  di storage kalau user balik lagi ke step yang sama (baca ulang di
+  `initState`). Step 1 (Name) back ke `/gateway-choice`. Kalau keyboard
+  terbuka, back PERTAMA cuma tutup keyboard (lihat pola detail di bagian
+  Routing di atas soal `PopScope` + `EditableText` ancestor check).
+- Sumber desain tiap step: `couplivy-docs/flow/01-discover/onboarding/*.html`
+  (`01-name.html` s.d. `10-preview.html`, 10 step total).
 
 ## Safe Area — Notch, Punch-Hole, Status Bar, Gesture Nav
 

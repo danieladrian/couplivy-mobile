@@ -107,6 +107,45 @@ void main() {
   });
 
   testWidgets(
+    'Back from Sign Up with keyboard open dismisses keyboard first, second back returns to Welcome',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const ProviderScope(child: CouplivyApp()));
+      await tester.pump(const Duration(milliseconds: 1600));
+      await tester.pump();
+
+      await tester.tap(find.text('Sign Up'));
+      await tester.pumpAndSettle();
+
+      // Fokus field Name — keyboard "terbuka" (ada TextField aktif).
+      await tester.tap(find.text('Your name'));
+      await tester.pumpAndSettle();
+      expect(FocusManager.instance.primaryFocus?.hasFocus, isTrue);
+
+      // Back PERTAMA — dulu pernah langsung ke Welcome tanpa tutup
+      // keyboard dulu (PopScope intercept semua pop, termasuk yang
+      // seharusnya cuma dismiss keyboard). Sekarang harus CUMA unfocus,
+      // tetap di Sign Up.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Create Account'), findsNWidgets(2));
+      expect(
+        FocusManager.instance.primaryFocus?.context
+            ?.findAncestorWidgetOfExactType<EditableText>(),
+        isNull,
+        reason: 'First back should only dismiss the keyboard',
+      );
+
+      // Back KEDUA (keyboard sudah tertutup) — baru pindah ke Welcome.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign Up'), findsOneWidget);
+      expect(find.text('Create Account'), findsNothing);
+    },
+  );
+
+  testWidgets(
     'Back from Login (reached via Sign Up footer link) returns to Welcome, not out of the app',
     (WidgetTester tester) async {
       await tester.pumpWidget(const ProviderScope(child: CouplivyApp()));

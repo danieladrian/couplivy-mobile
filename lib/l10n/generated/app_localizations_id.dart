@@ -116,4 +116,20 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get gatewayChoiceTogetherCta => 'Segera hadir';
+
+  @override
+  String get onboardingNameTitle => 'Siapa namamu?';
+
+  @override
+  String get onboardingNameSubtitle =>
+      'Ini yang akan tampil di profil Couplivy kamu.';
+
+  @override
+  String get onboardingNameFieldLabel => 'Nama Kamu';
+
+  @override
+  String get onboardingNameFieldHint => 'Nama panggilanmu';
+
+  @override
+  String get onboardingContinue => 'Lanjut';
 }

@@ -58,7 +58,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   /// alasan seperti LoginScreen._backToWelcome: history stack ke Sign Up
   /// tidak konsisten (bisa dari Welcome atau dari Login via footer link),
   /// go('/welcome') eksplisit menjamin balik ke Welcome dari jalur mana pun.
-  void _backToWelcome(BuildContext context) => context.go('/welcome');
+  ///
+  /// Kalau keyboard sedang terbuka, back PERTAMA cuma tutup keyboard
+  /// (unfocus) — TIDAK langsung pindah ke Welcome (lihat komentar detail
+  /// di LoginScreen._backToWelcome).
+  void _backToWelcome(BuildContext context) {
+    final primaryFocus = FocusManager.instance.primaryFocus;
+    final isTextFieldFocused =
+        primaryFocus?.context?.findAncestorWidgetOfExactType<EditableText>() !=
+        null;
+
+    if (isTextFieldFocused) {
+      primaryFocus!.unfocus();
+      return;
+    }
+    context.go('/welcome');
+  }
 
   @override
   Widget build(BuildContext context) {

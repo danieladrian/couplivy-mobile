@@ -307,6 +307,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon'**
   String get gatewayChoiceTogetherCta;
+
+  /// Discover onboarding step 1/10 (Name) headline.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your name?'**
+  String get onboardingNameTitle;
+
+  /// No description provided for @onboardingNameSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how you\'ll appear on Couplivy.'**
+  String get onboardingNameSubtitle;
+
+  /// No description provided for @onboardingNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Name'**
+  String get onboardingNameFieldLabel;
+
+  /// No description provided for @onboardingNameFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your nickname'**
+  String get onboardingNameFieldHint;
+
+  /// Primary CTA to advance to the next onboarding step — shared across all Discover onboarding steps.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingContinue;
 }
 
 class _AppLocalizationsDelegate

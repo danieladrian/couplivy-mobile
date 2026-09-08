@@ -116,4 +116,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gatewayChoiceTogetherCta => 'Coming soon';
+
+  @override
+  String get onboardingNameTitle => 'What\'s your name?';
+
+  @override
+  String get onboardingNameSubtitle =>
+      'This is how you\'ll appear on Couplivy.';
+
+  @override
+  String get onboardingNameFieldLabel => 'Your Name';
+
+  @override
+  String get onboardingNameFieldHint => 'Your nickname';
+
+  @override
+  String get onboardingContinue => 'Continue';
 }

@@ -47,7 +47,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   /// footer link), jadi history stack-nya tidak konsisten; go('/welcome')
   /// eksplisit menjamin balik ke Welcome dari jalur mana pun, sesuai
   /// keputusan produk: back dari Login selalu skip Sign Up.
-  void _backToWelcome(BuildContext context) => context.go('/welcome');
+  ///
+  /// Kalau keyboard sedang terbuka (ada TextField yang fokus), back
+  /// PERTAMA cuma tutup keyboard (unfocus) — TIDAK langsung pindah ke
+  /// Welcome. `PopScope(canPop: false)` intercept semua pop request
+  /// termasuk yang seharusnya cuma dismiss keyboard, jadi behavior "tutup
+  /// keyboard dulu" itu harus ditangani manual di sini, bukan otomatis
+  /// dari framework.
+  ///
+  /// Cek ada `EditableText` (TextField) di ancestor primary focus saat
+  /// ini — BUKAN cuma `FocusScope.of(context).hasFocus` (SELALU `true`
+  /// walau tidak ada TextField aktif secara visual, false positive yang
+  /// sempat bikin back rusak total) atau `primaryFocus?.context != null`
+  /// (juga selalu non-null untuk focus node non-TextField).
+  void _backToWelcome(BuildContext context) {
+    final primaryFocus = FocusManager.instance.primaryFocus;
+    final isTextFieldFocused =
+        primaryFocus?.context?.findAncestorWidgetOfExactType<EditableText>() !=
+        null;
+
+    if (isTextFieldFocused) {
+      primaryFocus!.unfocus();
+      return;
+    }
+    context.go('/welcome');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +81,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen(loginFormProvider, (previous, next) {
       if (next is AuthFormSuccess) {
         // Login bisa terjadi dari device baru (uninstall+install ulang)
-        // atau session lama habis — kalau onboarding belum selesai, harus
-        // balik ke Gateway Choice (bukan langsung Discover), sama seperti
-        // Splash. TODO: arahkan ke /together kalau next.onboarding.mode
-        // == 'together' begitu halaman itu dibuat.
-        context.go(next.onboarding.completed ? '/discover' : '/gateway-choice');
+        // atau session lama habis — `resumeRoute` arahkan ke step yang
+        // BELUM diselesaikan (bukan selalu balik ke Gateway Choice dari
+        // awal), sama seperti Splash. Lihat OnboardingStatus.resumeRoute.
+        context.go(next.onboarding.resumeRoute);
       }
     });
 

@@ -65,6 +65,7 @@ dependencies:
   # Gyroscope untuk efek parallax welcome screen (foto bergeser mengikuti
   # kemiringan device).
   sensors_plus: ^7.1.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:

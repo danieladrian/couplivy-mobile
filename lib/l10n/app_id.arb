@@ -39,5 +39,11 @@
   "gatewayChoiceDiscoverCta": "Mulai isi profil",
   "gatewayChoiceTogetherTitle": "Sudah punya pasangan",
   "gatewayChoiceTogetherDescription": "Sudah pacaran serius atau menikah? Hubungkan akun kalian berdua dan langsung masuk ke ruang \"Growing Together\" — tanpa perlu isi preferensi kencan.",
-  "gatewayChoiceTogetherCta": "Segera hadir"
+  "gatewayChoiceTogetherCta": "Segera hadir",
+
+  "onboardingNameTitle": "Siapa namamu?",
+  "onboardingNameSubtitle": "Ini yang akan tampil di profil Couplivy kamu.",
+  "onboardingNameFieldLabel": "Nama Kamu",
+  "onboardingNameFieldHint": "Nama panggilanmu",
+  "onboardingContinue": "Lanjut"
 }

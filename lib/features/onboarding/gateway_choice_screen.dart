@@ -32,10 +32,7 @@ class GatewayChoiceScreen extends ConsumerWidget {
 
     ref.listen(gatewayChoiceProvider, (previous, next) {
       if (next is GatewayChoiceSuccess) {
-        // Belum ada step onboarding berikutnya (Name/DOB/dst) di Flutter —
-        // sementara langsung ke Discover placeholder. Ganti ke step
-        // berikutnya begitu halamannya dibuat.
-        context.go('/discover');
+        context.go('/onboarding/discover/name');
       }
 
       if (next is GatewayChoiceError) {

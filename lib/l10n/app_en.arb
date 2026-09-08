@@ -72,5 +72,17 @@
   "gatewayChoiceTogetherCta": "Coming soon",
   "@gatewayChoiceTogetherCta": {
     "description": "CTA shown on the disabled 'Already have a partner' option — backend doesn't support this path yet."
+  },
+
+  "onboardingNameTitle": "What's your name?",
+  "@onboardingNameTitle": {
+    "description": "Discover onboarding step 1/10 (Name) headline."
+  },
+  "onboardingNameSubtitle": "This is how you'll appear on Couplivy.",
+  "onboardingNameFieldLabel": "Your Name",
+  "onboardingNameFieldHint": "Your nickname",
+  "onboardingContinue": "Continue",
+  "@onboardingContinue": {
+    "description": "Primary CTA to advance to the next onboarding step — shared across all Discover onboarding steps."
   }
 }
