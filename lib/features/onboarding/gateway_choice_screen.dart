@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../core/storage/user_session_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../l10n/generated/app_localizations.dart';
@@ -14,25 +15,50 @@ import 'providers/gateway_choice_controller.dart';
 /// setelah Sign Up/Login pertama kali (bukan tiap login), sebelum masuk ke
 /// pengisian profil (Discover) atau pairing (Together).
 ///
+/// Judul dipersonalisasi pakai nickname user ("Hello Daniel, ...") — baca
+/// dari UserSessionStorage (SharedPreferences, diisi begitu Sign
+/// Up/Login sukses), BUKAN API call terpisah.
+///
 /// "Sudah punya pasangan" (mode=together) DI-DISABLE dulu — backend
 /// menolak mode itu (lihat GatewayChoiceRequest), UI-nya tetap tampil
 /// supaya user tahu fitur itu akan ada, cuma belum bisa dipilih.
-class GatewayChoiceScreen extends ConsumerWidget {
+class GatewayChoiceScreen extends ConsumerStatefulWidget {
   const GatewayChoiceScreen({super.key});
 
-  void _chooseDiscover(WidgetRef ref) {
+  @override
+  ConsumerState<GatewayChoiceScreen> createState() =>
+      _GatewayChoiceScreenState();
+}
+
+class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
+  String? _nickName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNickName();
+  }
+
+  Future<void> _loadNickName() async {
+    final nickName = await UserSessionStorage.readNickName();
+    if (mounted) setState(() => _nickName = nickName);
+  }
+
+  void _chooseDiscover() {
     ref.read(gatewayChoiceProvider.notifier).choose('discover');
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(gatewayChoiceProvider);
     final isLoading = state is GatewayChoiceLoading;
 
     ref.listen(gatewayChoiceProvider, (previous, next) {
       if (next is GatewayChoiceSuccess) {
-        context.go('/onboarding/discover/name');
+        // Step 1 pengisian profil (DOB) belum ada — sementara langsung ke
+        // Discover placeholder. Ganti begitu halamannya dibuat.
+        context.go('/discover');
       }
 
       if (next is GatewayChoiceError) {
@@ -56,7 +82,12 @@ class GatewayChoiceScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  l10n.gatewayChoiceTitle,
+                  // Fallback ke judul tanpa nama kalau nickname belum
+                  // sempat ke-load (jeda 1 frame baca SharedPreferences) —
+                  // supaya tidak ada layout jump begitu nickname muncul.
+                  _nickName != null
+                      ? l10n.gatewayChoiceTitle(_nickName!)
+                      : l10n.gatewayChoiceTitleFallback,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.playfairDisplay(fontSize: 22),
                 ),
@@ -76,7 +107,7 @@ class GatewayChoiceScreen extends ConsumerWidget {
                   title: l10n.gatewayChoiceDiscoverTitle,
                   description: l10n.gatewayChoiceDiscoverDescription,
                   ctaLabel: l10n.gatewayChoiceDiscoverCta,
-                  onTap: isLoading ? null : () => _chooseDiscover(ref),
+                  onTap: isLoading ? null : _chooseDiscover,
                 ),
                 const SizedBox(height: 16),
                 GatewayOptionCard(

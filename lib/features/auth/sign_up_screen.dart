@@ -24,7 +24,8 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  final _nameController = TextEditingController();
+  final _fullNameController = TextEditingController();
+  final _nickNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -33,7 +34,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _fullNameController.dispose();
+    _nickNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
@@ -46,7 +48,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     ref
         .read(signUpFormProvider.notifier)
         .register(
-          name: _nameController.text.trim(),
+          fullName: _fullNameController.text.trim(),
+          nickName: _nickNameController.text.trim(),
           email: _emailController.text.trim(),
           phone: '$_dialCode${_phoneController.text.trim()}',
           password: _passwordController.text,
@@ -124,10 +127,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       ),
                       LabeledDivider(label: l10n.authOr),
                       AppTextField(
-                        label: l10n.authNameLabel,
-                        hintText: l10n.authNameHint,
-                        controller: _nameController,
-                        errorText: apiError?.errorFor('name'),
+                        label: l10n.authFullNameLabel,
+                        hintText: l10n.authFullNameHint,
+                        controller: _fullNameController,
+                        errorText: apiError?.errorFor('full_name'),
+                      ),
+                      const SizedBox(height: 14),
+                      AppTextField(
+                        label: l10n.authNickNameLabel,
+                        hintText: l10n.authNickNameHint,
+                        controller: _nickNameController,
+                        errorText: apiError?.errorFor('nick_name'),
                       ),
                       const SizedBox(height: 14),
                       AppTextField(

@@ -146,17 +146,29 @@ abstract class AppLocalizations {
   /// **'or'**
   String get authOr;
 
-  /// No description provided for @authNameLabel.
+  /// No description provided for @authFullNameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Name'**
-  String get authNameLabel;
+  /// **'Full Name'**
+  String get authFullNameLabel;
 
-  /// No description provided for @authNameHint.
+  /// No description provided for @authFullNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Your name'**
-  String get authNameHint;
+  /// **'Your full name'**
+  String get authFullNameHint;
+
+  /// No description provided for @authNickNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get authNickNameLabel;
+
+  /// No description provided for @authNickNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What should we call you?'**
+  String get authNickNameHint;
 
   /// No description provided for @authEmailLabel.
   ///
@@ -260,16 +272,22 @@ abstract class AppLocalizations {
   /// **'Sign Up'**
   String get loginFooterAction;
 
-  /// Gateway Choice screen headline — first onboarding step, right after Sign Up/Login.
+  /// Gateway Choice screen headline — first onboarding step, right after Sign Up/Login. Personalized with the user's nickname.
   ///
   /// In en, this message translates to:
-  /// **'What brings you to Couplivy?'**
-  String get gatewayChoiceTitle;
+  /// **'Hello {nickName},'**
+  String gatewayChoiceTitle(String nickName);
+
+  /// Gateway Choice headline shown for the 1 frame before nickname finishes loading from local storage — avoids a layout jump once it's ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello,'**
+  String get gatewayChoiceTitleFallback;
 
   /// No description provided for @gatewayChoiceSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'This shapes the experience you\'ll get — you can change it later from Profile.'**
+  /// **'What brings you to Couplivy? This shapes the experience you\'ll get — you can change it later from Profile.'**
   String get gatewayChoiceSubtitle;
 
   /// No description provided for @gatewayChoiceDiscoverTitle.
@@ -307,30 +325,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon'**
   String get gatewayChoiceTogetherCta;
-
-  /// Discover onboarding step 1/10 (Name) headline.
-  ///
-  /// In en, this message translates to:
-  /// **'What\'s your name?'**
-  String get onboardingNameTitle;
-
-  /// No description provided for @onboardingNameSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'This is how you\'ll appear on Couplivy.'**
-  String get onboardingNameSubtitle;
-
-  /// No description provided for @onboardingNameFieldLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Name'**
-  String get onboardingNameFieldLabel;
-
-  /// No description provided for @onboardingNameFieldHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Your nickname'**
-  String get onboardingNameFieldHint;
 
   /// Primary CTA to advance to the next onboarding step — shared across all Discover onboarding steps.
   ///

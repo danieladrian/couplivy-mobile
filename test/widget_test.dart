@@ -60,6 +60,22 @@ void main() {
     expect(find.text('Log In'), findsOneWidget);
   });
 
+  testWidgets('Sign Up shows both Full Name and Nickname fields', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const ProviderScope(child: CouplivyApp()));
+    await tester.pump(const Duration(milliseconds: 1600));
+    await tester.pump();
+
+    await tester.tap(find.text('Sign Up'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Full Name'), findsOneWidget);
+    expect(find.text('Your full name'), findsOneWidget);
+    expect(find.text('Nickname'), findsOneWidget);
+    expect(find.text('What should we call you?'), findsOneWidget);
+  });
+
   testWidgets('Welcome screen navigates to Sign Up and back to Login', (
     WidgetTester tester,
   ) async {
@@ -116,8 +132,8 @@ void main() {
       await tester.tap(find.text('Sign Up'));
       await tester.pumpAndSettle();
 
-      // Fokus field Name — keyboard "terbuka" (ada TextField aktif).
-      await tester.tap(find.text('Your name'));
+      // Fokus field Full Name — keyboard "terbuka" (ada TextField aktif).
+      await tester.tap(find.text('Your full name'));
       await tester.pumpAndSettle();
       expect(FocusManager.instance.primaryFocus?.hasFocus, isTrue);
 

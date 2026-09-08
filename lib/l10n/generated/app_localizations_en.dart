@@ -33,10 +33,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authOr => 'or';
 
   @override
-  String get authNameLabel => 'Name';
+  String get authFullNameLabel => 'Full Name';
 
   @override
-  String get authNameHint => 'Your name';
+  String get authFullNameHint => 'Your full name';
+
+  @override
+  String get authNickNameLabel => 'Nickname';
+
+  @override
+  String get authNickNameHint => 'What should we call you?';
 
   @override
   String get authEmailLabel => 'Email';
@@ -91,11 +97,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginFooterAction => 'Sign Up';
 
   @override
-  String get gatewayChoiceTitle => 'What brings you to Couplivy?';
+  String gatewayChoiceTitle(String nickName) {
+    return 'Hello $nickName,';
+  }
+
+  @override
+  String get gatewayChoiceTitleFallback => 'Hello,';
 
   @override
   String get gatewayChoiceSubtitle =>
-      'This shapes the experience you\'ll get — you can change it later from Profile.';
+      'What brings you to Couplivy? This shapes the experience you\'ll get — you can change it later from Profile.';
 
   @override
   String get gatewayChoiceDiscoverTitle => 'Looking for a new connection';
@@ -116,19 +127,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gatewayChoiceTogetherCta => 'Coming soon';
-
-  @override
-  String get onboardingNameTitle => 'What\'s your name?';
-
-  @override
-  String get onboardingNameSubtitle =>
-      'This is how you\'ll appear on Couplivy.';
-
-  @override
-  String get onboardingNameFieldLabel => 'Your Name';
-
-  @override
-  String get onboardingNameFieldHint => 'Your nickname';
 
   @override
   String get onboardingContinue => 'Continue';

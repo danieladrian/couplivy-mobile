@@ -7,7 +7,7 @@ void main() {
     test('completed -> /discover regardless of step', () {
       const status = OnboardingStatus(
         completed: true,
-        currentStep: 'name',
+        currentStep: 'gateway_choice',
         mode: 'discover',
       );
 
@@ -34,18 +34,15 @@ void main() {
       expect(status.resumeRoute, '/gateway-choice');
     });
 
-    test(
-      'mode discover, not completed -> always step 1 profile form (Name), '
-      'server does not track progress within step 2-10 (local draft only)',
-      () {
-        const status = OnboardingStatus(
-          completed: false,
-          currentStep: 'gateway_choice',
-          mode: 'discover',
-        );
+    test('mode discover, not completed -> /discover placeholder '
+        '(step 1 profile form/DOB not built yet)', () {
+      const status = OnboardingStatus(
+        completed: false,
+        currentStep: 'gateway_choice',
+        mode: 'discover',
+      );
 
-        expect(status.resumeRoute, '/onboarding/discover/name');
-      },
-    );
+      expect(status.resumeRoute, '/discover');
+    });
   });
 }

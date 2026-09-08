@@ -25,8 +25,10 @@
   "authContinueWithApple": "Continue with Apple",
   "authContinueWithGoogle": "Continue with Google",
   "authOr": "or",
-  "authNameLabel": "Name",
-  "authNameHint": "Your name",
+  "authFullNameLabel": "Full Name",
+  "authFullNameHint": "Your full name",
+  "authNickNameLabel": "Nickname",
+  "authNickNameHint": "What should we call you?",
   "authEmailLabel": "Email",
   "authEmailHint": "name@email.com",
   "authPhoneLabel": "Phone Number",
@@ -59,11 +61,21 @@
   "loginFooterQuestion": "Don't have an account?",
   "loginFooterAction": "Sign Up",
 
-  "gatewayChoiceTitle": "What brings you to Couplivy?",
+  "gatewayChoiceTitle": "Hello {nickName},",
   "@gatewayChoiceTitle": {
-    "description": "Gateway Choice screen headline — first onboarding step, right after Sign Up/Login."
+    "description": "Gateway Choice screen headline — first onboarding step, right after Sign Up/Login. Personalized with the user's nickname.",
+    "placeholders": {
+      "nickName": {
+        "type": "String",
+        "example": "Daniel"
+      }
+    }
   },
-  "gatewayChoiceSubtitle": "This shapes the experience you'll get — you can change it later from Profile.",
+  "gatewayChoiceTitleFallback": "Hello,",
+  "@gatewayChoiceTitleFallback": {
+    "description": "Gateway Choice headline shown for the 1 frame before nickname finishes loading from local storage — avoids a layout jump once it's ready."
+  },
+  "gatewayChoiceSubtitle": "What brings you to Couplivy? This shapes the experience you'll get — you can change it later from Profile.",
   "gatewayChoiceDiscoverTitle": "Looking for a new connection",
   "gatewayChoiceDiscoverDescription": "You'll fill out a full profile — bio, interests, relationship goals — then head to Discover to meet new people.",
   "gatewayChoiceDiscoverCta": "Start my profile",
@@ -74,13 +86,6 @@
     "description": "CTA shown on the disabled 'Already have a partner' option — backend doesn't support this path yet."
   },
 
-  "onboardingNameTitle": "What's your name?",
-  "@onboardingNameTitle": {
-    "description": "Discover onboarding step 1/10 (Name) headline."
-  },
-  "onboardingNameSubtitle": "This is how you'll appear on Couplivy.",
-  "onboardingNameFieldLabel": "Your Name",
-  "onboardingNameFieldHint": "Your nickname",
   "onboardingContinue": "Continue",
   "@onboardingContinue": {
     "description": "Primary CTA to advance to the next onboarding step — shared across all Discover onboarding steps."

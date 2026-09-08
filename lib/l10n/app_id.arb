@@ -10,8 +10,10 @@
   "authContinueWithApple": "Lanjutkan dengan Apple",
   "authContinueWithGoogle": "Lanjutkan dengan Google",
   "authOr": "atau",
-  "authNameLabel": "Nama",
-  "authNameHint": "Nama panggilanmu",
+  "authFullNameLabel": "Nama Lengkap",
+  "authFullNameHint": "Nama lengkapmu",
+  "authNickNameLabel": "Nama Panggilan",
+  "authNickNameHint": "Mau dipanggil apa?",
   "authEmailLabel": "Email",
   "authEmailHint": "nama@email.com",
   "authPhoneLabel": "Nomor HP",
@@ -32,8 +34,9 @@
   "loginFooterQuestion": "Belum punya akun?",
   "loginFooterAction": "Daftar",
 
-  "gatewayChoiceTitle": "Kamu di Couplivy untuk apa?",
-  "gatewayChoiceSubtitle": "Ini akan menentukan pengalaman yang kamu dapat — bisa diubah nanti dari Profile.",
+  "gatewayChoiceTitle": "Hai {nickName},",
+  "gatewayChoiceTitleFallback": "Hai,",
+  "gatewayChoiceSubtitle": "Kamu di Couplivy untuk apa? Ini akan menentukan pengalaman yang kamu dapat — bisa diubah nanti dari Profile.",
   "gatewayChoiceDiscoverTitle": "Mencari koneksi baru",
   "gatewayChoiceDiscoverDescription": "Kamu akan melalui pengisian profil lengkap — bio, minat, tujuan hubungan — lalu masuk ke Discover untuk bertemu orang baru.",
   "gatewayChoiceDiscoverCta": "Mulai isi profil",
@@ -41,9 +44,5 @@
   "gatewayChoiceTogetherDescription": "Sudah pacaran serius atau menikah? Hubungkan akun kalian berdua dan langsung masuk ke ruang \"Growing Together\" — tanpa perlu isi preferensi kencan.",
   "gatewayChoiceTogetherCta": "Segera hadir",
 
-  "onboardingNameTitle": "Siapa namamu?",
-  "onboardingNameSubtitle": "Ini yang akan tampil di profil Couplivy kamu.",
-  "onboardingNameFieldLabel": "Nama Kamu",
-  "onboardingNameFieldHint": "Nama panggilanmu",
   "onboardingContinue": "Lanjut"
 }

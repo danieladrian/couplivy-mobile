@@ -33,10 +33,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get authOr => 'atau';
 
   @override
-  String get authNameLabel => 'Nama';
+  String get authFullNameLabel => 'Nama Lengkap';
 
   @override
-  String get authNameHint => 'Nama panggilanmu';
+  String get authFullNameHint => 'Nama lengkapmu';
+
+  @override
+  String get authNickNameLabel => 'Nama Panggilan';
+
+  @override
+  String get authNickNameHint => 'Mau dipanggil apa?';
 
   @override
   String get authEmailLabel => 'Email';
@@ -91,11 +97,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get loginFooterAction => 'Daftar';
 
   @override
-  String get gatewayChoiceTitle => 'Kamu di Couplivy untuk apa?';
+  String gatewayChoiceTitle(String nickName) {
+    return 'Hai $nickName,';
+  }
+
+  @override
+  String get gatewayChoiceTitleFallback => 'Hai,';
 
   @override
   String get gatewayChoiceSubtitle =>
-      'Ini akan menentukan pengalaman yang kamu dapat — bisa diubah nanti dari Profile.';
+      'Kamu di Couplivy untuk apa? Ini akan menentukan pengalaman yang kamu dapat — bisa diubah nanti dari Profile.';
 
   @override
   String get gatewayChoiceDiscoverTitle => 'Mencari koneksi baru';
@@ -116,19 +127,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get gatewayChoiceTogetherCta => 'Segera hadir';
-
-  @override
-  String get onboardingNameTitle => 'Siapa namamu?';
-
-  @override
-  String get onboardingNameSubtitle =>
-      'Ini yang akan tampil di profil Couplivy kamu.';
-
-  @override
-  String get onboardingNameFieldLabel => 'Nama Kamu';
-
-  @override
-  String get onboardingNameFieldHint => 'Nama panggilanmu';
 
   @override
   String get onboardingContinue => 'Lanjut';

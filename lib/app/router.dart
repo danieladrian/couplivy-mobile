@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/sign_up_screen.dart';
 import '../features/discover/discover_placeholder_screen.dart';
-import '../features/onboarding/discover/name_step_screen.dart';
 import '../features/onboarding/gateway_choice_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/welcome/welcome_screen.dart';
@@ -44,11 +43,6 @@ GoRouter createAppRouter() {
         path: '/gateway-choice',
         name: 'gateway-choice',
         builder: (context, state) => const GatewayChoiceScreen(),
-      ),
-      GoRoute(
-        path: '/onboarding/discover/name',
-        name: 'onboarding-discover-name',
-        builder: (context, state) => const NameStepScreen(),
       ),
       GoRoute(
         path: '/discover',

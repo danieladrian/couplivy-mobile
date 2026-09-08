@@ -25,20 +25,22 @@ class OnboardingStatus {
   /// di sini (bukan diduplikasi di tiap pemanggil) supaya nambah step
   /// baru cuma 1 tempat yang perlu diubah.
   ///
-  /// Step 2-10 (Name, DOB, dst) disimpan LOKAL di device (SharedPreferences,
-  /// lihat DiscoverOnboardingDraftStorage) — SERVER TIDAK TAHU user sudah
-  /// sampai step berapa di tengah pengisian, cuma tahu 3 kondisi:
-  /// belum mulai (`mode == null`), sudah pilih Gateway Choice tapi belum
-  /// submit profil lengkap (`current_step == 'gateway_choice'`,
+  /// Step 2-9 (DOB, Gender, dst — belum ada satupun yang dibuat, step
+  /// "Name" DIHAPUS karena nickname sekarang diisi saat Sign Up) disimpan
+  /// LOKAL di device (SharedPreferences) — SERVER TIDAK TAHU user sudah
+  /// sampai step berapa di tengah pengisian, cuma tahu 3 kondisi: belum
+  /// mulai (`mode == null`), sudah pilih Gateway Choice tapi belum submit
+  /// profil lengkap (`current_step == 'gateway_choice'`,
   /// `completed == false`), atau sudah selesai (`completed == true`).
-  /// Makanya kondisi kedua SELALU redirect ke step 1 pengisian profil
-  /// (Name) — bukan step tertentu di tengah — karena draft lokal cuma
-  /// bisa dibaca dari device yang sama tempat draft itu dibuat (splash
-  /// baca draft lokal duluan sebelum redirect, lihat SplashScreen).
+  ///
+  /// TODO: kondisi kedua sekarang fallback ke `/discover` (placeholder)
+  /// karena step 1 pengisian profil (DOB) belum dibuat — ganti jadi
+  /// `/onboarding/discover/dob` (atau step pertama yang aktual) begitu
+  /// halamannya ada.
   String get resumeRoute {
     if (completed) return '/discover';
     if (mode != 'discover') return '/gateway-choice';
 
-    return '/onboarding/discover/name';
+    return '/discover';
   }
 }

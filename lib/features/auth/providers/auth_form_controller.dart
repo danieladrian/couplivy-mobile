@@ -41,7 +41,8 @@ class AuthFormController extends Notifier<AuthFormState> {
   AuthFormState build() => const AuthFormIdle();
 
   Future<void> register({
-    required String name,
+    required String fullName,
+    required String nickName,
     required String email,
     required String phone,
     required String password,
@@ -50,7 +51,8 @@ class AuthFormController extends Notifier<AuthFormState> {
     state = const AuthFormLoading();
     try {
       final result = await authRepository.register(
-        name: name,
+        fullName: fullName,
+        nickName: nickName,
         email: email,
         phone: phone,
         password: password,

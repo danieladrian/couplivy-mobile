@@ -5,6 +5,7 @@ import '../../core/api/api_exception.dart';
 import '../../core/models/onboarding_status.dart';
 import '../../core/models/user.dart';
 import '../../core/storage/token_storage.dart';
+import '../../core/storage/user_session_storage.dart';
 
 /// Hasil sukses login/register — user + token, sekaligus menyimpan token
 /// ke secure storage. `onboarding` disertakan backend di response yang
@@ -31,14 +32,16 @@ class AuthRepository {
   final Dio _dio;
 
   Future<AuthResult> register({
-    required String name,
+    required String fullName,
+    required String nickName,
     required String email,
     required String phone,
     required String password,
     required String locale,
   }) {
     return _post('/auth/register', {
-      'name': name,
+      'full_name': fullName,
+      'nick_name': nickName,
       'email': email,
       'phone': phone,
       'password': password,
@@ -84,10 +87,13 @@ class AuthRepository {
       final body = response.data as Map<String, dynamic>;
       final token = body['token'] as String;
 
+      final user = User.fromJson(body['user'] as Map<String, dynamic>);
+
       await TokenStorage.saveToken(token);
+      await UserSessionStorage.save(user);
 
       return AuthResult(
-        user: User.fromJson(body['user'] as Map<String, dynamic>),
+        user: user,
         token: token,
         onboarding: OnboardingStatus.fromJson(
           body['onboarding'] as Map<String, dynamic>,
