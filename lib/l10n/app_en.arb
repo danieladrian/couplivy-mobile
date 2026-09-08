@@ -1,0 +1,76 @@
+{
+  "@@locale": "en",
+  "appName": "Couplivy",
+  "@appName": {
+    "description": "The application name, used as app title/switcher label. Not shown as separate text on splash — the wordmark is baked into the logo image there."
+  },
+  "splashTagline": "Made for Meaningful Love",
+  "@splashTagline": {
+    "description": "Tagline shown under the logo on the splash screen."
+  },
+
+  "welcomeGetStarted": "Sign Up",
+  "@welcomeGetStarted": {
+    "description": "Primary CTA button on the welcome screen."
+  },
+  "welcomeLogIn": "Log In",
+  "@welcomeLogIn": {
+    "description": "Secondary CTA button on the welcome screen."
+  },
+  "welcomeTapBackAgainToExit": "Tap back again to exit",
+  "@welcomeTapBackAgainToExit": {
+    "description": "Snackbar shown when user presses back once on the Welcome screen (root screen, no page to pop to) — must tap again within a short window to actually exit the app."
+  },
+
+  "authContinueWithApple": "Continue with Apple",
+  "authContinueWithGoogle": "Continue with Google",
+  "authOr": "or",
+  "authNameLabel": "Name",
+  "authNameHint": "Your name",
+  "authEmailLabel": "Email",
+  "authEmailHint": "name@email.com",
+  "authPhoneLabel": "Phone Number",
+  "authPasswordLabel": "Password",
+  "authPasswordHintSignUp": "At least 8 characters",
+  "authPasswordHintLogin": "Your password",
+  "authForgotPassword": "Forgot password?",
+  "authComingSoon": "Coming soon — set up your Google/Apple Developer credentials first.",
+
+  "signUpTitle": "Create Account",
+  "@signUpTitle": {
+    "description": "Sign Up screen header title."
+  },
+  "signUpSubmit": "Create Account",
+  "@signUpSubmit": {
+    "description": "Primary submit button on Sign Up screen."
+  },
+  "signUpFooterQuestion": "Already have an account?",
+  "signUpFooterAction": "Log In",
+
+  "loginTitle": "Welcome Back",
+  "@loginTitle": {
+    "description": "Login screen header title."
+  },
+  "loginIdentifierLabel": "Email / Phone Number",
+  "loginSubmit": "Log In",
+  "@loginSubmit": {
+    "description": "Primary submit button on Login screen."
+  },
+  "loginFooterQuestion": "Don't have an account?",
+  "loginFooterAction": "Sign Up",
+
+  "gatewayChoiceTitle": "What brings you to Couplivy?",
+  "@gatewayChoiceTitle": {
+    "description": "Gateway Choice screen headline — first onboarding step, right after Sign Up/Login."
+  },
+  "gatewayChoiceSubtitle": "This shapes the experience you'll get — you can change it later from Profile.",
+  "gatewayChoiceDiscoverTitle": "Looking for a new connection",
+  "gatewayChoiceDiscoverDescription": "You'll fill out a full profile — bio, interests, relationship goals — then head to Discover to meet new people.",
+  "gatewayChoiceDiscoverCta": "Start my profile",
+  "gatewayChoiceTogetherTitle": "Already have a partner",
+  "gatewayChoiceTogetherDescription": "Already dating seriously or married? Link your accounts and go straight to the \"Growing Together\" space — no dating preferences needed.",
+  "gatewayChoiceTogetherCta": "Coming soon",
+  "@gatewayChoiceTogetherCta": {
+    "description": "CTA shown on the disabled 'Already have a partner' option — backend doesn't support this path yet."
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "@@locale": "id",
+  "appName": "Couplivy",
+  "splashTagline": "Dibuat untuk Cinta yang Bermakna",
+
+  "welcomeGetStarted": "Daftar",
+  "welcomeLogIn": "Masuk",
+  "welcomeTapBackAgainToExit": "Tekan sekali lagi untuk keluar",
+
+  "authContinueWithApple": "Lanjutkan dengan Apple",
+  "authContinueWithGoogle": "Lanjutkan dengan Google",
+  "authOr": "atau",
+  "authNameLabel": "Nama",
+  "authNameHint": "Nama panggilanmu",
+  "authEmailLabel": "Email",
+  "authEmailHint": "nama@email.com",
+  "authPhoneLabel": "Nomor HP",
+  "authPasswordLabel": "Password",
+  "authPasswordHintSignUp": "Minimal 8 karakter",
+  "authPasswordHintLogin": "Password kamu",
+  "authForgotPassword": "Lupa password?",
+  "authComingSoon": "Segera hadir — perlu setup kredensial Google/Apple Developer dulu.",
+
+  "signUpTitle": "Buat Akun",
+  "signUpSubmit": "Buat Akun",
+  "signUpFooterQuestion": "Sudah punya akun?",
+  "signUpFooterAction": "Masuk",
+
+  "loginTitle": "Masuk Kembali",
+  "loginIdentifierLabel": "Email / Nomor HP",
+  "loginSubmit": "Masuk",
+  "loginFooterQuestion": "Belum punya akun?",
+  "loginFooterAction": "Daftar",
+
+  "gatewayChoiceTitle": "Kamu di Couplivy untuk apa?",
+  "gatewayChoiceSubtitle": "Ini akan menentukan pengalaman yang kamu dapat — bisa diubah nanti dari Profile.",
+  "gatewayChoiceDiscoverTitle": "Mencari koneksi baru",
+  "gatewayChoiceDiscoverDescription": "Kamu akan melalui pengisian profil lengkap — bio, minat, tujuan hubungan — lalu masuk ke Discover untuk bertemu orang baru.",
+  "gatewayChoiceDiscoverCta": "Mulai isi profil",
+  "gatewayChoiceTogetherTitle": "Sudah punya pasangan",
+  "gatewayChoiceTogetherDescription": "Sudah pacaran serius atau menikah? Hubungkan akun kalian berdua dan langsung masuk ke ruang \"Growing Together\" — tanpa perlu isi preferensi kencan.",
+  "gatewayChoiceTogetherCta": "Segera hadir"
+}

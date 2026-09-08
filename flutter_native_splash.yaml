@@ -1,0 +1,18 @@
+# Native splash — tampil instant sebelum Flutter engine selesai load,
+# menutupi jeda tersebut dengan background+logo statis. Setelah engine siap,
+# app lanjut ke route Flutter splash ('/') yang urus logic (cek token login,
+# locale, dst) sebelum navigasi ke halaman berikutnya.
+# Jalankan: dart run flutter_native_splash:create
+#
+# Warna dari brand-guideline.md (couplivy-docs) — deep-violet, token inti.
+flutter_native_splash:
+  color: "#6D5BA6"
+  image: assets/icons/app_icon.png
+
+  android_12:
+    color: "#6D5BA6"
+    image: assets/icons/app_icon.png
+
+  android: true
+  ios: true
+  web: false

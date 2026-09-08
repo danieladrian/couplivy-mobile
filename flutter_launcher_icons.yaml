@@ -1,0 +1,19 @@
+# Generate app icon untuk semua resolusi Android/iOS dari 1 source file.
+# Jalankan: dart run flutter_launcher_icons
+#
+# Source PNG asli: /Users/danieladrian/Documents/couplivy/source/app_icon.png
+# (di-copy ke assets/icons/app_icon.png supaya ikut ter-track di repo).
+#
+# Versi ini SUDAH punya safe-zone padding (logo cuma ~32-39% dari kanvas
+# 2000x2000, jauh di bawah batas aman ~66% rekomendasi Google) — adaptive
+# icon Android aman diaktifkan, tidak akan terpotong saat di-mask launcher
+# jadi lingkaran/rounded-square. (Versi sebelumnya full-bleed tanpa padding,
+# makanya adaptive icon sempat sengaja di-skip — lihat git history.)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21
+
+  adaptive_icon_background: "#6D5BA6"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
