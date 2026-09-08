@@ -89,5 +89,140 @@
   "onboardingContinue": "Continue",
   "@onboardingContinue": {
     "description": "Primary CTA to advance to the next onboarding step — shared across all Discover onboarding steps."
-  }
+  },
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "Skip button shown on optional onboarding steps."
+  },
+
+  "dobTitle": "When were you born?",
+  "dobSubtitle": "Your age will be calculated automatically.",
+  "dobFieldLabel": "Date of birth",
+  "dobAgeResultLabel": "You are",
+  "dobAgeResultUnit": "{age} years old",
+  "@dobAgeResultUnit": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "dobUnderageError": "You must be at least 18 years old to use Couplivy.",
+
+  "genderTitle": "What's your gender?",
+  "genderSubtitle": "We'll show you better matches based on this.",
+  "genderFemale": "Female",
+  "genderMale": "Male",
+  "genderNonBinary": "Non-binary",
+
+  "photosTitle": "Add your photos",
+  "photosSubtitle": "A few clear photos help you get better matches.",
+  "photosMainPhotoLabel": "Main Photo",
+  "photosMinimumError": "Add at least 1 photo to continue.",
+
+  "bioTitle": "Tell us about yourself",
+  "bioSubtitle": "A few lines about you, plus some details for better matches.",
+  "bioFieldHint": "e.g. I love good coffee, weekend hikes, and meaningful conversations.",
+  "bioCharCount": "{current}/{max}",
+  "@bioCharCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "bioHeightLabel": "Height (cm)",
+  "bioHeightHint": "e.g. 170",
+  "bioEthnicityLabel": "Ethnicity",
+  "bioEthnicityHint": "e.g. Javanese",
+  "bioWantsChildrenLabel": "Do you want children?",
+  "bioWantsChildrenYes": "Yes",
+  "bioWantsChildrenNo": "No",
+  "bioWantsChildrenNotSure": "Not sure yet",
+
+  "workEducationTitle": "What do you do?",
+  "workEducationSubtitle": "Your career and education.",
+  "workEducationOccupationLabel": "Occupation",
+  "workEducationOccupationHint": "Your occupation",
+  "workEducationEducationLabel": "Education",
+  "workEducationEducationHint": "Select education",
+  "educationHighSchool": "High School",
+  "educationBachelor": "Bachelor's Degree",
+  "educationMaster": "Master's Degree",
+  "educationDoctorate": "Doctorate",
+  "educationAny": "Any",
+
+  "interestsTitle": "What are your interests?",
+  "interestsSubtitle": "Choose a few things you enjoy.",
+  "interestsSelectedCount": "{count} selected · choose at least 3",
+  "@interestsSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "interestsMinimumError": "Choose at least 3 interests, or skip this step.",
+  "interestTravel": "Travel",
+  "interestCoffee": "Coffee",
+  "interestHiking": "Hiking",
+  "interestFood": "Food",
+  "interestMusic": "Music",
+  "interestMovies": "Movies",
+  "interestSports": "Sports",
+  "interestReading": "Reading",
+  "interestArt": "Art",
+  "interestNature": "Nature",
+
+  "relationshipGoalTitle": "What are you looking for?",
+  "relationshipGoalSubtitle": "This helps us show you people with the same intentions.",
+  "relationshipGoalSeriousTitle": "Serious Relationship",
+  "relationshipGoalSeriousDescription": "Looking for a long-term relationship",
+  "relationshipGoalCasualTitle": "Casual Dating",
+  "relationshipGoalCasualDescription": "Getting to know people, see where it goes",
+  "relationshipGoalFriendshipTitle": "Friendship",
+  "relationshipGoalFriendshipDescription": "Looking to make new friends first",
+
+  "preferencesTitle": "Tell us what you're looking for",
+  "preferencesAgeRangeLabel": "{min} – {max} years old",
+  "@preferencesAgeRangeLabel": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "preferencesGenderLabel": "Gender",
+  "preferencesGenderAny": "Everyone",
+  "preferencesFamilyLabel": "Family preference",
+  "preferencesFamilyWantsChildren": "Wants children",
+  "preferencesFamilyNotWantsChildren": "Doesn't want children",
+  "preferencesFamilyOpenToChildren": "Open to children",
+  "preferencesFamilyAny": "Any",
+  "preferencesReligionLabel": "Religion",
+  "preferencesReligionAny": "Any",
+  "preferencesEducationLabel": "Education",
+  "preferencesSubmit": "Save Preferences",
+
+  "previewTitle": "Almost there!",
+  "previewSubtitle": "Review your profile before continuing.",
+  "previewNameAge": "{nickName}, {age}",
+  "@previewNameAge": {
+    "placeholders": {
+      "nickName": {
+        "type": "String"
+      },
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "previewSubmit": "Looks Good",
+  "previewSubmitError": "Something went wrong saving your profile. Please try again."
 }

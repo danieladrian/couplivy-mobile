@@ -34,15 +34,14 @@ void main() {
       expect(status.resumeRoute, '/gateway-choice');
     });
 
-    test('mode discover, not completed -> /discover placeholder '
-        '(step 1 profile form/DOB not built yet)', () {
+    test('mode discover, not completed -> step 1 profile form (DOB)', () {
       const status = OnboardingStatus(
         completed: false,
         currentStep: 'gateway_choice',
         mode: 'discover',
       );
 
-      expect(status.resumeRoute, '/discover');
+      expect(status.resumeRoute, '/onboarding/discover/dob');
     });
   });
 }

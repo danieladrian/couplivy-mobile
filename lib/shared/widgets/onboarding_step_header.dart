@@ -4,8 +4,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../core/theme/app_colors.dart';
 
 /// Header step onboarding — back arrow + progress bar + label "x/total".
-/// Dipakai di semua step Discover (Name, DOB, Gender, dst — 10 step total)
-/// dan berpotensi Together nanti. Sumber desain:
+/// Dipakai di semua step Discover (DOB, Gender, dst — 9 step total, step
+/// "Name" sudah dihapus) dan berpotensi Together nanti. Sumber desain:
 /// couplivy-docs/flow/01-discover/onboarding/*.html (`.screen-header` +
 /// `.progress-bar`).
 class OnboardingStepHeader extends StatelessWidget {

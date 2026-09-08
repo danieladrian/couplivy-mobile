@@ -47,5 +47,7 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Couplivy needs access to your photos so you can add pictures to your profile.</string>
 	</dict>
 </plist>

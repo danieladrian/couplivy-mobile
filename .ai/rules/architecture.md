@@ -239,51 +239,80 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   belum dibangun; jadi titik akhir alur onboarding/login supaya bisa
   diverifikasi end-to-end tanpa nyangkut di halaman yang belum ada.
 
-## Onboarding — Step 2-9 Discover (DOB, Gender, dst) — Draft Lokal, Submit di Akhir
+## Onboarding — Step 1-9 Discover (DOB s.d. Preview) — SELESAI
 
 - **Step "Name" (dulu step 2) DIHAPUS TOTAL** — nickname sekarang diisi
   saat Sign Up (lihat section Auth di atas), BUKAN step onboarding
-  terpisah. `NameStepScreen`, `DiscoverOnboardingDraftStorage`, route
-  `/onboarding/discover/name` — semua DIHAPUS. Onboarding Discover sekarang
-  **9 step** (semula 10): DOB, Gender, Photos, Bio, Work/Education,
-  Interests, Relationship Goal, Preferences, Preview — BELUM ADA SATUPUN
-  yang dibuat.
-- Step 2-9 (spesifik jalur "Mencari koneksi baru") dipisah dari Gateway
-  Choice (step 1, netral) — sama pola pemisahan di backend
-  (`DiscoverOnboardingController`/`Service`, route
+  terpisah. Onboarding Discover sekarang **9 step, SEMUA SUDAH DIBUAT**:
+  1 DOB, 2 Gender, 3 Photos, 4 Bio (+Detail Diri), 5 Work/Education,
+  6 Interests, 7 Relationship Goal, 8 Preferences, 9 Preview.
+  `features/onboarding/discover/*_step_screen.dart` — 1 file per step.
+- Step 1-8 (spesifik jalur "Mencari koneksi baru") dipisah dari Gateway
+  Choice (step 0 alur lama, sekarang gerbang sebelum step 1) — sama pola
+  pemisahan di backend (`DiscoverOnboardingController`/`Service`, route
   `/api/onboarding/discover/*`, lihat `.ai/rules/architecture.md` backend).
-- **BUKAN per-step ke API** — step 2-9 (begitu dibuat) diisi & disimpan
-  LOKAL di Flutter (SharedPreferences, pola sama `DiscoverOnboardingDraftStorage`
-  yang sudah dihapus — buat ulang dengan nama yang sama begitu step DOB
-  mulai dikerjakan), TIDAK ADA network call sampai step TERAKHIR (Preview).
-  `features/onboarding/discover_onboarding_repository.dart` —
-  `DiscoverOnboardingRepository.complete(Map<String, dynamic> fields)`,
-  SATU-SATUNYA network call, dipanggil SEKALI di step terakhir dengan
-  SEMUA field draft dikumpulkan jadi 1 payload (`fields` kosong `{}`
-  sekarang karena belum ada step yang dibuat).
-  Kalau jalur Together dibuat nanti, ikuti pola yang sama:
-  `together_onboarding_repository.dart`, `features/onboarding/together/`,
-  JANGAN campur dengan Discover.
+- **BUKAN per-step ke API** — step 1-8 diisi & disimpan LOKAL di Flutter
+  (`features/onboarding/discover/discover_onboarding_draft_storage.dart`,
+  `DiscoverOnboardingDraftStorage` — SharedPreferences, 1 key per field,
+  method baca/tulis per field DAN `readAllForSubmit()`/`clear()`), TIDAK
+  ADA network call sampai step TERAKHIR (Preview, tombol "Looks Good").
+  Tiap screen baca draft-nya sendiri di `initState` (pre-fill kalau user
+  balik ke step yang sama) dan `PopScope(canPop: false)` untuk hardware
+  back (pola sama Login/SignUp — lihat bagian Routing).
+- **Step Preview memanggil DUA network call sekaligus** (beda bentuk
+  request, `discover_onboarding_repository.dart`):
+  - `complete(fields)` (JSON) — SEMUA field profil dari
+    `readAllForSubmit()`.
+  - `uploadPhotos(photoPaths)` (multipart, `Dio.FormData` +
+    `MultipartFile.fromFile()`) — path LOKAL hasil copy galeri→temp dir
+    di step Photos (`path_provider`), BUKAN path galeri asli (bisa
+    hilang/berubah kapan saja).
+  - Setelah KEDUANYA sukses: `DiscoverOnboardingDraftStorage.clear()`,
+    lalu `context.go('/discover')`.
+- `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`
+  (`InterestRepository`), model `core/models/interest.dart` (`Interest`,
+  cuma `{id, slug}`). `interest_labels.dart` (`InterestLabels.labelFor()`)
+  terjemahkan `slug` → label i18n (switch statement manual, BUKAN dari
+  server — server cuma kirim slug).
+- Step Interests: minimal 3 dipilih KALAU user memang isi (0 = skip,
+  boleh) — divalidasi di client (pesan instan) DAN lagi di server
+  (`DiscoverOnboardingService`, defense-in-depth).
+- `height_cm`/`ethnicity`/`wants_children` digabung ke step Bio (jadi
+  "Detail Diri") — field ini ADA di skema `profiles` tapi TIDAK ADA di
+  desain HTML `05-bio.html` sumber, keputusan produk (lihat
+  `.ai/rules/architecture.md` backend untuk detail).
 - **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
   di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
-  (SharedPreferences) hilang — user mulai dari step 1 (DOB, begitu dibuat)
-  lagi saat onboarding berikutnya. Ini disengaja demi kesederhanaan (tidak
-  perlu network call tiap step). SharedPreferences BERTAHAN walau app
-  di-kill (bukan cuma minimize) — cuma hilang kalau uninstall.
-- `OnboardingStatus.resumeRoute` (`core/models/`) — SEKARANG fallback ke
-  `/discover` (placeholder) kalau `mode == 'discover'` dan `!completed`,
-  karena step 1 pengisian profil (DOB) belum dibuat. TODO: ganti ke
-  `/onboarding/discover/dob` (atau step pertama yang aktual) begitu
-  halamannya ada. Server memang tidak tahu progress di tengah step 2-9
-  (data itu cuma ada di draft lokal device yang bersangkutan) — lihat
-  penjelasan detail di `.ai/rules/architecture.md` backend.
-- `OnboardingStepHeader` (`shared/widgets/`, MASIH ADA meski belum dipakai
-  lagi sejak NameStepScreen dihapus) — back arrow + progress bar + label
-  "x/total", dipakai SEMUA step Discover (dan Together nanti) begitu
-  dibuat. Param `step` 1-indexed (bukan 0-indexed).
+  (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang
+  — user mulai dari step 1 (DOB) lagi. SharedPreferences BERTAHAN walau
+  app di-kill (bukan cuma minimize) — cuma hilang kalau uninstall.
+- `OnboardingStatus.resumeRoute` (`core/models/`) — SELALU ke
+  `/onboarding/discover/dob` (step 1, BUKAN step tertentu di tengah)
+  kalau `mode == 'discover'` dan `!completed`. Server memang tidak tahu
+  progress di tengah step 1-8 (data itu cuma ada di draft lokal device
+  yang bersangkutan) — lihat penjelasan detail di
+  `.ai/rules/architecture.md` backend.
+- `OnboardingStepHeader` (`shared/widgets/`) — back arrow + progress bar +
+  label "x/total", dipakai SEMUA step Discover. Param `step` 1-indexed.
+  `SelectableOptionCard` (`shared/widgets/`) — radio card dengan state
+  "selected" persisten (border+bg lilac+checkmark), dipakai step Gender
+  (icon-only) dan Relationship Goal (icon+deskripsi) — BEDA dari
+  `GatewayOptionCard` (murni navigasi, tanpa konsep "sedang dipilih").
+- Kalau jalur Together dibuat nanti, ikuti pola yang sama:
+  `together_onboarding_draft_storage.dart`,
+  `together_onboarding_repository.dart`, `features/onboarding/together/`,
+  JANGAN campur dengan Discover.
 - Sumber desain tiap step: `couplivy-docs/flow/01-discover/onboarding/*.html`
-  (`02-dob.html` s.d. `10-preview.html` — `01-name.html` TIDAK RELEVAN
-  LAGI, sudah dihapus dari alur).
+  (`02-dob.html` s.d. `10-preview.html` — nomor file MASIH pakai
+  penomoran lama basis 10 step, `01-name.html` TIDAK RELEVAN lagi, sudah
+  dihapus dari alur; progress bar Flutter pakai basis 9, bukan 10).
+- **Widget test**: DOB, Gender, Bio, Work/Education, Relationship Goal,
+  Preferences punya test (render + navigasi dasar, tanpa network). Photos,
+  Interests, Preview SENGAJA TIDAK punya widget test — butuh mock
+  Dio/image_picker yang belum ada infrastrukturnya di project ini; network
+  call sungguhan di widget test bikin pending timer/flaky (dicoba, gagal —
+  lihat riwayat kalau perlu detail). Verifikasi 3 screen itu via
+  `flutter analyze` + manual di device.
 
 ## Safe Area — Notch, Punch-Hole, Status Bar, Gesture Nav
 

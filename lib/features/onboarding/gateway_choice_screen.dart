@@ -56,9 +56,7 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
 
     ref.listen(gatewayChoiceProvider, (previous, next) {
       if (next is GatewayChoiceSuccess) {
-        // Step 1 pengisian profil (DOB) belum ada — sementara langsung ke
-        // Discover placeholder. Ganti begitu halamannya dibuat.
-        context.go('/discover');
+        context.go('/onboarding/discover/dob');
       }
 
       if (next is GatewayChoiceError) {

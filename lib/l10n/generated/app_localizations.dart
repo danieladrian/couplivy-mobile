@@ -331,6 +331,480 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get onboardingContinue;
+
+  /// Skip button shown on optional onboarding steps.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @dobTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When were you born?'**
+  String get dobTitle;
+
+  /// No description provided for @dobSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your age will be calculated automatically.'**
+  String get dobSubtitle;
+
+  /// No description provided for @dobFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get dobFieldLabel;
+
+  /// No description provided for @dobAgeResultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You are'**
+  String get dobAgeResultLabel;
+
+  /// No description provided for @dobAgeResultUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{age} years old'**
+  String dobAgeResultUnit(int age);
+
+  /// No description provided for @dobUnderageError.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be at least 18 years old to use Couplivy.'**
+  String get dobUnderageError;
+
+  /// No description provided for @genderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your gender?'**
+  String get genderTitle;
+
+  /// No description provided for @genderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll show you better matches based on this.'**
+  String get genderSubtitle;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderNonBinary.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-binary'**
+  String get genderNonBinary;
+
+  /// No description provided for @photosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your photos'**
+  String get photosTitle;
+
+  /// No description provided for @photosSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few clear photos help you get better matches.'**
+  String get photosSubtitle;
+
+  /// No description provided for @photosMainPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Photo'**
+  String get photosMainPhotoLabel;
+
+  /// No description provided for @photosMinimumError.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least 1 photo to continue.'**
+  String get photosMinimumError;
+
+  /// No description provided for @bioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about yourself'**
+  String get bioTitle;
+
+  /// No description provided for @bioSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few lines about you, plus some details for better matches.'**
+  String get bioSubtitle;
+
+  /// No description provided for @bioFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. I love good coffee, weekend hikes, and meaningful conversations.'**
+  String get bioFieldHint;
+
+  /// No description provided for @bioCharCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{current}/{max}'**
+  String bioCharCount(int current, int max);
+
+  /// No description provided for @bioHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Height (cm)'**
+  String get bioHeightLabel;
+
+  /// No description provided for @bioHeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 170'**
+  String get bioHeightHint;
+
+  /// No description provided for @bioEthnicityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ethnicity'**
+  String get bioEthnicityLabel;
+
+  /// No description provided for @bioEthnicityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Javanese'**
+  String get bioEthnicityHint;
+
+  /// No description provided for @bioWantsChildrenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want children?'**
+  String get bioWantsChildrenLabel;
+
+  /// No description provided for @bioWantsChildrenYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get bioWantsChildrenYes;
+
+  /// No description provided for @bioWantsChildrenNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get bioWantsChildrenNo;
+
+  /// No description provided for @bioWantsChildrenNotSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure yet'**
+  String get bioWantsChildrenNotSure;
+
+  /// No description provided for @workEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What do you do?'**
+  String get workEducationTitle;
+
+  /// No description provided for @workEducationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your career and education.'**
+  String get workEducationSubtitle;
+
+  /// No description provided for @workEducationOccupationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupation'**
+  String get workEducationOccupationLabel;
+
+  /// No description provided for @workEducationOccupationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your occupation'**
+  String get workEducationOccupationHint;
+
+  /// No description provided for @workEducationEducationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get workEducationEducationLabel;
+
+  /// No description provided for @workEducationEducationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select education'**
+  String get workEducationEducationHint;
+
+  /// No description provided for @educationHighSchool.
+  ///
+  /// In en, this message translates to:
+  /// **'High School'**
+  String get educationHighSchool;
+
+  /// No description provided for @educationBachelor.
+  ///
+  /// In en, this message translates to:
+  /// **'Bachelor\'s Degree'**
+  String get educationBachelor;
+
+  /// No description provided for @educationMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Master\'s Degree'**
+  String get educationMaster;
+
+  /// No description provided for @educationDoctorate.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctorate'**
+  String get educationDoctorate;
+
+  /// No description provided for @educationAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get educationAny;
+
+  /// No description provided for @interestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are your interests?'**
+  String get interestsTitle;
+
+  /// No description provided for @interestsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a few things you enjoy.'**
+  String get interestsSubtitle;
+
+  /// No description provided for @interestsSelectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected · choose at least 3'**
+  String interestsSelectedCount(int count);
+
+  /// No description provided for @interestsMinimumError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least 3 interests, or skip this step.'**
+  String get interestsMinimumError;
+
+  /// No description provided for @interestTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get interestTravel;
+
+  /// No description provided for @interestCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get interestCoffee;
+
+  /// No description provided for @interestHiking.
+  ///
+  /// In en, this message translates to:
+  /// **'Hiking'**
+  String get interestHiking;
+
+  /// No description provided for @interestFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get interestFood;
+
+  /// No description provided for @interestMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get interestMusic;
+
+  /// No description provided for @interestMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get interestMovies;
+
+  /// No description provided for @interestSports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get interestSports;
+
+  /// No description provided for @interestReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get interestReading;
+
+  /// No description provided for @interestArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Art'**
+  String get interestArt;
+
+  /// No description provided for @interestNature.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature'**
+  String get interestNature;
+
+  /// No description provided for @relationshipGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you looking for?'**
+  String get relationshipGoalTitle;
+
+  /// No description provided for @relationshipGoalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This helps us show you people with the same intentions.'**
+  String get relationshipGoalSubtitle;
+
+  /// No description provided for @relationshipGoalSeriousTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Serious Relationship'**
+  String get relationshipGoalSeriousTitle;
+
+  /// No description provided for @relationshipGoalSeriousDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for a long-term relationship'**
+  String get relationshipGoalSeriousDescription;
+
+  /// No description provided for @relationshipGoalCasualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Casual Dating'**
+  String get relationshipGoalCasualTitle;
+
+  /// No description provided for @relationshipGoalCasualDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting to know people, see where it goes'**
+  String get relationshipGoalCasualDescription;
+
+  /// No description provided for @relationshipGoalFriendshipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friendship'**
+  String get relationshipGoalFriendshipTitle;
+
+  /// No description provided for @relationshipGoalFriendshipDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking to make new friends first'**
+  String get relationshipGoalFriendshipDescription;
+
+  /// No description provided for @preferencesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what you\'re looking for'**
+  String get preferencesTitle;
+
+  /// No description provided for @preferencesAgeRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{min} – {max} years old'**
+  String preferencesAgeRangeLabel(int min, int max);
+
+  /// No description provided for @preferencesGenderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get preferencesGenderLabel;
+
+  /// No description provided for @preferencesGenderAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get preferencesGenderAny;
+
+  /// No description provided for @preferencesFamilyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Family preference'**
+  String get preferencesFamilyLabel;
+
+  /// No description provided for @preferencesFamilyWantsChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Wants children'**
+  String get preferencesFamilyWantsChildren;
+
+  /// No description provided for @preferencesFamilyNotWantsChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Doesn\'t want children'**
+  String get preferencesFamilyNotWantsChildren;
+
+  /// No description provided for @preferencesFamilyOpenToChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to children'**
+  String get preferencesFamilyOpenToChildren;
+
+  /// No description provided for @preferencesFamilyAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get preferencesFamilyAny;
+
+  /// No description provided for @preferencesReligionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Religion'**
+  String get preferencesReligionLabel;
+
+  /// No description provided for @preferencesReligionAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get preferencesReligionAny;
+
+  /// No description provided for @preferencesEducationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get preferencesEducationLabel;
+
+  /// No description provided for @preferencesSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Preferences'**
+  String get preferencesSubmit;
+
+  /// No description provided for @previewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there!'**
+  String get previewTitle;
+
+  /// No description provided for @previewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your profile before continuing.'**
+  String get previewSubtitle;
+
+  /// No description provided for @previewNameAge.
+  ///
+  /// In en, this message translates to:
+  /// **'{nickName}, {age}'**
+  String previewNameAge(String nickName, int age);
+
+  /// No description provided for @previewSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks Good'**
+  String get previewSubmit;
+
+  /// No description provided for @previewSubmitError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong saving your profile. Please try again.'**
+  String get previewSubmitError;
 }
 
 class _AppLocalizationsDelegate
