@@ -303,13 +303,58 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   cuma `{id, slug}`). `interest_labels.dart` (`InterestLabels.labelFor()`)
   terjemahkan `slug` → label i18n (switch statement manual, BUKAN dari
   server — server cuma kirim slug).
-- Step Interests: minimal 3 dipilih KALAU user memang isi (0 = skip,
-  boleh) — divalidasi di client (pesan instan) DAN lagi di server
-  (`DiscoverOnboardingService`, defense-in-depth).
+  - **Di-cache lokal via drift (SQLite)** — `core/storage/app_database.dart`
+    (`AppDatabase`, tabel `CachedInterests { id, slug }`). Alasan pakai
+    SQLite (bukan SharedPreferences+JSON seperti draft onboarding):
+    keputusan produk untuk data master yang berpotensi bertambah banyak
+    ke depan (bukan cuma 10 baris interests) dan bisa dipakai fitur lain.
+    Instance tunggal `appDatabase` (pola sama seperti `interestRepository`
+    lain — bukan di-construct manual di widget). `InterestRepository.list()`
+    baca cache DULU (instan), fallback network kalau cache kosong (akun
+    lama / data lokal terhapus) sambil sekalian isi cache.
+    `InterestRepository.refreshCache()` dipanggil (fire-and-forget, lihat
+    `unawaited()`) tepat setelah login/register sukses
+    (`AuthRepository._post`) — supaya saat user (kalau mode discover)
+    sampai step Interests, cache SUDAH terisi, step render instan tanpa
+    network round-trip. Kegagalan refresh diabaikan (bukan dilempar) —
+    tidak boleh menggagalkan alur login/register, dan `list()` tetap
+    punya fallback network.
+  - Code generator drift: jalankan
+    `dart run build_runner build --delete-conflicting-outputs` setelah
+    ubah skema tabel di `app_database.dart` (generate `app_database.g.dart`).
+- Step Interests WAJIB minimal 3 dipilih (tombol Skip DIHAPUS — keputusan
+  produk, lihat catatan di bawah) — divalidasi di client (pesan instan)
+  DAN lagi di server (`DiscoverOnboardingService`, defense-in-depth).
 - `height_cm`/`ethnicity`/`wants_children` digabung ke step Bio (jadi
   "Detail Diri") — field ini ADA di skema `profiles` tapi TIDAK ADA di
   desain HTML `05-bio.html` sumber, keputusan produk (lihat
   `.ai/rules/architecture.md` backend untuk detail).
+  - **Step 4 (Bio), 5 (Work/Education), 6 (Interests) SEMUA field WAJIB
+    diisi** — tombol Skip DIHAPUS dari ketiganya (awalnya optional dengan
+    Skip, keputusan produk berubah). Backend
+    (`CompleteProfileRequest`) juga diupdate jadi `required` untuk semua
+    field ini.
+  - **Ethnicity BUKAN teks bebas lagi** — bottom sheet select dengan 10
+    kategori luas (asian, black_african_descent, hispanic_latino,
+    middle_eastern, native_american, pacific_islander, south_asian,
+    white_caucasian, mixed_multiracial, other) — pola sama seperti dating
+    app besar (Tinder/Bumble/Hinge), BUKAN per-suku/per-negara granular.
+    "other" jadi jaring pengaman.
+  - **Height punya unit switcher cm/ft** (`_HeightUnitToggle` di
+    `bio_step_screen.dart`) — toggle segmented kecil di samping label.
+    Unit `ft` pakai 2 field TERPISAH (Feet + Inches), BUKAN feet desimal
+    (mis. "5.7 ft") — feet desimal TIDAK SAMA dengan notasi umum 5'7" (5
+    ft 7 in): 5.7 ft sebenarnya ≡ 5'8.4", ambigu dan berisiko salah
+    input. Backend/draft SELALU simpan `height_cm` (satu-satunya bentuk
+    yang dikirim) — konversi ft+in↔cm terjadi di client
+    (`_BioStepScreenState._heightCm` getter, `_applyHeightCm`). Preferensi
+    unit tampilan (`'cm'`/`'ft'`) disimpan TERPISAH di draft lokal
+    (`saveHeightUnitPreference`/`readHeightUnitPreference`) — MURNI
+    preferensi tampilan, tidak dikirim ke server.
+  - **Education tambah 2 opsi**: `no_education`, `elementary` (sebelum
+    `high_school`) — dipakai di step Work/Education DAN
+    `education_preference` di step Preferences. Backend enum di
+    `CompleteProfileRequest` diupdate untuk keduanya.
 - **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
   di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
   (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang

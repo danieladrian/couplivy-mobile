@@ -15,11 +15,12 @@ const _minimumInterests = 3;
 
 /// Step 6/9 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/07-interests.html. Daftar
-/// interest di-fetch dari `GET /api/interests` (master data server, bukan
-/// hardcode). Minimal 3 dipilih kalau user memang mau isi (0 dipilih =
-/// skip, diperbolehkan) — divalidasi lagi di server saat submit akhir,
-/// tapi dicek juga di sini supaya user tidak perlu tunggu sampai step
-/// Preview untuk tahu ada masalah.
+/// interest di-cache lokal (lihat [InterestRepository]) sejak login/
+/// register, jadi step ini biasanya render instan tanpa network round-
+/// trip. WAJIB pilih minimal 3 (tombol Skip dihapus — keputusan produk,
+/// lihat .ai/rules/architecture.md) — divalidasi lagi di server saat
+/// submit akhir, tapi dicek juga di sini supaya user tidak perlu tunggu
+/// sampai step Preview untuk tahu ada masalah.
 class InterestsStepScreen extends StatefulWidget {
   const InterestsStepScreen({super.key});
 
@@ -79,7 +80,7 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
 
   Future<void> _saveAndContinue() async {
     final l10n = AppLocalizations.of(context);
-    if (_selectedIds.isNotEmpty && _selectedIds.length < _minimumInterests) {
+    if (_selectedIds.length < _minimumInterests) {
       setState(() => _errorText = l10n.interestsMinimumError);
       return;
     }
@@ -198,24 +199,9 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
             ),
           ],
           const SizedBox(height: 24),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() => _selectedIds = {});
-                  _saveAndContinue();
-                },
-                child: Text(l10n.onboardingSkip),
-              ),
-              const Spacer(),
-              SizedBox(
-                width: 160,
-                child: AppButton(
-                  label: l10n.onboardingContinue,
-                  onPressed: _saveAndContinue,
-                ),
-              ),
-            ],
+          AppButton(
+            label: l10n.onboardingContinue,
+            onPressed: _saveAndContinue,
           ),
         ],
       ),

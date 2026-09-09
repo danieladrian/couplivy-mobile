@@ -461,14 +461,26 @@ abstract class AppLocalizations {
   /// No description provided for @bioHeightLabel.
   ///
   /// In en, this message translates to:
-  /// **'Height (cm)'**
+  /// **'Height'**
   String get bioHeightLabel;
 
-  /// No description provided for @bioHeightHint.
+  /// No description provided for @bioHeightHintCm.
   ///
   /// In en, this message translates to:
   /// **'e.g. 170'**
-  String get bioHeightHint;
+  String get bioHeightHintCm;
+
+  /// No description provided for @bioHeightHintFeet.
+  ///
+  /// In en, this message translates to:
+  /// **'Feet'**
+  String get bioHeightHintFeet;
+
+  /// No description provided for @bioHeightHintInch.
+  ///
+  /// In en, this message translates to:
+  /// **'Inches'**
+  String get bioHeightHintInch;
 
   /// No description provided for @bioEthnicityLabel.
   ///
@@ -479,8 +491,68 @@ abstract class AppLocalizations {
   /// No description provided for @bioEthnicityHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g. Javanese'**
+  /// **'Select ethnicity'**
   String get bioEthnicityHint;
+
+  /// No description provided for @ethnicityAsian.
+  ///
+  /// In en, this message translates to:
+  /// **'Asian'**
+  String get ethnicityAsian;
+
+  /// No description provided for @ethnicityBlackAfricanDescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Black / African Descent'**
+  String get ethnicityBlackAfricanDescent;
+
+  /// No description provided for @ethnicityHispanicLatino.
+  ///
+  /// In en, this message translates to:
+  /// **'Hispanic / Latino'**
+  String get ethnicityHispanicLatino;
+
+  /// No description provided for @ethnicityMiddleEastern.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle Eastern'**
+  String get ethnicityMiddleEastern;
+
+  /// No description provided for @ethnicityNativeAmerican.
+  ///
+  /// In en, this message translates to:
+  /// **'Native American'**
+  String get ethnicityNativeAmerican;
+
+  /// No description provided for @ethnicityPacificIslander.
+  ///
+  /// In en, this message translates to:
+  /// **'Pacific Islander'**
+  String get ethnicityPacificIslander;
+
+  /// No description provided for @ethnicitySouthAsian.
+  ///
+  /// In en, this message translates to:
+  /// **'South Asian'**
+  String get ethnicitySouthAsian;
+
+  /// No description provided for @ethnicityWhiteCaucasian.
+  ///
+  /// In en, this message translates to:
+  /// **'White / Caucasian'**
+  String get ethnicityWhiteCaucasian;
+
+  /// No description provided for @ethnicityMixedMultiracial.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed / Multiracial'**
+  String get ethnicityMixedMultiracial;
+
+  /// No description provided for @ethnicityOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get ethnicityOther;
 
   /// No description provided for @bioWantsChildrenLabel.
   ///
@@ -505,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not sure yet'**
   String get bioWantsChildrenNotSure;
+
+  /// No description provided for @bioAllFieldsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields to continue.'**
+  String get bioAllFieldsRequiredError;
 
   /// No description provided for @workEducationTitle.
   ///
@@ -542,6 +620,18 @@ abstract class AppLocalizations {
   /// **'Select education'**
   String get workEducationEducationHint;
 
+  /// No description provided for @educationNoEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'No Education'**
+  String get educationNoEducation;
+
+  /// No description provided for @educationElementary.
+  ///
+  /// In en, this message translates to:
+  /// **'Elementary School'**
+  String get educationElementary;
+
   /// No description provided for @educationHighSchool.
   ///
   /// In en, this message translates to:
@@ -572,6 +662,12 @@ abstract class AppLocalizations {
   /// **'Any'**
   String get educationAny;
 
+  /// No description provided for @workEducationAllFieldsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in occupation and education to continue.'**
+  String get workEducationAllFieldsRequiredError;
+
   /// No description provided for @interestsTitle.
   ///
   /// In en, this message translates to:
@@ -593,7 +689,7 @@ abstract class AppLocalizations {
   /// No description provided for @interestsMinimumError.
   ///
   /// In en, this message translates to:
-  /// **'Choose at least 3 interests, or skip this step.'**
+  /// **'Choose at least 3 interests to continue.'**
   String get interestsMinimumError;
 
   /// No description provided for @interestTravel.

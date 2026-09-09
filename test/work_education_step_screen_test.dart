@@ -31,7 +31,7 @@ void main() {
     );
   }
 
-  testWidgets('shows occupation and education fields with Skip button', (
+  testWidgets('shows occupation and education fields, and NO Skip button', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -47,10 +47,12 @@ void main() {
     expect(find.text('5/9'), findsOneWidget);
     expect(find.text('Occupation'), findsOneWidget);
     expect(find.text('Education'), findsOneWidget);
-    expect(find.text('Skip'), findsOneWidget);
+    expect(find.text('Skip'), findsNothing);
   });
 
-  testWidgets('Skip navigates to Interests', (WidgetTester tester) async {
+  testWidgets('Continue blocked with error when fields are empty', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: buildRouter(),
@@ -60,9 +62,68 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Skip'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Interests'), findsOneWidget);
+    expect(
+      find.text('Please fill in occupation and education to continue.'),
+      findsOneWidget,
+    );
+    expect(find.text('Interests'), findsNothing);
+  });
+
+  testWidgets(
+    'filling occupation and picking education navigates to Interests',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'Engineer');
+
+      await tester.tap(find.text('Select education'));
+      await tester.pumpAndSettle();
+      // Options now include No Education/Elementary — Bachelor's still
+      // present, pick it explicitly.
+      await tester.tap(find.text("Bachelor's Degree"));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Interests'), findsOneWidget);
+    },
+  );
+
+  testWidgets('education picker includes No Education and Elementary School', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: buildRouter(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Select education'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No Education'), findsOneWidget);
+    expect(find.text('Elementary School'), findsOneWidget);
   });
 }

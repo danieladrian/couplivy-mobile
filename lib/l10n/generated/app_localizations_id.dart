@@ -205,16 +205,52 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get bioHeightLabel => 'Tinggi (cm)';
+  String get bioHeightLabel => 'Tinggi';
 
   @override
-  String get bioHeightHint => 'mis. 170';
+  String get bioHeightHintCm => 'mis. 170';
+
+  @override
+  String get bioHeightHintFeet => 'Kaki';
+
+  @override
+  String get bioHeightHintInch => 'Inci';
 
   @override
   String get bioEthnicityLabel => 'Etnis';
 
   @override
-  String get bioEthnicityHint => 'mis. Jawa';
+  String get bioEthnicityHint => 'Pilih etnis';
+
+  @override
+  String get ethnicityAsian => 'Asia';
+
+  @override
+  String get ethnicityBlackAfricanDescent => 'Kulit Hitam / Keturunan Afrika';
+
+  @override
+  String get ethnicityHispanicLatino => 'Hispanik / Latino';
+
+  @override
+  String get ethnicityMiddleEastern => 'Timur Tengah';
+
+  @override
+  String get ethnicityNativeAmerican => 'Penduduk Asli Amerika';
+
+  @override
+  String get ethnicityPacificIslander => 'Kepulauan Pasifik';
+
+  @override
+  String get ethnicitySouthAsian => 'Asia Selatan';
+
+  @override
+  String get ethnicityWhiteCaucasian => 'Kulit Putih / Kaukasia';
+
+  @override
+  String get ethnicityMixedMultiracial => 'Campuran / Multiras';
+
+  @override
+  String get ethnicityOther => 'Lainnya';
 
   @override
   String get bioWantsChildrenLabel => 'Kamu mau punya anak?';
@@ -227,6 +263,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get bioWantsChildrenNotSure => 'Belum yakin';
+
+  @override
+  String get bioAllFieldsRequiredError => 'Isi semua field untuk melanjutkan.';
 
   @override
   String get workEducationTitle => 'Kamu kerja apa?';
@@ -247,6 +286,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get workEducationEducationHint => 'Pilih pendidikan';
 
   @override
+  String get educationNoEducation => 'Tidak Sekolah';
+
+  @override
+  String get educationElementary => 'SD';
+
+  @override
   String get educationHighSchool => 'SMA';
 
   @override
@@ -262,6 +307,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get educationAny => 'Semua';
 
   @override
+  String get workEducationAllFieldsRequiredError =>
+      'Isi pekerjaan dan pendidikan untuk melanjutkan.';
+
+  @override
   String get interestsTitle => 'Apa minatmu?';
 
   @override
@@ -274,7 +323,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get interestsMinimumError =>
-      'Pilih minimal 3 minat, atau lewati step ini.';
+      'Pilih minimal 3 minat untuk melanjutkan.';
 
   @override
   String get interestTravel => 'Traveling';

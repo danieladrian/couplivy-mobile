@@ -70,6 +70,12 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
 
+  # Cache lokal untuk master data (mis. Interests) — SQLite cross-platform
+  # (iOS+Android+desktop), diambil sekali saat login/register lalu dibaca
+  # instan di step Interests (tanpa network round-trip tiap buka step).
+  drift: ^2.28.2
+  sqlite3_flutter_libs: ^0.5.31
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -88,6 +94,10 @@ dev_dependencies:
   # Generate app icon semua resolusi Android/iOS dari 1 source file, lihat
   # flutter_launcher_icons.yaml.
   flutter_launcher_icons: ^0.14.4
+
+  # Code generator drift (tabel -> Dart classes type-safe).
+  drift_dev: ^2.28.2
+  build_runner: ^2.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

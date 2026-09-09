@@ -103,16 +103,23 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     if (selected != null) setState(() => _familyPreference = selected);
   }
 
+  // Jenjang terendah ke tertinggi, "any" di akhir.
+  Map<String, String> _educationOptions(AppLocalizations l10n) => {
+    'no_education': l10n.educationNoEducation,
+    'elementary': l10n.educationElementary,
+    'high_school': l10n.educationHighSchool,
+    'bachelor': l10n.educationBachelor,
+    'master': l10n.educationMaster,
+    'doctorate': l10n.educationDoctorate,
+    'any': l10n.educationAny,
+  };
+
   Future<void> _pickEducationPreference() async {
     final l10n = AppLocalizations.of(context);
-    final options = {
-      'high_school': l10n.educationHighSchool,
-      'bachelor': l10n.educationBachelor,
-      'master': l10n.educationMaster,
-      'doctorate': l10n.educationDoctorate,
-      'any': l10n.educationAny,
-    };
-    final selected = await _showPickerSheet(options, _educationPreference);
+    final selected = await _showPickerSheet(
+      _educationOptions(l10n),
+      _educationPreference,
+    );
     if (selected != null) setState(() => _educationPreference = selected);
   }
 
@@ -278,13 +285,9 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                               icon: PhosphorIcons.graduationCap(),
                               label: l10n.preferencesEducationLabel,
                               value: _educationPreference != null
-                                  ? {
-                                      'high_school': l10n.educationHighSchool,
-                                      'bachelor': l10n.educationBachelor,
-                                      'master': l10n.educationMaster,
-                                      'doctorate': l10n.educationDoctorate,
-                                      'any': l10n.educationAny,
-                                    }[_educationPreference]
+                                  ? _educationOptions(
+                                      l10n,
+                                    )[_educationPreference]
                                   : null,
                               onTap: _pickEducationPreference,
                             ),

@@ -22,6 +22,8 @@ abstract final class DiscoverOnboardingDraftStorage {
   static const _heightCmKey = 'onboarding_discover_draft_height_cm';
   static const _ethnicityKey = 'onboarding_discover_draft_ethnicity';
   static const _wantsChildrenKey = 'onboarding_discover_draft_wants_children';
+  static const _heightUnitPreferenceKey =
+      'onboarding_discover_draft_height_unit_preference';
   static const _occupationKey = 'onboarding_discover_draft_occupation';
   static const _educationKey = 'onboarding_discover_draft_education';
   static const _interestIdsKey = 'onboarding_discover_draft_interest_ids';
@@ -119,6 +121,31 @@ abstract final class DiscoverOnboardingDraftStorage {
   static Future<bool?> readWantsChildren() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_wantsChildrenKey);
+  }
+
+  /// "Not sure yet" DISIMPAN sebagai null — sama seperti "belum pernah
+  /// disentuh sama sekali". [readWantsChildren] tidak bisa bedakan
+  /// keduanya, jadi step Bio (yang sekarang mewajibkan field ini) pakai
+  /// method ini untuk tahu apakah user SUDAH memilih salah satu opsi
+  /// (termasuk "Not sure yet") atau belum menyentuh sama sekali.
+  static Future<bool> hasWantsChildrenKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(_wantsChildrenKey);
+  }
+
+  /// Preferensi TAMPILAN unit height ('cm' atau 'ft') — MURNI lokal,
+  /// TIDAK dikirim ke backend (backend cuma terima height_cm, satu-
+  /// satunya bentuk yang disimpan sebagai data). Dipakai supaya step
+  /// Bio ingat unit yang terakhir dipilih user, bisa dipakai lagi nanti
+  /// di Preview/Edit Profile.
+  static Future<void> saveHeightUnitPreference(String unit) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_heightUnitPreferenceKey, unit);
+  }
+
+  static Future<String?> readHeightUnitPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_heightUnitPreferenceKey);
   }
 
   // --- Step 5: Work/Education ---

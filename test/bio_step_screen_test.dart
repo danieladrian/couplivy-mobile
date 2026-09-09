@@ -32,7 +32,7 @@ void main() {
     );
   }
 
-  testWidgets('shows bio field, detail fields, and Skip button', (
+  testWidgets('shows bio field, detail fields, and NO Skip button', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -46,15 +46,23 @@ void main() {
 
     expect(find.text('Tell us about yourself'), findsOneWidget);
     expect(find.text('4/9'), findsOneWidget);
-    expect(find.text('Height (cm)'), findsOneWidget);
+    expect(find.text('Height'), findsOneWidget);
     expect(find.text('Ethnicity'), findsOneWidget);
+    expect(find.text('Select ethnicity'), findsOneWidget);
     expect(find.text('Do you want children?'), findsOneWidget);
-    expect(find.text('Skip'), findsOneWidget);
+    expect(find.text('Skip'), findsNothing);
+    // Unit toggle default cm.
+    expect(find.text('cm'), findsOneWidget);
+    expect(find.text('ft'), findsOneWidget);
   });
 
-  testWidgets('Skip navigates to Work/Education without filling anything', (
+  testWidgets('Continue blocked with error when fields are empty', (
     WidgetTester tester,
   ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: buildRouter(),
@@ -64,11 +72,46 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.text('Skip'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Skip'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
-    expect(find.text('WorkEducation'), findsOneWidget);
+    expect(find.text('Please fill in all fields to continue.'), findsOneWidget);
+    expect(find.text('WorkEducation'), findsNothing);
   });
+
+  testWidgets(
+    'filling all fields (incl. ethnicity picker) navigates to Work/Education',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Field 0 = bio, field 1 = height (cm, unit default).
+      final textFields = find.byType(TextField);
+      await tester.enterText(textFields.at(0), 'Hello there');
+      await tester.enterText(textFields.at(1), '170');
+
+      await tester.tap(find.text('Select ethnicity'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Asian').last);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Yes'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('WorkEducation'), findsOneWidget);
+    },
+  );
 }

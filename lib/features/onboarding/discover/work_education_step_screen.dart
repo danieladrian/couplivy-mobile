@@ -12,8 +12,10 @@ import 'discover_onboarding_draft_storage.dart';
 
 /// Step 5/9 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/06-work-education.html.
-/// OPTIONAL (ada tombol Skip). Education pakai bottom sheet select (sesuai
-/// brand-guideline §9.2c), bukan native dropdown.
+/// Occupation dan Education WAJIB diisi (tombol Skip dihapus) — keputusan
+/// produk, lihat catatan di .ai/rules/architecture.md. Education pakai
+/// bottom sheet select (sesuai brand-guideline §9.2c), bukan native
+/// dropdown.
 class WorkEducationStepScreen extends StatefulWidget {
   const WorkEducationStepScreen({super.key});
 
@@ -26,6 +28,7 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
   final _occupationController = TextEditingController();
   String? _selectedEducation;
   bool _isLoadingDraft = true;
+  String? _errorText;
 
   @override
   void initState() {
@@ -51,7 +54,10 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
     super.dispose();
   }
 
+  // Jenjang terendah ke tertinggi.
   Map<String, String> _educationOptions(AppLocalizations l10n) => {
+    'no_education': l10n.educationNoEducation,
+    'elementary': l10n.educationElementary,
     'high_school': l10n.educationHighSchool,
     'bachelor': l10n.educationBachelor,
     'master': l10n.educationMaster,
@@ -92,9 +98,15 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
   }
 
   Future<void> _saveAndContinue() async {
-    await DiscoverOnboardingDraftStorage.saveOccupation(
-      _occupationController.text.trim(),
-    );
+    final l10n = AppLocalizations.of(context);
+    final occupation = _occupationController.text.trim();
+
+    if (occupation.isEmpty || _selectedEducation == null) {
+      setState(() => _errorText = l10n.workEducationAllFieldsRequiredError);
+      return;
+    }
+
+    await DiscoverOnboardingDraftStorage.saveOccupation(occupation);
     await DiscoverOnboardingDraftStorage.saveEducation(_selectedEducation);
     if (mounted) context.go('/onboarding/discover/interests');
   }
@@ -207,22 +219,20 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
                                 ),
                               ),
                             ),
+                            if (_errorText != null) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                _errorText!,
+                                style: const TextStyle(
+                                  color: AppColors.error,
+                                  fontSize: 12.5,
+                                ),
+                              ),
+                            ],
                             const SizedBox(height: 24),
-                            Row(
-                              children: [
-                                TextButton(
-                                  onPressed: _saveAndContinue,
-                                  child: Text(l10n.onboardingSkip),
-                                ),
-                                const Spacer(),
-                                SizedBox(
-                                  width: 160,
-                                  child: AppButton(
-                                    label: l10n.onboardingContinue,
-                                    onPressed: _saveAndContinue,
-                                  ),
-                                ),
-                              ],
+                            AppButton(
+                              label: l10n.onboardingContinue,
+                              onPressed: _saveAndContinue,
                             ),
                           ],
                         ),

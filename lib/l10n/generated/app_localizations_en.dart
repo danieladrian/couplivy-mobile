@@ -203,16 +203,52 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get bioHeightLabel => 'Height (cm)';
+  String get bioHeightLabel => 'Height';
 
   @override
-  String get bioHeightHint => 'e.g. 170';
+  String get bioHeightHintCm => 'e.g. 170';
+
+  @override
+  String get bioHeightHintFeet => 'Feet';
+
+  @override
+  String get bioHeightHintInch => 'Inches';
 
   @override
   String get bioEthnicityLabel => 'Ethnicity';
 
   @override
-  String get bioEthnicityHint => 'e.g. Javanese';
+  String get bioEthnicityHint => 'Select ethnicity';
+
+  @override
+  String get ethnicityAsian => 'Asian';
+
+  @override
+  String get ethnicityBlackAfricanDescent => 'Black / African Descent';
+
+  @override
+  String get ethnicityHispanicLatino => 'Hispanic / Latino';
+
+  @override
+  String get ethnicityMiddleEastern => 'Middle Eastern';
+
+  @override
+  String get ethnicityNativeAmerican => 'Native American';
+
+  @override
+  String get ethnicityPacificIslander => 'Pacific Islander';
+
+  @override
+  String get ethnicitySouthAsian => 'South Asian';
+
+  @override
+  String get ethnicityWhiteCaucasian => 'White / Caucasian';
+
+  @override
+  String get ethnicityMixedMultiracial => 'Mixed / Multiracial';
+
+  @override
+  String get ethnicityOther => 'Other';
 
   @override
   String get bioWantsChildrenLabel => 'Do you want children?';
@@ -225,6 +261,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bioWantsChildrenNotSure => 'Not sure yet';
+
+  @override
+  String get bioAllFieldsRequiredError =>
+      'Please fill in all fields to continue.';
 
   @override
   String get workEducationTitle => 'What do you do?';
@@ -245,6 +285,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workEducationEducationHint => 'Select education';
 
   @override
+  String get educationNoEducation => 'No Education';
+
+  @override
+  String get educationElementary => 'Elementary School';
+
+  @override
   String get educationHighSchool => 'High School';
 
   @override
@@ -260,6 +306,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationAny => 'Any';
 
   @override
+  String get workEducationAllFieldsRequiredError =>
+      'Please fill in occupation and education to continue.';
+
+  @override
   String get interestsTitle => 'What are your interests?';
 
   @override
@@ -272,7 +322,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get interestsMinimumError =>
-      'Choose at least 3 interests, or skip this step.';
+      'Choose at least 3 interests to continue.';
 
   @override
   String get interestTravel => 'Travel';

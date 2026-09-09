@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 
 import '../../core/api/api_client.dart';
@@ -6,6 +8,7 @@ import '../../core/models/onboarding_status.dart';
 import '../../core/models/user.dart';
 import '../../core/storage/token_storage.dart';
 import '../../core/storage/user_session_storage.dart';
+import '../onboarding/discover/interest_repository.dart';
 
 /// Hasil sukses login/register — user + token, sekaligus menyimpan token
 /// ke secure storage. `onboarding` disertakan backend di response yang
@@ -91,6 +94,12 @@ class AuthRepository {
 
       await TokenStorage.saveToken(token);
       await UserSessionStorage.save(user);
+      // Refresh cache Interests SEGERA setelah login/register — supaya
+      // saat user sampai step Interests (kalau mode discover), datanya
+      // sudah ada di cache lokal (instan, tanpa network round-trip).
+      // Kegagalan diabaikan (lihat dokumentasi refreshCache) — TIDAK
+      // boleh menggagalkan alur login/register.
+      unawaited(interestRepository.refreshCache());
 
       return AuthResult(
         user: user,
