@@ -13,6 +13,9 @@ import 'discover_onboarding_draft_storage.dart';
 /// tidak ada tombol Skip — memilih salah satu opsi langsung lanjut ke
 /// step berikutnya (tidak ada tombol Continue terpisah, sama pola
 /// GatewayChoiceScreen).
+///
+/// Cuma 2 opsi (Female/Male) — keputusan produk, HTML sumber aslinya
+/// punya Non-binary juga tapi sengaja dihapus dari scope sekarang.
 class GenderStepScreen extends StatefulWidget {
   const GenderStepScreen({super.key});
 
@@ -101,16 +104,6 @@ class _GenderStepScreenState extends State<GenderStepScreen> {
                               title: l10n.genderMale,
                               selected: _selectedGender == 'male',
                               onTap: () => _select('male'),
-                            ),
-                            const SizedBox(height: 12),
-                            SelectableOptionCard(
-                              icon: PhosphorIcons.genderIntersex(),
-                              iconBackgroundColor: AppColors.peach.withValues(
-                                alpha: 0.3,
-                              ),
-                              title: l10n.genderNonBinary,
-                              selected: _selectedGender == 'non_binary',
-                              onTap: () => _select('non_binary'),
                             ),
                           ],
                         ),

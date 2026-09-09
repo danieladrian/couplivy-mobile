@@ -85,7 +85,6 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     final options = {
       'female': l10n.genderFemale,
       'male': l10n.genderMale,
-      'non_binary': l10n.genderNonBinary,
       'everyone': l10n.preferencesGenderAny,
     };
     final selected = await _showPickerSheet(options, _genderPreference);
@@ -215,7 +214,6 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                                   ? {
                                       'female': l10n.genderFemale,
                                       'male': l10n.genderMale,
-                                      'non_binary': l10n.genderNonBinary,
                                       'everyone': l10n.preferencesGenderAny,
                                     }[_genderPreference]
                                   : null,

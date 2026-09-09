@@ -31,7 +31,7 @@ void main() {
     );
   }
 
-  testWidgets('shows all 3 gender options and 2/9 progress', (
+  testWidgets('shows only Female and Male options and 2/9 progress', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -47,7 +47,7 @@ void main() {
     expect(find.text('2/9'), findsOneWidget);
     expect(find.text('Female'), findsOneWidget);
     expect(find.text('Male'), findsOneWidget);
-    expect(find.text('Non-binary'), findsOneWidget);
+    expect(find.text('Non-binary'), findsNothing);
   });
 
   testWidgets('tapping an option navigates to Photos', (

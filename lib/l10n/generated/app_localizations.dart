@@ -398,12 +398,6 @@ abstract class AppLocalizations {
   /// **'Male'**
   String get genderMale;
 
-  /// No description provided for @genderNonBinary.
-  ///
-  /// In en, this message translates to:
-  /// **'Non-binary'**
-  String get genderNonBinary;
-
   /// No description provided for @photosTitle.
   ///
   /// In en, this message translates to:

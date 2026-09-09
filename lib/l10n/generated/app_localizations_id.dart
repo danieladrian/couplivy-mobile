@@ -169,9 +169,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get genderMale => 'Laki-laki';
 
   @override
-  String get genderNonBinary => 'Non-biner';
-
-  @override
   String get photosTitle => 'Tambahkan fotomu';
 
   @override

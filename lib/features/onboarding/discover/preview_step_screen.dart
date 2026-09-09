@@ -145,7 +145,6 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
   String? _genderLabel(AppLocalizations l10n) => switch (_gender) {
     'female' => l10n.genderFemale,
     'male' => l10n.genderMale,
-    'non_binary' => l10n.genderNonBinary,
     _ => null,
   };
 

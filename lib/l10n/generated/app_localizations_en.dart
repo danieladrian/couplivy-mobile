@@ -168,9 +168,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genderMale => 'Male';
 
   @override
-  String get genderNonBinary => 'Non-binary';
-
-  @override
   String get photosTitle => 'Add your photos';
 
   @override
