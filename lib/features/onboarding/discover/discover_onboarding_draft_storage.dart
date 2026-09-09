@@ -223,6 +223,33 @@ abstract final class DiscoverOnboardingDraftStorage {
     };
   }
 
+  /// Tentukan route step SELANJUTNYA yang belum diisi — dipakai
+  /// [OnboardingStatus.resolveResumeRoute] supaya Splash/Login membawa
+  /// user balik ke step tempat dia berhenti (bukan selalu step 1),
+  /// mis. sudah sampai Photos (step 3) lalu keluar app, masuk lagi harus
+  /// langsung ke Photos, bukan DOB lagi.
+  ///
+  /// Cuma cek field yang WAJIB per step (tidak ada tombol Skip di HTML
+  /// sumbernya) — step optional (Bio, Work/Education, Interests,
+  /// Preferences) dianggap "boleh kosong selamanya" jadi tidak bisa
+  /// dipakai sebagai penanda "belum sampai sini". Kalau user pernah lewat
+  /// step optional (skip atau isi), dia akan mendarat di Preview begitu
+  /// semua step wajib (DOB, Gender, Photos, Relationship Goal) terisi —
+  /// draft optional yang sudah diisi tetap ke-preserve dan tampil di
+  /// Preview, cuma urutan "kembali ke mana" yang disederhanakan.
+  static Future<String> resolveNextStepRoute() async {
+    if (await readDob() == null) return '/onboarding/discover/dob';
+    if (await readGender() == null) return '/onboarding/discover/gender';
+    if ((await readPhotoPaths()).isEmpty) {
+      return '/onboarding/discover/photos';
+    }
+    if (await readRelationshipGoal() == null) {
+      return '/onboarding/discover/relationship-goal';
+    }
+
+    return '/onboarding/discover/preview';
+  }
+
   /// Hapus semua draft — dipanggil setelah submit sukses ke server,
   /// supaya draft lama tidak nyangkut kalau user onboarding lagi nanti
   /// (device baru/akun baru login di device sama).

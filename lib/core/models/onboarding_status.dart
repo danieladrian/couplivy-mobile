@@ -1,3 +1,5 @@
+import '../../features/onboarding/discover/discover_onboarding_draft_storage.dart';
+
 /// Status onboarding user — dikembalikan backend baik lewat
 /// `{user, token, onboarding}` di response `/auth/*` maupun langsung dari
 /// `GET /onboarding/status`. Dipakai Splash/SignUp/Login untuk menentukan
@@ -33,17 +35,20 @@ class OnboardingStatus {
   /// profil lengkap (`current_step == 'gateway_choice'`,
   /// `completed == false`), atau sudah selesai (`completed == true`).
   ///
-  /// Kondisi kedua SELALU ke `/onboarding/discover/dob` (step 1 pengisian
-  /// profil) — BUKAN step tertentu di tengah, karena draft lokal
-  /// (SharedPreferences) cuma bisa dibaca dari device yang sama tempat
-  /// draft itu dibuat; tiap step baca draft-nya sendiri di `initState` dan
-  /// pre-fill kalau ada, jadi user yang balik ke step 1 lalu next lagi
-  /// akan lewat step yang sudah terisi dengan cepat (tidak perlu isi
-  /// ulang dari nol).
-  String get resumeRoute {
+  /// Kondisi kedua dulunya SELALU ke `/onboarding/discover/dob` (step 1)
+  /// biar sederhana, tapi user melapor itu bikin bingung — sudah sampai
+  /// step 3 (Photos), keluar app, masuk lagi malah balik ke step 1 lagi
+  /// (meski isian step 1-2 tetap ke-preserve dan tinggal skip cepat).
+  /// Sekarang resume LANGSUNG ke step pertama yang belum terisi di draft
+  /// lokal — lihat [DiscoverOnboardingDraftStorage.resolveNextStepRoute].
+  ///
+  /// Async karena draft ada di SharedPreferences (device yang sama tempat
+  /// draft dibuat — server tidak tahu progress step 1-8, lihat
+  /// .ai/rules/architecture.md backend).
+  Future<String> resolveResumeRoute() async {
     if (completed) return '/discover';
     if (mode != 'discover') return '/gateway-choice';
 
-    return '/onboarding/discover/dob';
+    return DiscoverOnboardingDraftStorage.resolveNextStepRoute();
   }
 }

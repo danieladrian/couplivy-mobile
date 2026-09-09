@@ -227,8 +227,8 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
 - Redirect setelah auth sukses:
   - Sign Up sukses -> SELALU `/gateway-choice` (user baru pasti belum
     onboard, tidak perlu cek `completed`).
-  - Login sukses -> lewat `OnboardingStatus.resumeRoute` (lihat section
-    di bawah).
+  - Login sukses -> lewat `OnboardingStatus.resolveResumeRoute()` (lihat
+    section di bawah).
   - Splash (device baru/reinstall lalu buka app dengan token tersimpan) ->
     sama seperti Login, tapi lewat `GET /onboarding/status` (lihat bagian
     Splash Screen di atas).
@@ -271,6 +271,31 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     `android.permission.CAMERA` + `NSCameraUsageDescription`; Galeri via
     `ImageSource.gallery` — Android 13+ pakai Photo Picker system, tidak
     butuh permission runtime).
+  - 6 slot foto HARUS diisi BERURUTAN dari kiri-atas (index 0 = foto
+    utama) — hanya slot kosong PERTAMA (`index == _photoPaths.length`)
+    yang aktif (`onTap` non-null); slot kosong sesudahnya dibuat redup
+    (`Opacity` 0.4) dan tidak bisa di-tap. User sempat melapor bingung
+    waktu semua slot kosong bisa di-tap bebas: foto yang dipilih selalu
+    "nempel" ke slot kosong paling awal (karena render `hasPhoto = index
+    < _photoPaths.length`), bukan ke slot yang di-tap — kesannya foto
+    "pindah sendiri".
+  - **Bug kamera "Take a photo" silent-fail** — pernah terjadi di device
+    Samsung One UI (Android 16): tap "Take a photo" menutup bottom sheet
+    tanpa membuka kamera ATAU dialog permission, tanpa exception apa pun
+    di log. Root cause: Android "Restricted Settings" — APK yang
+    di-sideload (`adb install`, bukan dari Play Store) punya permission
+    sensitif (kamera, mikrofon) TERKUNCI ke "Don't allow" secara diam-diam
+    (`cmd appops get` menunjukkan `CAMERA: ignore` +
+    `ACCESS_RESTRICTED_SETTINGS: default; rejectTime=...`), dan App Info →
+    Permissions menunjukkan "No permissions allowed" dengan radio button
+    yang tidak responsif terhadap tap. Fix di kode: tambah `<queries>`
+    block untuk `android.media.action.IMAGE_CAPTURE` di
+    `AndroidManifest.xml` (package visibility Android 11+, diperlukan
+    `image_picker` untuk resolve app kamera). Fix di device (tidak bisa
+    dari kode): buka App Info → menu titik-tiga → "Allow restricted
+    setting", baru permission kamera bisa di-grant normal. Ini bug
+    device/OS, bukan bug aplikasi — reproduksi ulang di device release
+    (bukan sideload) tidak akan mengalami ini.
   - Setelah KEDUANYA sukses: `DiscoverOnboardingDraftStorage.clear()`,
     lalu `context.go('/discover')`.
 - `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`
@@ -290,12 +315,20 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang
   — user mulai dari step 1 (DOB) lagi. SharedPreferences BERTAHAN walau
   app di-kill (bukan cuma minimize) — cuma hilang kalau uninstall.
-- `OnboardingStatus.resumeRoute` (`core/models/`) — SELALU ke
-  `/onboarding/discover/dob` (step 1, BUKAN step tertentu di tengah)
-  kalau `mode == 'discover'` dan `!completed`. Server memang tidak tahu
-  progress di tengah step 1-8 (data itu cuma ada di draft lokal device
-  yang bersangkutan) — lihat penjelasan detail di
-  `.ai/rules/architecture.md` backend.
+- `OnboardingStatus.resolveResumeRoute()` (`core/models/`, async) —
+  kalau `mode == 'discover'` dan `!completed`, resume LANGSUNG ke step
+  pertama yang belum terisi di draft lokal (lihat
+  `DiscoverOnboardingDraftStorage.resolveNextStepRoute()`), BUKAN selalu
+  ke step 1 (DOB). Awalnya didesain selalu ke step 1 (dengan asumsi user
+  cuma tinggal skip cepat lewat step yang sudah terisi), tapi user
+  melapor itu membingungkan — sudah sampai step 3 (Photos), keluar app,
+  masuk lagi malah balik ke step 1. Cuma cek field WAJIB per step (DOB,
+  Gender, Photos minimal 1, Relationship Goal) — step optional (Bio,
+  Work/Education, Interests, Preferences) tidak dipakai sebagai penanda
+  progress karena boleh kosong selamanya; kalau semua step wajib sudah
+  terisi, resume ke Preview. Server tetap tidak tahu progress di tengah
+  step 1-8 (data cuma ada di draft lokal device yang bersangkutan) —
+  lihat penjelasan detail di `.ai/rules/architecture.md` backend.
 - `OnboardingStepHeader` (`shared/widgets/`) — back arrow + progress bar +
   label "x/total", dipakai SEMUA step Discover. Param `step` 1-indexed.
   `SelectableOptionCard` (`shared/widgets/`) — radio card dengan state

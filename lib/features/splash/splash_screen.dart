@@ -13,8 +13,9 @@ import '_water_gradient_background.dart';
 /// couplivy-docs/flow/00-auth/01-splash.html) ke salah satu dari 3 tempat:
 /// - Tidak ada token tersimpan -> /welcome (belum pernah login).
 /// - Ada token, tapi onboarding belum selesai -> step yang BELUM
-///   diselesaikan (lihat OnboardingStatus.resumeRoute — BUKAN selalu ke
-///   Gateway Choice dari awal). Ini yang menangani kasus uninstall+install
+///   diselesaikan (lihat OnboardingStatus.resolveResumeRoute — BUKAN
+///   selalu ke Gateway Choice/step 1 dari awal, langsung ke step tempat
+///   user terakhir berhenti). Ini yang menangani kasus uninstall+install
 ///   ulang lalu login, atau app ditutup di tengah onboarding lalu dibuka
 ///   lagi.
 /// - Ada token, onboarding sudah selesai -> /discover.
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = await TokenStorage.readToken();
       if (token != null) {
         final onboarding = await onboardingRepository.status();
-        destination = onboarding.resumeRoute;
+        destination = await onboarding.resolveResumeRoute();
       }
     } catch (_) {
       destination = '/welcome';

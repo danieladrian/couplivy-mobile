@@ -81,10 +81,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen(loginFormProvider, (previous, next) {
       if (next is AuthFormSuccess) {
         // Login bisa terjadi dari device baru (uninstall+install ulang)
-        // atau session lama habis — `resumeRoute` arahkan ke step yang
-        // BELUM diselesaikan (bukan selalu balik ke Gateway Choice dari
-        // awal), sama seperti Splash. Lihat OnboardingStatus.resumeRoute.
-        context.go(next.onboarding.resumeRoute);
+        // atau session lama habis — `resolveResumeRoute()` arahkan ke
+        // step yang BELUM diselesaikan (bukan selalu balik ke Gateway
+        // Choice/step 1 dari awal), sama seperti Splash. Lihat
+        // OnboardingStatus.resolveResumeRoute.
+        next.onboarding.resolveResumeRoute().then((route) {
+          if (context.mounted) context.go(route);
+        });
       }
     });
 

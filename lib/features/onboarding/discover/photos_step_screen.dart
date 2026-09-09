@@ -192,11 +192,24 @@ class _PhotosStepScreenState extends State<PhotosStepScreen> {
                                   ),
                               itemBuilder: (context, index) {
                                 final hasPhoto = index < _photoPaths.length;
+                                // Slot terisi harus berurutan dari kiri-atas
+                                // (index 0) — hanya slot kosong PERTAMA yang
+                                // bisa di-tap. Tanpa ini, tap di slot mana
+                                // pun (misal slot ke-4) tetap menambah foto
+                                // ke akhir _photoPaths, tapi tampil nempel
+                                // di slot kosong paling awal — user jadi
+                                // bingung foto yang dia pilih "pindah" ke
+                                // slot lain.
+                                final isNextEmptySlot =
+                                    index == _photoPaths.length;
                                 return _PhotoSlot(
                                   path: hasPhoto ? _photoPaths[index] : null,
                                   isMain: index == 0,
+                                  isEnabled: hasPhoto || isNextEmptySlot,
                                   mainLabel: l10n.photosMainPhotoLabel,
-                                  onTap: hasPhoto ? null : _addPhoto,
+                                  onTap: hasPhoto
+                                      ? null
+                                      : (isNextEmptySlot ? _addPhoto : null),
                                   onRemove: hasPhoto
                                       ? () => _removePhoto(index)
                                       : null,
@@ -234,6 +247,7 @@ class _PhotoSlot extends StatelessWidget {
   const _PhotoSlot({
     required this.path,
     required this.isMain,
+    required this.isEnabled,
     required this.mainLabel,
     required this.onTap,
     required this.onRemove,
@@ -241,6 +255,10 @@ class _PhotoSlot extends StatelessWidget {
 
   final String? path;
   final bool isMain;
+  // false untuk slot kosong yang belum gilirannya diisi (mis. slot 4
+  // selagi slot 2-3 masih kosong) — dibuat redup + tidak bisa di-tap,
+  // supaya urutan pengisian slot terlihat jelas.
+  final bool isEnabled;
   final String mainLabel;
   final VoidCallback? onTap;
   final VoidCallback? onRemove;
@@ -248,14 +266,17 @@ class _PhotoSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (path == null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        child: DottedBorderBox(
-          child: Icon(
-            PhosphorIcons.plus(),
-            color: AppColors.textSecondary,
-            size: 24,
+      return Opacity(
+        opacity: isEnabled ? 1 : 0.4,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          child: DottedBorderBox(
+            child: Icon(
+              PhosphorIcons.plus(),
+              color: AppColors.textSecondary,
+              size: 24,
+            ),
           ),
         ),
       );

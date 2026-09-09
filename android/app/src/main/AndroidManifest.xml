@@ -49,5 +49,13 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- image_picker: package visibility (Android 11+) — tanpa ini,
+             plugin tidak bisa menemukan app kamera manapun di device
+             (resolveActivity() return null), dan ImageSource.camera GAGAL
+             SECARA SENYAP (bukan exception — dianggap sama seperti user
+             cancel). Lihat https://developer.android.com/training/package-visibility. -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE"/>
+        </intent>
     </queries>
 </manifest>
