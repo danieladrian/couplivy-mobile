@@ -49,5 +49,7 @@
 		<false/>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Couplivy needs access to your photos so you can add pictures to your profile.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Couplivy needs access to your camera so you can take pictures for your profile.</string>
 	</dict>
 </plist>

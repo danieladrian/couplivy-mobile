@@ -428,6 +428,18 @@ abstract class AppLocalizations {
   /// **'Add at least 1 photo to continue.'**
   String get photosMinimumError;
 
+  /// No description provided for @photosSourceCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get photosSourceCamera;
+
+  /// No description provided for @photosSourceGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get photosSourceGallery;
+
   /// No description provided for @bioTitle.
   ///
   /// In en, this message translates to:

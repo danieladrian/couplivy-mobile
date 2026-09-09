@@ -20,10 +20,11 @@ const _maxPhotoSlots = 6;
 /// couplivy-docs/flow/01-discover/onboarding/04-photos.html. Required,
 /// minimal 1 foto utama.
 ///
-/// Foto dipilih dari galeri DI-COPY ke temp dir aplikasi (path lokal
-/// disimpan di draft) — TIDAK di-upload sekarang. Upload sungguhan
-/// (multipart) baru terjadi di step Preview (terakhir), bersamaan dengan
-/// submit field profil lain. Lihat .ai/rules/architecture.md.
+/// Tap slot kosong buka bottom sheet pilihan sumber — Kamera atau Galeri.
+/// Foto DI-COPY ke temp dir aplikasi (path lokal disimpan di draft) —
+/// TIDAK di-upload sekarang. Upload sungguhan (multipart) baru terjadi di
+/// step Preview (terakhir), bersamaan dengan submit field profil lain.
+/// Lihat .ai/rules/architecture.md.
 class PhotosStepScreen extends StatefulWidget {
   const PhotosStepScreen({super.key});
 
@@ -50,7 +51,10 @@ class _PhotosStepScreenState extends State<PhotosStepScreen> {
   }
 
   Future<void> _addPhoto() async {
-    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    final source = await _pickSource();
+    if (source == null) return;
+
+    final picked = await _picker.pickImage(source: source);
     if (picked == null) return;
 
     // Copy ke temp dir aplikasi — file asli di galeri device bisa
@@ -71,6 +75,47 @@ class _PhotosStepScreenState extends State<PhotosStepScreen> {
       _errorText = null;
     });
     await DiscoverOnboardingDraftStorage.savePhotoPaths(updated);
+  }
+
+  /// Bottom sheet pilihan sumber foto — Kamera atau Galeri. Sesuai brand-
+  /// guideline §9.2c (select dibuka sebagai bottom sheet, bukan native
+  /// dropdown/dialog).
+  Future<ImageSource?> _pickSource() {
+    final l10n = AppLocalizations.of(context);
+
+    return showModalBottomSheet<ImageSource>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 12),
+              ListTile(
+                leading: Icon(
+                  PhosphorIcons.camera(),
+                  color: AppColors.deepViolet,
+                ),
+                title: Text(l10n.photosSourceCamera),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: Icon(
+                  PhosphorIcons.image(),
+                  color: AppColors.deepViolet,
+                ),
+                title: Text(l10n.photosSourceGallery),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _removePhoto(int index) async {

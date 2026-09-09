@@ -264,9 +264,13 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   - `complete(fields)` (JSON) — SEMUA field profil dari
     `readAllForSubmit()`.
   - `uploadPhotos(photoPaths)` (multipart, `Dio.FormData` +
-    `MultipartFile.fromFile()`) — path LOKAL hasil copy galeri→temp dir
-    di step Photos (`path_provider`), BUKAN path galeri asli (bisa
-    hilang/berubah kapan saja).
+    `MultipartFile.fromFile()`) — path LOKAL hasil copy kamera/galeri→temp
+    dir di step Photos (`path_provider`), BUKAN path galeri/kamera asli
+    (bisa hilang/berubah kapan saja). Tap slot kosong buka bottom sheet
+    pilihan sumber (Kamera via `ImageSource.camera` — butuh
+    `android.permission.CAMERA` + `NSCameraUsageDescription`; Galeri via
+    `ImageSource.gallery` — Android 13+ pakai Photo Picker system, tidak
+    butuh permission runtime).
   - Setelah KEDUANYA sukses: `DiscoverOnboardingDraftStorage.clear()`,
     lalu `context.go('/discover')`.
 - `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`

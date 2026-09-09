@@ -119,6 +119,8 @@
   "photosSubtitle": "A few clear photos help you get better matches.",
   "photosMainPhotoLabel": "Main Photo",
   "photosMinimumError": "Add at least 1 photo to continue.",
+  "photosSourceCamera": "Take a photo",
+  "photosSourceGallery": "Choose from gallery",
 
   "bioTitle": "Tell us about yourself",
   "bioSubtitle": "A few lines about you, plus some details for better matches.",

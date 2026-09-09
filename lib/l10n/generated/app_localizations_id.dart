@@ -186,6 +186,12 @@ class AppLocalizationsId extends AppLocalizations {
       'Tambahkan minimal 1 foto untuk melanjutkan.';
 
   @override
+  String get photosSourceCamera => 'Ambil foto';
+
+  @override
+  String get photosSourceGallery => 'Pilih dari galeri';
+
+  @override
   String get bioTitle => 'Ceritakan tentang dirimu';
 
   @override

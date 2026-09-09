@@ -184,6 +184,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photosMinimumError => 'Add at least 1 photo to continue.';
 
   @override
+  String get photosSourceCamera => 'Take a photo';
+
+  @override
+  String get photosSourceGallery => 'Choose from gallery';
+
+  @override
   String get bioTitle => 'Tell us about yourself';
 
   @override

@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- image_picker: ambil foto dari kamera langsung di step Photos
+         onboarding (couplivy-docs/flow/01-discover/onboarding/
+         04-photos.html) — dibutuhkan hanya untuk ImageSource.camera,
+         ImageSource.gallery via Android Photo Picker system TIDAK butuh
+         permission ini. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:label="Couplivy"
         android:name="${applicationName}"

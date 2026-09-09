@@ -64,6 +64,8 @@
   "photosSubtitle": "Beberapa foto jelas membantu kamu dapat kecocokan lebih baik.",
   "photosMainPhotoLabel": "Foto Utama",
   "photosMinimumError": "Tambahkan minimal 1 foto untuk melanjutkan.",
+  "photosSourceCamera": "Ambil foto",
+  "photosSourceGallery": "Pilih dari galeri",
 
   "bioTitle": "Ceritakan tentang dirimu",
   "bioSubtitle": "Beberapa kalimat tentang kamu, plus beberapa detail untuk kecocokan lebih baik.",
