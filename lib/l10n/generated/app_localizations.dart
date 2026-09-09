@@ -494,6 +494,18 @@ abstract class AppLocalizations {
   /// **'Select ethnicity'**
   String get bioEthnicityHint;
 
+  /// No description provided for @bioReligionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Religion'**
+  String get bioReligionLabel;
+
+  /// No description provided for @bioReligionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select religion'**
+  String get bioReligionHint;
+
   /// No description provided for @ethnicityAsian.
   ///
   /// In en, this message translates to:
@@ -955,6 +967,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Any'**
   String get preferencesReligionAny;
+
+  /// No description provided for @religionChristian.
+  ///
+  /// In en, this message translates to:
+  /// **'Christian'**
+  String get religionChristian;
+
+  /// No description provided for @religionCatholic.
+  ///
+  /// In en, this message translates to:
+  /// **'Catholic'**
+  String get religionCatholic;
+
+  /// No description provided for @religionMuslim.
+  ///
+  /// In en, this message translates to:
+  /// **'Muslim'**
+  String get religionMuslim;
+
+  /// No description provided for @religionBuddhist.
+  ///
+  /// In en, this message translates to:
+  /// **'Buddhist'**
+  String get religionBuddhist;
+
+  /// No description provided for @religionHindu.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindu'**
+  String get religionHindu;
+
+  /// No description provided for @religionJewish.
+  ///
+  /// In en, this message translates to:
+  /// **'Jewish'**
+  String get religionJewish;
+
+  /// No description provided for @religionSikh.
+  ///
+  /// In en, this message translates to:
+  /// **'Sikh'**
+  String get religionSikh;
+
+  /// No description provided for @religionAtheistAgnostic.
+  ///
+  /// In en, this message translates to:
+  /// **'Atheist / Agnostic'**
+  String get religionAtheistAgnostic;
+
+  /// No description provided for @religionSpiritual.
+  ///
+  /// In en, this message translates to:
+  /// **'Spiritual (not religious)'**
+  String get religionSpiritual;
+
+  /// No description provided for @religionOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get religionOther;
 
   /// No description provided for @preferencesEducationLabel.
   ///

@@ -21,6 +21,7 @@ abstract final class DiscoverOnboardingDraftStorage {
   static const _bioKey = 'onboarding_discover_draft_bio';
   static const _heightCmKey = 'onboarding_discover_draft_height_cm';
   static const _ethnicityKey = 'onboarding_discover_draft_ethnicity';
+  static const _religionKey = 'onboarding_discover_draft_religion';
   static const _wantsChildrenKey = 'onboarding_discover_draft_wants_children';
   static const _heightUnitPreferenceKey =
       'onboarding_discover_draft_height_unit_preference';
@@ -106,6 +107,20 @@ abstract final class DiscoverOnboardingDraftStorage {
   static Future<String?> readEthnicity() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_ethnicityKey);
+  }
+
+  static Future<void> saveReligion(String? religion) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (religion == null || religion.isEmpty) {
+      await prefs.remove(_religionKey);
+    } else {
+      await prefs.setString(_religionKey, religion);
+    }
+  }
+
+  static Future<String?> readReligion() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_religionKey);
   }
 
   /// null = belum dijawab (belum sentuh pilihan), true/false = jawaban.
@@ -228,6 +243,7 @@ abstract final class DiscoverOnboardingDraftStorage {
     final bio = await readBio();
     final heightCm = await readHeightCm();
     final ethnicity = await readEthnicity();
+    final religion = await readReligion();
     final wantsChildren = await readWantsChildren();
     final occupation = await readOccupation();
     final education = await readEducation();
@@ -241,6 +257,7 @@ abstract final class DiscoverOnboardingDraftStorage {
       'bio': ?bio,
       'height_cm': ?heightCm,
       'ethnicity': ?ethnicity,
+      'religion': ?religion,
       'wants_children': ?wantsChildren,
       'occupation': ?occupation,
       'education': ?education,
@@ -289,6 +306,7 @@ abstract final class DiscoverOnboardingDraftStorage {
       prefs.remove(_bioKey),
       prefs.remove(_heightCmKey),
       prefs.remove(_ethnicityKey),
+      prefs.remove(_religionKey),
       prefs.remove(_wantsChildrenKey),
       prefs.remove(_occupationKey),
       prefs.remove(_educationKey),

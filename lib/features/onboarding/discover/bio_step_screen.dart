@@ -52,6 +52,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
   final _heightFeetController = TextEditingController();
   final _heightInchController = TextEditingController();
   String? _ethnicity;
+  String? _religion;
   bool? _wantsChildren;
   bool _wantsChildrenTouched = false;
   _HeightUnit _heightUnit = _HeightUnit.cm;
@@ -69,6 +70,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
     final bio = await DiscoverOnboardingDraftStorage.readBio();
     final heightCm = await DiscoverOnboardingDraftStorage.readHeightCm();
     final ethnicity = await DiscoverOnboardingDraftStorage.readEthnicity();
+    final religion = await DiscoverOnboardingDraftStorage.readReligion();
     final wantsChildren =
         await DiscoverOnboardingDraftStorage.readWantsChildren();
     // "Not sure yet" DISIMPAN sebagai null (sama seperti "belum pernah
@@ -88,6 +90,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
       if (heightCm != null) _applyHeightCm(heightCm, unit);
       setState(() {
         _ethnicity = ethnicity;
+        _religion = religion;
         _wantsChildren = wantsChildren;
         _wantsChildrenTouched = wantsChildrenKeyExists;
         _heightUnit = unit;
@@ -155,15 +158,35 @@ class _BioStepScreenState extends State<BioStepScreen> {
     'other': l10n.ethnicityOther,
   };
 
-  Future<void> _pickEthnicity() async {
-    final l10n = AppLocalizations.of(context);
-    final options = _ethnicityOptions(l10n);
+  // Daftar agama umum secara global — TIDAK ADA opsi "any" di sini
+  // (beda dari religion_preference di step Preferences), karena "any"
+  // cuma masuk akal untuk preferensi siapa yang dicari, bukan agama
+  // milik user sendiri.
+  Map<String, String> _religionOptions(AppLocalizations l10n) => {
+    'christian': l10n.religionChristian,
+    'catholic': l10n.religionCatholic,
+    'muslim': l10n.religionMuslim,
+    'buddhist': l10n.religionBuddhist,
+    'hindu': l10n.religionHindu,
+    'jewish': l10n.religionJewish,
+    'sikh': l10n.religionSikh,
+    'atheist_agnostic': l10n.religionAtheistAgnostic,
+    'spiritual': l10n.religionSpiritual,
+    'other': l10n.religionOther,
+  };
 
-    final selected = await showModalBottomSheet<String>(
+  /// Bottom sheet select generik — dipakai Ethnicity DAN Religion (dan
+  /// pola yang sama di `work_education_step_screen.dart`/
+  /// `preferences_step_screen.dart`). Height DIBATASI + `ListView`
+  /// scrollable (bukan `Column` biasa) karena daftar opsi (11-10 item)
+  /// bisa lebih tinggi dari layar pendek — tanpa ini, Column overflow
+  /// ("A RenderFlex overflowed", baris terakhir terpotong).
+  Future<String?> _pickFromOptions(
+    Map<String, String> options,
+    String? current,
+  ) {
+    return showModalBottomSheet<String>(
       context: context,
-      // 11 opsi (10 kategori + Chinese) bisa lebih tinggi dari layar
-      // pendek — tanpa batas tinggi + scroll, Column overflow (RenderFlex
-      // "A RenderFlex overflowed" — user melihat baris terakhir terpotong).
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
@@ -183,7 +206,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
                     for (final entry in options.entries)
                       ListTile(
                         title: Text(entry.value),
-                        trailing: _ethnicity == entry.key
+                        trailing: current == entry.key
                             ? const Icon(
                                 Icons.check,
                                 color: AppColors.deepViolet,
@@ -200,10 +223,28 @@ class _BioStepScreenState extends State<BioStepScreen> {
         );
       },
     );
+  }
 
+  Future<void> _pickEthnicity() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await _pickFromOptions(
+      _ethnicityOptions(l10n),
+      _ethnicity,
+    );
     if (selected != null) {
       setState(() {
         _ethnicity = selected;
+        _errorText = null;
+      });
+    }
+  }
+
+  Future<void> _pickReligion() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await _pickFromOptions(_religionOptions(l10n), _religion);
+    if (selected != null) {
+      setState(() {
+        _religion = selected;
         _errorText = null;
       });
     }
@@ -217,6 +258,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
     if (bio.isEmpty ||
         heightCm == null ||
         _ethnicity == null ||
+        _religion == null ||
         !_wantsChildrenTouched) {
       setState(() => _errorText = l10n.bioAllFieldsRequiredError);
       return;
@@ -225,6 +267,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
     await DiscoverOnboardingDraftStorage.saveBio(bio);
     await DiscoverOnboardingDraftStorage.saveHeightCm(heightCm);
     await DiscoverOnboardingDraftStorage.saveEthnicity(_ethnicity);
+    await DiscoverOnboardingDraftStorage.saveReligion(_religion);
     await DiscoverOnboardingDraftStorage.saveWantsChildren(_wantsChildren);
     await DiscoverOnboardingDraftStorage.saveHeightUnitPreference(
       _heightUnit == _HeightUnit.footInch ? 'ft' : 'cm',
@@ -240,6 +283,9 @@ class _BioStepScreenState extends State<BioStepScreen> {
     final bioLength = _bioController.text.length;
     final ethnicityLabel = _ethnicity != null
         ? _ethnicityOptions(l10n)[_ethnicity]
+        : null;
+    final religionLabel = _religion != null
+        ? _religionOptions(l10n)[_religion]
         : null;
 
     return PopScope(
@@ -371,42 +417,25 @@ class _BioStepScreenState extends State<BioStepScreen> {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            InkWell(
+                            _SelectField(
+                              value: ethnicityLabel,
+                              hintText: l10n.bioEthnicityHint,
                               onTap: _pickEthnicity,
-                              borderRadius: BorderRadius.circular(AppRadius.md),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 14,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadius.md,
-                                  ),
-                                  border: Border.all(color: AppColors.border),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        ethnicityLabel ?? l10n.bioEthnicityHint,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: ethnicityLabel != null
-                                              ? AppColors.textDark
-                                              : AppColors.textSecondary,
-                                        ),
-                                      ),
-                                    ),
-                                    Icon(
-                                      PhosphorIcons.caretDown(),
-                                      size: 16,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ],
-                                ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              l10n.bioReligionLabel,
+                              style: const TextStyle(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textDark,
                               ),
+                            ),
+                            const SizedBox(height: 6),
+                            _SelectField(
+                              value: religionLabel,
+                              hintText: l10n.bioReligionHint,
+                              onTap: _pickReligion,
                             ),
                             const SizedBox(height: 18),
                             Text(
@@ -588,6 +617,58 @@ class _PlainNumberField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.md),
           borderSide: const BorderSide(color: AppColors.deepViolet),
+        ),
+      ),
+    );
+  }
+}
+
+/// Card select yang buka bottom sheet (lihat
+/// [_BioStepScreenState._pickFromOptions]) — dipakai Ethnicity DAN
+/// Religion, sama polanya dengan Education di
+/// `work_education_step_screen.dart`.
+class _SelectField extends StatelessWidget {
+  const _SelectField({
+    required this.value,
+    required this.hintText,
+    required this.onTap,
+  });
+
+  final String? value;
+  final String hintText;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                value ?? hintText,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: value != null
+                      ? AppColors.textDark
+                      : AppColors.textSecondary,
+                ),
+              ),
+            ),
+            Icon(
+              PhosphorIcons.caretDown(),
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
+          ],
         ),
       ),
     );

@@ -355,6 +355,27 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     `high_school`) — dipakai di step Work/Education DAN
     `education_preference` di step Preferences. Backend enum di
     `CompleteProfileRequest` diupdate untuk keduanya.
+  - **`religion` DITAMBAH ke step Bio** (bottom sheet select, sama pola
+    Ethnicity) — kolom `profiles.religion` SUDAH ADA di skema sejak awal
+    (bahkan sudah punya cast `encrypted`) tapi TIDAK PERNAH bisa diisi
+    lewat onboarding (`CompleteProfileRequest` tidak punya rule untuk
+    field ini) sampai ditambahkan sekarang. WAJIB, TANPA opsi "any"
+    (beda dari `religion_preference` di step Preferences, yang punya
+    "any" karena itu preferensi siapa yang dicari, bukan agama sendiri).
+    Daftar sama dipakai keduanya: christian, catholic, muslim, buddhist,
+    hindu, jewish, sikh, atheist_agnostic, spiritual, other.
+    `religion_preference` di step Preferences JUGA diubah dari teks bebas
+    (`TextEditingController` + `AlertDialog`) jadi bottom sheet select
+    yang sama — sebelumnya tidak konsisten dengan field select lain
+    (Ethnicity/Education). Icon row Preferences diganti dari
+    `PhosphorIcons.cross()` (simbol salib, spesifik Kristen/Katolik) ke
+    `PhosphorIcons.handsPraying()` (netral lintas agama).
+  - **Bottom sheet select generik** (`_BioStepScreenState._pickFromOptions`
+    di `bio_step_screen.dart`, `_showPickerSheet` di
+    `preferences_step_screen.dart`) SELALU dibatasi tinggi
+    (`maxHeight: 70% layar`) + `ListView` scrollable (BUKAN `Column`
+    polos) — daftar opsi yang panjang (Ethnicity 11, Religion 10,
+    Education 7) bisa overflow di layar pendek kalau tidak dibatasi.
 - **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
   di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
   (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang

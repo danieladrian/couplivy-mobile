@@ -49,6 +49,8 @@ void main() {
     expect(find.text('Height'), findsOneWidget);
     expect(find.text('Ethnicity'), findsOneWidget);
     expect(find.text('Select ethnicity'), findsOneWidget);
+    expect(find.text('Religion'), findsOneWidget);
+    expect(find.text('Select religion'), findsOneWidget);
     expect(find.text('Do you want children?'), findsOneWidget);
     expect(find.text('Skip'), findsNothing);
     // Unit toggle default cm.
@@ -80,7 +82,8 @@ void main() {
   });
 
   testWidgets(
-    'filling all fields (incl. ethnicity picker) navigates to Work/Education',
+    'filling all fields (incl. ethnicity + religion pickers) navigates to '
+    'Work/Education',
     (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 1.0;
@@ -103,6 +106,11 @@ void main() {
       await tester.tap(find.text('Select ethnicity'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Asian').last);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Select religion'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Christian').last);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Yes'));

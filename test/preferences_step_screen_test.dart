@@ -67,4 +67,36 @@ void main() {
 
     expect(find.text('Preview'), findsOneWidget);
   });
+
+  testWidgets(
+    'Religion row opens a select bottom sheet (not a free-text dialog)',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Religion'));
+      await tester.pumpAndSettle();
+
+      // Select bottom sheet, bukan AlertDialog dengan TextField bebas.
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.text('Christian'), findsOneWidget);
+      expect(find.text('Muslim'), findsOneWidget);
+      expect(find.text('Any'), findsWidgets);
+
+      await tester.tap(find.text('Muslim'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Muslim'), findsOneWidget);
+    },
+  );
 }

@@ -223,6 +223,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get bioEthnicityHint => 'Pilih etnis';
 
   @override
+  String get bioReligionLabel => 'Agama';
+
+  @override
+  String get bioReligionHint => 'Pilih agama';
+
+  @override
   String get ethnicityAsian => 'Asia';
 
   @override
@@ -461,6 +467,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesReligionAny => 'Semua';
+
+  @override
+  String get religionChristian => 'Kristen';
+
+  @override
+  String get religionCatholic => 'Katolik';
+
+  @override
+  String get religionMuslim => 'Muslim';
+
+  @override
+  String get religionBuddhist => 'Buddha';
+
+  @override
+  String get religionHindu => 'Hindu';
+
+  @override
+  String get religionJewish => 'Yahudi';
+
+  @override
+  String get religionSikh => 'Sikh';
+
+  @override
+  String get religionAtheistAgnostic => 'Atheis / Agnostik';
+
+  @override
+  String get religionSpiritual => 'Spiritual (tidak religius)';
+
+  @override
+  String get religionOther => 'Lainnya';
 
   @override
   String get preferencesEducationLabel => 'Pendidikan';

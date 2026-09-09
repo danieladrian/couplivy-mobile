@@ -28,7 +28,7 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
   RangeValues _ageRange = const RangeValues(25, 35);
   String? _genderPreference;
   String? _familyPreference;
-  final _religionController = TextEditingController();
+  String? _religionPreference;
   String? _educationPreference;
   bool _isLoadingDraft = true;
 
@@ -49,18 +49,11 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
         }
         _genderPreference = preferences['gender_preference'] as String?;
         _familyPreference = preferences['family_preference'] as String?;
-        _religionController.text =
-            preferences['religion_preference'] as String? ?? '';
+        _religionPreference = preferences['religion_preference'] as String?;
         _educationPreference = preferences['education_preference'] as String?;
         _isLoadingDraft = false;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _religionController.dispose();
-    super.dispose();
   }
 
   Future<void> _submit() async {
@@ -69,8 +62,8 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
       'age_max': _ageRange.end.round(),
       if (_genderPreference != null) 'gender_preference': _genderPreference,
       if (_familyPreference != null) 'family_preference': _familyPreference,
-      if (_religionController.text.trim().isNotEmpty)
-        'religion_preference': _religionController.text.trim(),
+      if (_religionPreference != null)
+        'religion_preference': _religionPreference,
       if (_educationPreference != null)
         'education_preference': _educationPreference,
     });
@@ -103,6 +96,32 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     if (selected != null) setState(() => _familyPreference = selected);
   }
 
+  // Daftar agama umum secara global, "any" khusus untuk preference
+  // (bukan opsi valid untuk religion milik user sendiri, lihat
+  // `BioStepScreen._religionOptions` — TIDAK ADA "any" di sana).
+  Map<String, String> _religionOptions(AppLocalizations l10n) => {
+    'christian': l10n.religionChristian,
+    'catholic': l10n.religionCatholic,
+    'muslim': l10n.religionMuslim,
+    'buddhist': l10n.religionBuddhist,
+    'hindu': l10n.religionHindu,
+    'jewish': l10n.religionJewish,
+    'sikh': l10n.religionSikh,
+    'atheist_agnostic': l10n.religionAtheistAgnostic,
+    'spiritual': l10n.religionSpiritual,
+    'other': l10n.religionOther,
+    'any': l10n.preferencesReligionAny,
+  };
+
+  Future<void> _pickReligionPreference() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await _showPickerSheet(
+      _religionOptions(l10n),
+      _religionPreference,
+    );
+    if (selected != null) setState(() => _religionPreference = selected);
+  }
+
   // Jenjang terendah ke tertinggi, "any" di akhir.
   Map<String, String> _educationOptions(AppLocalizations l10n) => {
     'no_education': l10n.educationNoEducation,
@@ -129,6 +148,13 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
   ) {
     return showModalBottomSheet<String>(
       context: context,
+      // Religion (11 opsi) dan Education (7 opsi) bisa lebih tinggi dari
+      // layar pendek — tanpa batas tinggi + scroll, Column overflow ("A
+      // RenderFlex overflowed", baris terakhir terpotong). Pola sama
+      // seperti `BioStepScreen._pickFromOptions`.
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+      ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -138,14 +164,24 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 12),
-              for (final entry in options.entries)
-                ListTile(
-                  title: Text(entry.value),
-                  trailing: current == entry.key
-                      ? const Icon(Icons.check, color: AppColors.deepViolet)
-                      : null,
-                  onTap: () => Navigator.of(context).pop(entry.key),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final entry in options.entries)
+                      ListTile(
+                        title: Text(entry.value),
+                        trailing: current == entry.key
+                            ? const Icon(
+                                Icons.check,
+                                color: AppColors.deepViolet,
+                              )
+                            : null,
+                        onTap: () => Navigator.of(context).pop(entry.key),
+                      ),
+                  ],
                 ),
+              ),
               const SizedBox(height: 12),
             ],
           ),
@@ -243,43 +279,15 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                               onTap: _pickFamilyPreference,
                             ),
                             _PreferenceRow(
-                              icon: PhosphorIcons.cross(),
+                              // handsPraying, BUKAN cross — simbol salib
+                              // spesifik Kristen/Katolik, tidak netral
+                              // untuk agama lain (lihat riwayat percakapan).
+                              icon: PhosphorIcons.handsPraying(),
                               label: l10n.preferencesReligionLabel,
-                              value: _religionController.text.isNotEmpty
-                                  ? _religionController.text
+                              value: _religionPreference != null
+                                  ? _religionOptions(l10n)[_religionPreference]
                                   : null,
-                              onTap: () async {
-                                final result = await showDialog<String>(
-                                  context: context,
-                                  builder: (context) {
-                                    final controller = TextEditingController(
-                                      text: _religionController.text,
-                                    );
-                                    return AlertDialog(
-                                      content: TextField(
-                                        controller: controller,
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              l10n.preferencesReligionLabel,
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.of(
-                                            context,
-                                          ).pop(controller.text),
-                                          child: Text(l10n.onboardingContinue),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                if (result != null) {
-                                  setState(
-                                    () => _religionController.text = result,
-                                  );
-                                }
-                              },
+                              onTap: _pickReligionPreference,
                             ),
                             _PreferenceRow(
                               icon: PhosphorIcons.graduationCap(),
