@@ -253,6 +253,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get ethnicityOther => 'Lainnya';
 
   @override
+  String get ethnicityChinese => 'Tionghoa';
+
+  @override
   String get bioWantsChildrenLabel => 'Kamu mau punya anak?';
 
   @override

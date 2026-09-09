@@ -251,6 +251,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ethnicityOther => 'Other';
 
   @override
+  String get ethnicityChinese => 'Chinese';
+
+  @override
   String get bioWantsChildrenLabel => 'Do you want children?';
 
   @override

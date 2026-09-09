@@ -114,4 +114,31 @@ void main() {
       expect(find.text('WorkEducation'), findsOneWidget);
     },
   );
+
+  testWidgets('ethnicity picker includes Chinese right before Other', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: buildRouter(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Select ethnicity'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Chinese'), findsOneWidget);
+    expect(find.text('Other'), findsOneWidget);
+
+    final options = tester.widgetList<ListTile>(find.byType(ListTile));
+    final labels = options.map((tile) => (tile.title as Text).data).toList();
+    expect(labels.indexOf('Chinese'), labels.indexOf('Other') - 1);
+  });
 }

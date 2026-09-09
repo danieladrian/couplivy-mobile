@@ -151,6 +151,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
     'south_asian': l10n.ethnicitySouthAsian,
     'white_caucasian': l10n.ethnicityWhiteCaucasian,
     'mixed_multiracial': l10n.ethnicityMixedMultiracial,
+    'chinese': l10n.ethnicityChinese,
     'other': l10n.ethnicityOther,
   };
 
@@ -160,6 +161,12 @@ class _BioStepScreenState extends State<BioStepScreen> {
 
     final selected = await showModalBottomSheet<String>(
       context: context,
+      // 11 opsi (10 kategori + Chinese) bisa lebih tinggi dari layar
+      // pendek — tanpa batas tinggi + scroll, Column overflow (RenderFlex
+      // "A RenderFlex overflowed" — user melihat baris terakhir terpotong).
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+      ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -169,14 +176,24 @@ class _BioStepScreenState extends State<BioStepScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 12),
-              for (final entry in options.entries)
-                ListTile(
-                  title: Text(entry.value),
-                  trailing: _ethnicity == entry.key
-                      ? const Icon(Icons.check, color: AppColors.deepViolet)
-                      : null,
-                  onTap: () => Navigator.of(context).pop(entry.key),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final entry in options.entries)
+                      ListTile(
+                        title: Text(entry.value),
+                        trailing: _ethnicity == entry.key
+                            ? const Icon(
+                                Icons.check,
+                                color: AppColors.deepViolet,
+                              )
+                            : null,
+                        onTap: () => Navigator.of(context).pop(entry.key),
+                      ),
+                  ],
                 ),
+              ),
               const SizedBox(height: 12),
             ],
           ),

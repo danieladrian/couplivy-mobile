@@ -554,6 +554,12 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get ethnicityOther;
 
+  /// No description provided for @ethnicityChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get ethnicityChinese;
+
   /// No description provided for @bioWantsChildrenLabel.
   ///
   /// In en, this message translates to:
