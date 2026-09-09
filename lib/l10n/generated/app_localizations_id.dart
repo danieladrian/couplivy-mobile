@@ -332,7 +332,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get interestTravel => 'Traveling';
 
   @override
-  String get interestCoffee => 'Kopi & Teh';
+  String get interestCoffee => 'Kopi / Teh';
 
   @override
   String get interestHiking => 'Hiking';

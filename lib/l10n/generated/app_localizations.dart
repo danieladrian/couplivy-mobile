@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @interestCoffee.
   ///
   /// In en, this message translates to:
-  /// **'Coffee & Tea'**
+  /// **'Coffee / Tea'**
   String get interestCoffee;
 
   /// No description provided for @interestHiking.

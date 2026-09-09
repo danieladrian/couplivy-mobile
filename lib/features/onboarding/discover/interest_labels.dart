@@ -8,7 +8,8 @@ abstract final class InterestLabels {
   static String labelFor(AppLocalizations l10n, String slug) {
     return switch (slug) {
       'travel' => l10n.interestTravel,
-      // Label diperluas jadi "Coffee & Tea" — slug tetap 'coffee' (tidak
+      // Label diperluas jadi "Coffee / Tea" (bukan "&" — orang bisa suka
+      // salah satu tanpa suka keduanya) — slug tetap 'coffee' (tidak
       // perlu migrasi data), cuma representasi tampilannya mewakili
       // keduanya, konsisten dengan kategori luas lainnya.
       'coffee' => l10n.interestCoffee,

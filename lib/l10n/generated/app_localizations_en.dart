@@ -331,7 +331,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get interestTravel => 'Travel';
 
   @override
-  String get interestCoffee => 'Coffee & Tea';
+  String get interestCoffee => 'Coffee / Tea';
 
   @override
   String get interestHiking => 'Hiking';
