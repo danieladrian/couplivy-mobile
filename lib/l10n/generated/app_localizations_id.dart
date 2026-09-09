@@ -332,7 +332,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get interestTravel => 'Traveling';
 
   @override
-  String get interestCoffee => 'Kopi';
+  String get interestCoffee => 'Kopi & Teh';
 
   @override
   String get interestHiking => 'Hiking';
@@ -357,6 +357,48 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get interestNature => 'Alam';
+
+  @override
+  String get interestGaming => 'Gaming';
+
+  @override
+  String get interestPhotography => 'Fotografi';
+
+  @override
+  String get interestFitness => 'Kebugaran';
+
+  @override
+  String get interestCooking => 'Memasak';
+
+  @override
+  String get interestDancing => 'Menari';
+
+  @override
+  String get interestPets => 'Hewan Peliharaan';
+
+  @override
+  String get interestFashion => 'Fashion';
+
+  @override
+  String get interestWine => 'Wine';
+
+  @override
+  String get interestVolunteering => 'Sukarelawan';
+
+  @override
+  String get interestWriting => 'Menulis';
+
+  @override
+  String get interestGardening => 'Berkebun';
+
+  @override
+  String get interestCamping => 'Camping';
+
+  @override
+  String get interestYoga => 'Yoga';
+
+  @override
+  String get interestTechnology => 'Teknologi';
 
   @override
   String get relationshipGoalTitle => 'Kamu mencari apa?';

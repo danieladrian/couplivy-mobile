@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @interestCoffee.
   ///
   /// In en, this message translates to:
-  /// **'Coffee'**
+  /// **'Coffee & Tea'**
   String get interestCoffee;
 
   /// No description provided for @interestHiking.
@@ -757,6 +757,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nature'**
   String get interestNature;
+
+  /// No description provided for @interestGaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Gaming'**
+  String get interestGaming;
+
+  /// No description provided for @interestPhotography.
+  ///
+  /// In en, this message translates to:
+  /// **'Photography'**
+  String get interestPhotography;
+
+  /// No description provided for @interestFitness.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness'**
+  String get interestFitness;
+
+  /// No description provided for @interestCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooking'**
+  String get interestCooking;
+
+  /// No description provided for @interestDancing.
+  ///
+  /// In en, this message translates to:
+  /// **'Dancing'**
+  String get interestDancing;
+
+  /// No description provided for @interestPets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get interestPets;
+
+  /// No description provided for @interestFashion.
+  ///
+  /// In en, this message translates to:
+  /// **'Fashion'**
+  String get interestFashion;
+
+  /// No description provided for @interestWine.
+  ///
+  /// In en, this message translates to:
+  /// **'Wine'**
+  String get interestWine;
+
+  /// No description provided for @interestVolunteering.
+  ///
+  /// In en, this message translates to:
+  /// **'Volunteering'**
+  String get interestVolunteering;
+
+  /// No description provided for @interestWriting.
+  ///
+  /// In en, this message translates to:
+  /// **'Writing'**
+  String get interestWriting;
+
+  /// No description provided for @interestGardening.
+  ///
+  /// In en, this message translates to:
+  /// **'Gardening'**
+  String get interestGardening;
+
+  /// No description provided for @interestCamping.
+  ///
+  /// In en, this message translates to:
+  /// **'Camping'**
+  String get interestCamping;
+
+  /// No description provided for @interestYoga.
+  ///
+  /// In en, this message translates to:
+  /// **'Yoga'**
+  String get interestYoga;
+
+  /// No description provided for @interestTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get interestTechnology;
 
   /// No description provided for @relationshipGoalTitle.
   ///

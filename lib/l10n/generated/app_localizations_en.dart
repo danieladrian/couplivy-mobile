@@ -331,7 +331,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get interestTravel => 'Travel';
 
   @override
-  String get interestCoffee => 'Coffee';
+  String get interestCoffee => 'Coffee & Tea';
 
   @override
   String get interestHiking => 'Hiking';
@@ -356,6 +356,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get interestNature => 'Nature';
+
+  @override
+  String get interestGaming => 'Gaming';
+
+  @override
+  String get interestPhotography => 'Photography';
+
+  @override
+  String get interestFitness => 'Fitness';
+
+  @override
+  String get interestCooking => 'Cooking';
+
+  @override
+  String get interestDancing => 'Dancing';
+
+  @override
+  String get interestPets => 'Pets';
+
+  @override
+  String get interestFashion => 'Fashion';
+
+  @override
+  String get interestWine => 'Wine';
+
+  @override
+  String get interestVolunteering => 'Volunteering';
+
+  @override
+  String get interestWriting => 'Writing';
+
+  @override
+  String get interestGardening => 'Gardening';
+
+  @override
+  String get interestCamping => 'Camping';
+
+  @override
+  String get interestYoga => 'Yoga';
+
+  @override
+  String get interestTechnology => 'Technology';
 
   @override
   String get relationshipGoalTitle => 'What are you looking for?';
