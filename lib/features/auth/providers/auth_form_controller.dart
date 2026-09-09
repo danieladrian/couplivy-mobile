@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_exception.dart';
@@ -61,6 +62,21 @@ class AuthFormController extends Notifier<AuthFormState> {
       state = AuthFormSuccess(result.onboarding);
     } on ApiException catch (e) {
       state = AuthFormError(e);
+    } catch (e, stackTrace) {
+      // Exception TAK TERDUGA (bukan ApiException) — mis. parsing
+      // response gagal karena field tak sesuai ekspektasi. WAJIB tetap
+      // ubah state dari Loading, kalau tidak UI macet selamanya dengan
+      // spinner tanpa pesan error (bug nyata yang pernah kejadian saat
+      // User.fromJson cast paksa field nullable — lihat komentar di
+      // core/models/user.dart). Detail teknis ke debug log (bukan
+      // ditampilkan ke user — terlalu teknis, mis. "type 'Null' is not a
+      // subtype of type 'String'"), UI cuma dapat pesan generik.
+      debugPrint(
+        'AuthFormController.register unexpected error: $e\n$stackTrace',
+      );
+      state = const AuthFormError(
+        ApiException(message: 'Something went wrong. Please try again.'),
+      );
     }
   }
 
@@ -77,6 +93,13 @@ class AuthFormController extends Notifier<AuthFormState> {
       state = AuthFormSuccess(result.onboarding);
     } on ApiException catch (e) {
       state = AuthFormError(e);
+    } catch (e, stackTrace) {
+      // Lihat komentar setara di register() — WAJIB tangkap exception
+      // tak terduga juga di sini, supaya tidak macet loading selamanya.
+      debugPrint('AuthFormController.login unexpected error: $e\n$stackTrace');
+      state = const AuthFormError(
+        ApiException(message: 'Something went wrong. Please try again.'),
+      );
     }
   }
 }

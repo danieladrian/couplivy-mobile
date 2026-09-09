@@ -16,7 +16,14 @@ abstract final class UserSessionStorage {
 
   static Future<void> save(User user) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_nickNameKey, user.nickName);
+    // nickName nullable — akun lama (dibuat sebelum field ini ada) belum
+    // punya nilainya. Hapus key lama daripada nyimpen string kosong,
+    // supaya readNickName() balikin null (bukan '') buat pemanggil.
+    if (user.nickName != null) {
+      await prefs.setString(_nickNameKey, user.nickName!);
+    } else {
+      await prefs.remove(_nickNameKey);
+    }
     await prefs.setString(_fullNameKey, user.fullName);
   }
 
