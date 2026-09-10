@@ -434,6 +434,38 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   "selected" persisten (border+bg lilac+checkmark), dipakai step Gender
   (icon-only) dan Relationship Goal (icon+deskripsi) — BEDA dari
   `GatewayOptionCard` (murni navigasi, tanpa konsep "sedang dipilih").
+- `OnboardingStepScaffold` (`shared/widgets/onboarding_step_scaffold.dart`)
+  — kerangka WAJIB semua step Discover: `OnboardingStepHeader` di atas,
+  body scrollable di tengah, `bottomButton` opsional (biasanya tombol
+  "Continue") DI-PIN ke bawah layar (di LUAR `SingleChildScrollView`,
+  sibling terpisah dalam `Column` utama) — bukan ikut scroll bersama
+  konten. `errorText` opsional tampil tepat di atas `bottomButton`.
+  Kontrak: `body` JANGAN kasih padding sendiri (scaffold sudah kasih
+  `EdgeInsets.fromLTRB(24, 16, 24, 24)`). Step dengan state
+  loading/error yang butuh Scaffold manual (mis. Interests, retry di
+  tengah layar) boleh skip `OnboardingStepScaffold` untuk state itu
+  saja dan pakai `OnboardingStepHeader` langsung — lihat
+  `interests_step_screen.dart` sebagai contoh percabangan.
+- Pola pilih-lalu-Continue vs auto-navigate: Gender dan Relationship
+  Goal SEKARANG (setelah `OnboardingStepScaffold`) pakai tombol
+  Continue eksplisit — tap kartu cuma `setState()` (pilih), navigasi
+  baru terjadi saat tap "Continue" (disabled/`onPressed: null` kalau
+  belum ada pilihan). Ini KONSISTEN dengan step lain. `GatewayChoiceScreen`
+  SENGAJA TETAP auto-navigate (tap kartu langsung `context.go()`, tanpa
+  tombol Continue) — beda pola, sengaja TIDAK diseragamkan karena beda
+  konteks (pre-onboarding branch point, bukan step form).
+- **Pelajaran (jangan diulang)**: `Padding` dengan `EdgeInsets` NEGATIF
+  (mis. `EdgeInsets.only(right: -24)`) SELALU crash — assertion
+  `'padding.isNonNegative': is not true`, Flutter tidak mengizinkan
+  sama sekali. `LayoutBuilder` + `OverflowBox` di dalam
+  `SingleChildScrollView` vertikal RAPUH untuk kasus "full-bleed row
+  nempel tepi layar" — `SingleChildScrollView` kasih constraint tinggi
+  unbounded (`0..infinity`), `OverflowBox.alignment` butuh ukuran
+  finite buat hitung posisi, hasilnya `Offset(NaN, NaN)` (crash saat
+  widget test tap). Kalau butuh elemen full-bleed di dalam scroll
+  view vertikal, JANGAN pakai kombinasi ini — pertimbangkan
+  `Transform.translate` dengan `ClipRect`, atau letakkan elemen di
+  LUAR `SingleChildScrollView` sama sekali.
 - Kalau jalur Together dibuat nanti, ikuti pola yang sama:
   `together_onboarding_draft_storage.dart`,
   `together_onboarding_repository.dart`, `features/onboarding/together/`,
