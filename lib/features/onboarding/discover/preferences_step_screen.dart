@@ -5,7 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
 /// Step 8/9 onboarding Discover — sumber:
@@ -300,118 +300,111 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _backToRelationshipGoal();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(
-                step: 8,
-                totalSteps: 9,
-                onBack: _backToRelationshipGoal,
-              ),
-              Expanded(
-                child: _isLoadingDraft
-                    ? const SizedBox.shrink()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.preferencesTitle,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                l10n.preferencesAgeRangeLabel(
-                                  _ageRange.start.round(),
-                                  _ageRange.end.round(),
-                                ),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.deepViolet,
-                                ),
-                              ),
-                            ),
-                            RangeSlider(
-                              values: _ageRange,
-                              min: 18,
-                              max: 80,
-                              activeColor: AppColors.lilac,
-                              inactiveColor: AppColors.border,
-                              onChanged: (values) =>
-                                  setState(() => _ageRange = values),
-                            ),
-                            const SizedBox(height: 12),
-                            _PreferenceRow(
-                              icon: PhosphorIcons.user(),
-                              label: l10n.preferencesGenderLabel,
-                              value: _genderPreference != null
-                                  ? {
-                                      'female': l10n.genderFemale,
-                                      'male': l10n.genderMale,
-                                      'everyone': l10n.preferencesGenderAny,
-                                    }[_genderPreference]
-                                  : null,
-                              onTap: _pickGenderPreference,
-                            ),
-                            _PreferenceRow(
-                              icon: PhosphorIcons.heart(),
-                              label: l10n.preferencesFamilyLabel,
-                              value: _familyPreference != null
-                                  ? {
-                                      'wants_children':
-                                          l10n.preferencesFamilyWantsChildren,
-                                      'not_wants_children': l10n
-                                          .preferencesFamilyNotWantsChildren,
-                                      'open_to_children':
-                                          l10n.preferencesFamilyOpenToChildren,
-                                      'any': l10n.preferencesFamilyAny,
-                                    }[_familyPreference]
-                                  : null,
-                              onTap: _pickFamilyPreference,
-                            ),
-                            _PreferenceRow(
-                              // handsPraying, BUKAN cross — simbol salib
-                              // spesifik Kristen/Katolik, tidak netral
-                              // untuk agama lain (lihat riwayat percakapan).
-                              icon: PhosphorIcons.handsPraying(),
-                              label: l10n.preferencesReligionLabel,
-                              value: _summaryFor(
-                                _religionOptions(l10n),
-                                _religionPreferences,
-                              ),
-                              onTap: _pickReligionPreferences,
-                            ),
-                            _PreferenceRow(
-                              icon: PhosphorIcons.graduationCap(),
-                              label: l10n.preferencesEducationLabel,
-                              value: _summaryFor(
-                                _educationOptions(l10n),
-                                _educationPreferences,
-                              ),
-                              onTap: _pickEducationPreferences,
-                            ),
-                            const SizedBox(height: 24),
-                            AppButton(
-                              label: l10n.onboardingContinue,
-                              onPressed: _submit,
-                            ),
-                          ],
-                        ),
-                      ),
-              ),
-            ],
-          ),
+      child: OnboardingStepScaffold(
+        step: 8,
+        totalSteps: 9,
+        onBack: _backToRelationshipGoal,
+        bottomButton: AppButton(
+          label: l10n.onboardingContinue,
+          onPressed: _submit,
         ),
+        body: _isLoadingDraft
+            ? const SizedBox.shrink()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.preferencesTitle,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      l10n.preferencesAgeRangeLabel(
+                        _ageRange.start.round(),
+                        _ageRange.end.round(),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.deepViolet,
+                      ),
+                    ),
+                  ),
+                  RangeSlider(
+                    values: _ageRange,
+                    min: 18,
+                    max: 80,
+                    activeColor: AppColors.lilac,
+                    inactiveColor: AppColors.border,
+                    onChanged: (values) => setState(() => _ageRange = values),
+                  ),
+                  const SizedBox(height: 12),
+                  // Row full-bleed (chevron 0px dari tepi fisik layar)
+                  // SEMPAT dicoba (LayoutBuilder+OverflowBox) tapi
+                  // ternyata rapuh — kombinasi dengan SingleChildScrollView
+                  // (tinggi unbounded) menghasilkan posisi NaN dan
+                  // crash. Dibatalkan — murni permintaan visual, tidak
+                  // ada dampak fungsional, tidak sepadan dengan
+                  // kompleksitas/risiko yang muncul. Row ini ikut
+                  // padding 24px standar `OnboardingStepScaffold`, sama
+                  // seperti elemen lain di halaman.
+                  _PreferenceRow(
+                    icon: PhosphorIcons.user(),
+                    label: l10n.preferencesGenderLabel,
+                    value: _genderPreference != null
+                        ? {
+                            'female': l10n.genderFemale,
+                            'male': l10n.genderMale,
+                            'everyone': l10n.preferencesGenderAny,
+                          }[_genderPreference]
+                        : null,
+                    onTap: _pickGenderPreference,
+                  ),
+                  _PreferenceRow(
+                    icon: PhosphorIcons.heart(),
+                    label: l10n.preferencesFamilyLabel,
+                    value: _familyPreference != null
+                        ? {
+                            'wants_children':
+                                l10n.preferencesFamilyWantsChildren,
+                            'not_wants_children':
+                                l10n.preferencesFamilyNotWantsChildren,
+                            'open_to_children':
+                                l10n.preferencesFamilyOpenToChildren,
+                            'any': l10n.preferencesFamilyAny,
+                          }[_familyPreference]
+                        : null,
+                    onTap: _pickFamilyPreference,
+                  ),
+                  _PreferenceRow(
+                    // handsPraying, BUKAN cross — simbol salib spesifik
+                    // Kristen/Katolik, tidak netral untuk agama lain
+                    // (lihat riwayat percakapan).
+                    icon: PhosphorIcons.handsPraying(),
+                    label: l10n.preferencesReligionLabel,
+                    value: _summaryFor(
+                      _religionOptions(l10n),
+                      _religionPreferences,
+                    ),
+                    onTap: _pickReligionPreferences,
+                  ),
+                  _PreferenceRow(
+                    icon: PhosphorIcons.graduationCap(),
+                    label: l10n.preferencesEducationLabel,
+                    value: _summaryFor(
+                      _educationOptions(l10n),
+                      _educationPreferences,
+                    ),
+                    onTap: _pickEducationPreferences,
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -435,6 +428,10 @@ class _PreferenceRow extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        // Full-bleed (chevron 0px dari tepi layar) SEMPAT dicoba tapi
+        // dibatalkan (lihat catatan di `_PreferencesStepScreenState.
+        // build()`) — padding standar mengikuti 24px yang sudah
+        // diterapkan `OnboardingStepScaffold` ke seluruh body.
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: AppColors.border)),

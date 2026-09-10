@@ -7,7 +7,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
-import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
 /// Step 5/9 onboarding Discover — sumber:
@@ -125,122 +125,96 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _backToBio();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(step: 5, totalSteps: 9, onBack: _backToBio),
-              Expanded(
-                child: _isLoadingDraft
-                    ? const SizedBox.shrink()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.workEducationTitle,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              l10n.workEducationSubtitle,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            AppTextField(
-                              label: l10n.workEducationOccupationLabel,
-                              hintText: l10n.workEducationOccupationHint,
-                              controller: _occupationController,
-                              suffixIcon: const Icon(
-                                Icons.work_outline,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Text(
-                              l10n.workEducationEducationLabel,
-                              style: const TextStyle(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            InkWell(
-                              onTap: _pickEducation,
-                              borderRadius: BorderRadius.circular(AppRadius.md),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 14,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadius.md,
-                                  ),
-                                  border: Border.all(color: AppColors.border),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.school_outlined,
-                                      size: 20,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        educationLabel ??
-                                            l10n.workEducationEducationHint,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: educationLabel != null
-                                              ? AppColors.textDark
-                                              : AppColors.textSecondary,
-                                        ),
-                                      ),
-                                    ),
-                                    Icon(
-                                      PhosphorIcons.caretDown(),
-                                      size: 16,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            if (_errorText != null) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                _errorText!,
-                                style: const TextStyle(
-                                  color: AppColors.error,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 24),
-                            AppButton(
-                              label: l10n.onboardingContinue,
-                              onPressed: _saveAndContinue,
-                            ),
-                          ],
-                        ),
-                      ),
-              ),
-            ],
-          ),
+      child: OnboardingStepScaffold(
+        step: 5,
+        totalSteps: 9,
+        onBack: _backToBio,
+        errorText: _errorText,
+        bottomButton: AppButton(
+          label: l10n.onboardingContinue,
+          onPressed: _saveAndContinue,
         ),
+        body: _isLoadingDraft
+            ? const SizedBox.shrink()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.workEducationTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.workEducationSubtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  AppTextField(
+                    label: l10n.workEducationOccupationLabel,
+                    hintText: l10n.workEducationOccupationHint,
+                    controller: _occupationController,
+                    suffixIcon: const Icon(Icons.work_outline, size: 20),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    l10n.workEducationEducationLabel,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  InkWell(
+                    onTap: _pickEducation,
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.school_outlined,
+                            size: 20,
+                            color: AppColors.textSecondary,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              educationLabel ?? l10n.workEducationEducationHint,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: educationLabel != null
+                                    ? AppColors.textDark
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            PhosphorIcons.caretDown(),
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

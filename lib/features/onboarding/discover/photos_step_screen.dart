@@ -11,7 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
 const _maxPhotoSlots = 6;
@@ -144,100 +144,73 @@ class _PhotosStepScreenState extends State<PhotosStepScreen> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _backToGender();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(
-                step: 3,
-                totalSteps: 9,
-                onBack: _backToGender,
-              ),
-              Expanded(
-                child: _isLoadingDraft
-                    ? const SizedBox.shrink()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.photosTitle,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              l10n.photosSubtitle,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _maxPhotoSlots,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 3 / 4,
-                                  ),
-                              itemBuilder: (context, index) {
-                                final hasPhoto = index < _photoPaths.length;
-                                // Slot terisi harus berurutan dari kiri-atas
-                                // (index 0) — hanya slot kosong PERTAMA yang
-                                // bisa di-tap. Tanpa ini, tap di slot mana
-                                // pun (misal slot ke-4) tetap menambah foto
-                                // ke akhir _photoPaths, tapi tampil nempel
-                                // di slot kosong paling awal — user jadi
-                                // bingung foto yang dia pilih "pindah" ke
-                                // slot lain.
-                                final isNextEmptySlot =
-                                    index == _photoPaths.length;
-                                return _PhotoSlot(
-                                  path: hasPhoto ? _photoPaths[index] : null,
-                                  isMain: index == 0,
-                                  isEnabled: hasPhoto || isNextEmptySlot,
-                                  mainLabel: l10n.photosMainPhotoLabel,
-                                  onTap: hasPhoto
-                                      ? null
-                                      : (isNextEmptySlot ? _addPhoto : null),
-                                  onRemove: hasPhoto
-                                      ? () => _removePhoto(index)
-                                      : null,
-                                );
-                              },
-                            ),
-                            if (_errorText != null) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                _errorText!,
-                                style: const TextStyle(
-                                  color: AppColors.error,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 24),
-                            AppButton(
-                              label: l10n.onboardingContinue,
-                              onPressed: _submit,
-                            ),
-                          ],
-                        ),
-                      ),
-              ),
-            ],
-          ),
+      child: OnboardingStepScaffold(
+        step: 3,
+        totalSteps: 9,
+        onBack: _backToGender,
+        errorText: _errorText,
+        bottomButton: AppButton(
+          label: l10n.onboardingContinue,
+          onPressed: _submit,
         ),
+        body: _isLoadingDraft
+            ? const SizedBox.shrink()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.photosTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.photosSubtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _maxPhotoSlots,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 3 / 4,
+                        ),
+                    itemBuilder: (context, index) {
+                      final hasPhoto = index < _photoPaths.length;
+                      // Slot terisi harus berurutan dari kiri-atas
+                      // (index 0) — hanya slot kosong PERTAMA yang
+                      // bisa di-tap. Tanpa ini, tap di slot mana
+                      // pun (misal slot ke-4) tetap menambah foto
+                      // ke akhir _photoPaths, tapi tampil nempel
+                      // di slot kosong paling awal — user jadi
+                      // bingung foto yang dia pilih "pindah" ke
+                      // slot lain.
+                      final isNextEmptySlot = index == _photoPaths.length;
+                      return _PhotoSlot(
+                        path: hasPhoto ? _photoPaths[index] : null,
+                        isMain: index == 0,
+                        isEnabled: hasPhoto || isNextEmptySlot,
+                        mainLabel: l10n.photosMainPhotoLabel,
+                        onTap: hasPhoto
+                            ? null
+                            : (isNextEmptySlot ? _addPhoto : null),
+                        onRemove: hasPhoto ? () => _removePhoto(index) : null,
+                      );
+                    },
+                  ),
+                ],
+              ),
       ),
     );
   }

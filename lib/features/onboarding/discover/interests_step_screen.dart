@@ -7,6 +7,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 import 'interest_labels.dart';
 import 'interest_repository.dart';
@@ -96,114 +97,119 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) _backToWorkEducation();
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(
-                step: 6,
-                totalSteps: 9,
-                onBack: _backToWorkEducation,
-              ),
-              Expanded(child: _buildBody(l10n)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBody(AppLocalizations l10n) {
-    if (_isLoading) return const SizedBox.shrink();
-
-    if (_loadError != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _loadError!.message,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.textSecondary),
-              ),
-              const SizedBox(height: 16),
-              AppButton(
-                label: l10n.onboardingContinue,
-                onPressed: () => setState(() {
-                  _isLoading = true;
-                  _loadError = null;
-                  _load();
-                }),
-              ),
-            ],
+    // State loading/error TIDAK pakai `bottomButton` scaffold — error
+    // state punya tombol Retry sebagai BAGIAN dari pesan error di
+    // tengah layar (`Center`), bukan tombol aksi utama step yang perlu
+    // di-pin di bawah.
+    if (_isLoading || _loadError != null) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) _backToWorkEducation();
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.lightGray,
+          body: SafeArea(
+            child: Column(
+              children: [
+                OnboardingStepHeader(
+                  step: 6,
+                  totalSteps: 9,
+                  onBack: _backToWorkEducation,
+                ),
+                Expanded(child: _buildLoadingOrErrorBody(l10n)),
+              ],
+            ),
           ),
         ),
       );
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.interestsTitle,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textDark,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            l10n.interestsSubtitle,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final interest in _interests)
-                _InterestChip(
-                  label: InterestLabels.labelFor(l10n, interest.slug),
-                  selected: _selectedIds.contains(interest.id),
-                  onTap: () => _toggle(interest.id),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.interestsSelectedCount(_selectedIds.length),
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          if (_errorText != null) ...[
-            const SizedBox(height: 8),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _backToWorkEducation();
+      },
+      child: OnboardingStepScaffold(
+        step: 6,
+        totalSteps: 9,
+        onBack: _backToWorkEducation,
+        errorText: _errorText,
+        bottomButton: AppButton(
+          label: l10n.onboardingContinue,
+          onPressed: _saveAndContinue,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Text(
-              _errorText!,
-              style: const TextStyle(color: AppColors.error, fontSize: 12.5),
+              l10n.interestsTitle,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textDark,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              l10n.interestsSubtitle,
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final interest in _interests)
+                  _InterestChip(
+                    label: InterestLabels.labelFor(l10n, interest.slug),
+                    selected: _selectedIds.contains(interest.id),
+                    onTap: () => _toggle(interest.id),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l10n.interestsSelectedCount(_selectedIds.length),
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
-          const SizedBox(height: 24),
-          AppButton(
-            label: l10n.onboardingContinue,
-            onPressed: _saveAndContinue,
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOrErrorBody(AppLocalizations l10n) {
+    if (_isLoading) return const SizedBox.shrink();
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _loadError!.message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: 16),
+            AppButton(
+              label: l10n.onboardingContinue,
+              onPressed: () => setState(() {
+                _isLoading = true;
+                _loadError = null;
+                _load();
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

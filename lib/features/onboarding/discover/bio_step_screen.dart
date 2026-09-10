@@ -6,7 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
 const _maxBioLength = 300;
@@ -293,220 +293,191 @@ class _BioStepScreenState extends State<BioStepScreen> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _backToPhotos();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(
-                step: 4,
-                totalSteps: 9,
-                onBack: _backToPhotos,
-              ),
-              Expanded(
-                child: _isLoadingDraft
-                    ? const SizedBox.shrink()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.bioTitle,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
+      child: OnboardingStepScaffold(
+        step: 4,
+        totalSteps: 9,
+        onBack: _backToPhotos,
+        errorText: _errorText,
+        bottomButton: AppButton(
+          label: l10n.onboardingContinue,
+          onPressed: _saveAndContinue,
+        ),
+        body: _isLoadingDraft
+            ? const SizedBox.shrink()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.bioTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.bioSubtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      TextField(
+                        controller: _bioController,
+                        maxLength: _maxBioLength,
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: l10n.bioFieldHint,
+                          filled: true,
+                          fillColor: Colors.white,
+                          counterText: '',
+                          contentPadding: const EdgeInsets.all(16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadius.md),
+                            borderSide: const BorderSide(
+                              color: AppColors.border,
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              l10n.bioSubtitle,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Stack(
-                              children: [
-                                TextField(
-                                  controller: _bioController,
-                                  maxLength: _maxBioLength,
-                                  maxLines: 5,
-                                  decoration: InputDecoration(
-                                    hintText: l10n.bioFieldHint,
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    counterText: '',
-                                    contentPadding: const EdgeInsets.all(16),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        AppRadius.md,
-                                      ),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.border,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 12,
-                                  bottom: 8,
-                                  child: Text(
-                                    l10n.bioCharCount(bioLength, _maxBioLength),
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: bioLength > _maxBioLength * 0.9
-                                          ? AppColors.warning
-                                          : AppColors.textSecondary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  l10n.bioHeightLabel,
-                                  style: const TextStyle(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textDark,
-                                  ),
-                                ),
-                                _HeightUnitToggle(
-                                  unit: _heightUnit,
-                                  onChanged: _switchHeightUnit,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            if (_heightUnit == _HeightUnit.cm)
-                              _PlainNumberField(
-                                hintText: l10n.bioHeightHintCm,
-                                controller: _heightCmController,
-                              )
-                            else
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _PlainNumberField(
-                                      hintText: l10n.bioHeightHintFeet,
-                                      controller: _heightFeetController,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: _PlainNumberField(
-                                      hintText: l10n.bioHeightHintInch,
-                                      controller: _heightInchController,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            const SizedBox(height: 14),
-                            Text(
-                              l10n.bioEthnicityLabel,
-                              style: const TextStyle(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            _SelectField(
-                              value: ethnicityLabel,
-                              hintText: l10n.bioEthnicityHint,
-                              onTap: _pickEthnicity,
-                            ),
-                            const SizedBox(height: 14),
-                            Text(
-                              l10n.bioReligionLabel,
-                              style: const TextStyle(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            _SelectField(
-                              value: religionLabel,
-                              hintText: l10n.bioReligionHint,
-                              onTap: _pickReligion,
-                            ),
-                            const SizedBox(height: 18),
-                            Text(
-                              l10n.bioWantsChildrenLabel,
-                              style: const TextStyle(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 8,
-                              children: [
-                                _ChoiceChipOption(
-                                  label: l10n.bioWantsChildrenYes,
-                                  selected:
-                                      _wantsChildrenTouched &&
-                                      _wantsChildren == true,
-                                  onSelected: () => setState(() {
-                                    _wantsChildren = true;
-                                    _wantsChildrenTouched = true;
-                                    _errorText = null;
-                                  }),
-                                ),
-                                _ChoiceChipOption(
-                                  label: l10n.bioWantsChildrenNo,
-                                  selected:
-                                      _wantsChildrenTouched &&
-                                      _wantsChildren == false,
-                                  onSelected: () => setState(() {
-                                    _wantsChildren = false;
-                                    _wantsChildrenTouched = true;
-                                    _errorText = null;
-                                  }),
-                                ),
-                                _ChoiceChipOption(
-                                  label: l10n.bioWantsChildrenNotSure,
-                                  selected:
-                                      _wantsChildrenTouched &&
-                                      _wantsChildren == null,
-                                  onSelected: () => setState(() {
-                                    _wantsChildren = null;
-                                    _wantsChildrenTouched = true;
-                                    _errorText = null;
-                                  }),
-                                ),
-                              ],
-                            ),
-                            if (_errorText != null) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                _errorText!,
-                                style: const TextStyle(
-                                  color: AppColors.error,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 24),
-                            AppButton(
-                              label: l10n.onboardingContinue,
-                              onPressed: _saveAndContinue,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
+                      Positioned(
+                        right: 12,
+                        bottom: 8,
+                        child: Text(
+                          l10n.bioCharCount(bioLength, _maxBioLength),
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: bioLength > _maxBioLength * 0.9
+                                ? AppColors.warning
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.bioHeightLabel,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textDark,
+                        ),
+                      ),
+                      _HeightUnitToggle(
+                        unit: _heightUnit,
+                        onChanged: _switchHeightUnit,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  if (_heightUnit == _HeightUnit.cm)
+                    _PlainNumberField(
+                      hintText: l10n.bioHeightHintCm,
+                      controller: _heightCmController,
+                    )
+                  else
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _PlainNumberField(
+                            hintText: l10n.bioHeightHintFeet,
+                            controller: _heightFeetController,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _PlainNumberField(
+                            hintText: l10n.bioHeightHintInch,
+                            controller: _heightInchController,
+                          ),
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 14),
+                  Text(
+                    l10n.bioEthnicityLabel,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _SelectField(
+                    value: ethnicityLabel,
+                    hintText: l10n.bioEthnicityHint,
+                    onTap: _pickEthnicity,
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    l10n.bioReligionLabel,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _SelectField(
+                    value: religionLabel,
+                    hintText: l10n.bioReligionHint,
+                    onTap: _pickReligion,
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    l10n.bioWantsChildrenLabel,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      _ChoiceChipOption(
+                        label: l10n.bioWantsChildrenYes,
+                        selected:
+                            _wantsChildrenTouched && _wantsChildren == true,
+                        onSelected: () => setState(() {
+                          _wantsChildren = true;
+                          _wantsChildrenTouched = true;
+                          _errorText = null;
+                        }),
+                      ),
+                      _ChoiceChipOption(
+                        label: l10n.bioWantsChildrenNo,
+                        selected:
+                            _wantsChildrenTouched && _wantsChildren == false,
+                        onSelected: () => setState(() {
+                          _wantsChildren = false;
+                          _wantsChildrenTouched = true;
+                          _errorText = null;
+                        }),
+                      ),
+                      _ChoiceChipOption(
+                        label: l10n.bioWantsChildrenNotSure,
+                        selected:
+                            _wantsChildrenTouched && _wantsChildren == null,
+                        onSelected: () => setState(() {
+                          _wantsChildren = null;
+                          _wantsChildrenTouched = true;
+                          _errorText = null;
+                        }),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -50,7 +50,25 @@ void main() {
     expect(find.text('Non-binary'), findsNothing);
   });
 
-  testWidgets('tapping an option navigates to Photos', (
+  testWidgets('Continue disabled until an option is picked', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: buildRouter(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final button = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'Continue'),
+    );
+    expect(button.onPressed, isNull);
+  });
+
+  testWidgets('selecting an option then tapping Continue navigates to Photos', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -63,6 +81,8 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Female'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(find.text('Photos'), findsOneWidget);

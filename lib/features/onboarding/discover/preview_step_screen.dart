@@ -10,7 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/onboarding_step_header.dart';
+import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import '../discover_onboarding_repository.dart';
 import 'discover_onboarding_draft_storage.dart';
 import 'interest_labels.dart';
@@ -165,146 +165,125 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop && !_isSubmitting) _backToPreferences();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.lightGray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              OnboardingStepHeader(
-                step: 9,
-                totalSteps: 9,
-                onBack: _backToPreferences,
-              ),
-              Expanded(
-                child: _isLoadingDraft
-                    ? const SizedBox.shrink()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.previewTitle,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              l10n.previewSubtitle,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            Center(
-                              child: CircleAvatar(
-                                radius: 44,
-                                backgroundColor: AppColors.lilac.withValues(
-                                  alpha: 0.2,
-                                ),
-                                backgroundImage: _photoPaths.isNotEmpty
-                                    ? FileImage(File(_photoPaths.first))
-                                    : null,
-                                child: _photoPaths.isEmpty
-                                    ? Icon(
-                                        PhosphorIcons.user(),
-                                        size: 36,
-                                        color: AppColors.deepViolet,
-                                      )
-                                    : null,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            if (_nickName != null && _age != null)
-                              Center(
-                                child: Text(
-                                  l10n.previewNameAge(_nickName!, _age!),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.textDark,
-                                  ),
-                                ),
-                              ),
-                            if (_occupation != null || _education != null)
-                              Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Text(
-                                    [
-                                      _occupation,
-                                      _education,
-                                    ].whereType<String>().join(' · '),
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            if (_bio != null && _bio!.isNotEmpty) ...[
-                              const SizedBox(height: 16),
-                              Text(
-                                _bio!,
-                                style: const TextStyle(
-                                  fontSize: 13.5,
-                                  color: AppColors.textDark,
-                                  height: 1.5,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 16),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                if (_genderLabel(l10n) != null)
-                                  _FactPill(
-                                    icon: PhosphorIcons.genderFemale(),
-                                    label: _genderLabel(l10n)!,
-                                  ),
-                                if (_relationshipGoalLabel(l10n) != null)
-                                  _FactPill(
-                                    icon: PhosphorIcons.heart(),
-                                    label: _relationshipGoalLabel(l10n)!,
-                                  ),
-                                for (final slug in _interestSlugs)
-                                  _FactPill(
-                                    icon: PhosphorIcons.sparkle(),
-                                    label: InterestLabels.labelFor(l10n, slug),
-                                  ),
-                              ],
-                            ),
-                            if (_errorMessage != null) ...[
-                              const SizedBox(height: 16),
-                              Text(
-                                _errorMessage!,
-                                style: const TextStyle(
-                                  color: AppColors.error,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 24),
-                            AppButton(
-                              label: l10n.previewSubmit,
-                              onPressed: _isSubmitting ? null : _submit,
-                            ),
-                            if (_isSubmitting) ...[
-                              const SizedBox(height: 16),
-                              const Center(child: CircularProgressIndicator()),
-                            ],
-                          ],
+      child: OnboardingStepScaffold(
+        step: 9,
+        totalSteps: 9,
+        onBack: _backToPreferences,
+        errorText: _errorMessage,
+        bottomButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppButton(
+              label: l10n.previewSubmit,
+              onPressed: _isSubmitting ? null : _submit,
+            ),
+            if (_isSubmitting) ...[
+              const SizedBox(height: 16),
+              const Center(child: CircularProgressIndicator()),
+            ],
+          ],
+        ),
+        body: _isLoadingDraft
+            ? const SizedBox.shrink()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.previewTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.previewSubtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: CircleAvatar(
+                      radius: 44,
+                      backgroundColor: AppColors.lilac.withValues(alpha: 0.2),
+                      backgroundImage: _photoPaths.isNotEmpty
+                          ? FileImage(File(_photoPaths.first))
+                          : null,
+                      child: _photoPaths.isEmpty
+                          ? Icon(
+                              PhosphorIcons.user(),
+                              size: 36,
+                              color: AppColors.deepViolet,
+                            )
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (_nickName != null && _age != null)
+                    Center(
+                      child: Text(
+                        l10n.previewNameAge(_nickName!, _age!),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textDark,
                         ),
                       ),
+                    ),
+                  if (_occupation != null || _education != null)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          [
+                            _occupation,
+                            _education,
+                          ].whereType<String>().join(' · '),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (_bio != null && _bio!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      _bio!,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        color: AppColors.textDark,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (_genderLabel(l10n) != null)
+                        _FactPill(
+                          icon: PhosphorIcons.genderFemale(),
+                          label: _genderLabel(l10n)!,
+                        ),
+                      if (_relationshipGoalLabel(l10n) != null)
+                        _FactPill(
+                          icon: PhosphorIcons.heart(),
+                          label: _relationshipGoalLabel(l10n)!,
+                        ),
+                      for (final slug in _interestSlugs)
+                        _FactPill(
+                          icon: PhosphorIcons.sparkle(),
+                          label: InterestLabels.labelFor(l10n, slug),
+                        ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
