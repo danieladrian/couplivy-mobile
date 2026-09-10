@@ -47,12 +47,11 @@ void main() {
     expect(find.text('8/9'), findsOneWidget);
     expect(find.text('25 – 35 years old'), findsOneWidget);
     expect(find.text('Gender'), findsOneWidget);
-    expect(find.text('Save Preferences'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
+    expect(find.text('Save Preferences'), findsNothing);
   });
 
-  testWidgets('Save Preferences navigates to Preview', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('Continue navigates to Preview', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: buildRouter(),
@@ -62,7 +61,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Save Preferences'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(find.text('Preview'), findsOneWidget);
@@ -99,7 +98,11 @@ void main() {
       // Pilih 2 opsi sekaligus — summary harus tampilkan keduanya.
       await tester.tap(find.text('Christian'));
       await tester.tap(find.text('Muslim'));
-      await tester.tap(find.text('Continue'));
+      // `.last` — tombol "Continue" halaman utama tetap ada di tree di
+      // belakang sheet (cuma tertutup visual), jadi ada 2 widget dengan
+      // teks yang sama; tombol Continue di dalam sheet-nya sendiri
+      // dirender belakangan.
+      await tester.tap(find.text('Continue').last);
       await tester.pumpAndSettle();
 
       expect(find.text('Christian, Muslim'), findsOneWidget);
@@ -140,7 +143,7 @@ void main() {
     expect(christianCheckbox.value, isFalse);
     expect(anyCheckbox.value, isTrue);
 
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Continue').last);
     await tester.pumpAndSettle();
 
     expect(find.text('Any'), findsOneWidget);

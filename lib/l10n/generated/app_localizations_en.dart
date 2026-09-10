@@ -502,9 +502,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesEducationLabel => 'Education';
 
   @override
-  String get preferencesSubmit => 'Save Preferences';
-
-  @override
   String get previewTitle => 'Almost there!';
 
   @override

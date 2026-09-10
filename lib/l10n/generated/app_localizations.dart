@@ -1034,12 +1034,6 @@ abstract class AppLocalizations {
   /// **'Education'**
   String get preferencesEducationLabel;
 
-  /// No description provided for @preferencesSubmit.
-  ///
-  /// In en, this message translates to:
-  /// **'Save Preferences'**
-  String get preferencesSubmit;
-
   /// No description provided for @previewTitle.
   ///
   /// In en, this message translates to:

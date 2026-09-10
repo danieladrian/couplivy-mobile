@@ -402,7 +402,7 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                             ),
                             const SizedBox(height: 24),
                             AppButton(
-                              label: l10n.preferencesSubmit,
+                              label: l10n.onboardingContinue,
                               onPressed: _submit,
                             ),
                           ],
