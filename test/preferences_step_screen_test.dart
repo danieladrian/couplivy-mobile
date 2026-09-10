@@ -69,7 +69,8 @@ void main() {
   });
 
   testWidgets(
-    'Religion row opens a select bottom sheet (not a free-text dialog)',
+    'Religion row opens a checkbox multi-select sheet (not a free-text '
+    'dialog), summary shows all picked',
     (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 1.0;
@@ -87,16 +88,61 @@ void main() {
       await tester.tap(find.text('Religion'));
       await tester.pumpAndSettle();
 
-      // Select bottom sheet, bukan AlertDialog dengan TextField bebas.
+      // Checkbox multi-select sheet, bukan AlertDialog dengan TextField
+      // bebas, dan bukan radio single-select (ListTile check icon).
       expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(CheckboxListTile), findsWidgets);
       expect(find.text('Christian'), findsOneWidget);
       expect(find.text('Muslim'), findsOneWidget);
-      expect(find.text('Any'), findsWidgets);
+      expect(find.text('Any'), findsOneWidget);
 
+      // Pilih 2 opsi sekaligus — summary harus tampilkan keduanya.
+      await tester.tap(find.text('Christian'));
       await tester.tap(find.text('Muslim'));
+      await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Muslim'), findsOneWidget);
+      expect(find.text('Christian, Muslim'), findsOneWidget);
     },
   );
+
+  testWidgets('Religion "Any" is exclusive with specific options', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: buildRouter(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Religion'));
+    await tester.pumpAndSettle();
+
+    // Pilih Christian dulu, lalu pilih Any — Christian harus ke-uncheck.
+    await tester.tap(find.text('Christian'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Any'));
+    await tester.pumpAndSettle();
+
+    final christianCheckbox = tester.widget<CheckboxListTile>(
+      find.widgetWithText(CheckboxListTile, 'Christian'),
+    );
+    final anyCheckbox = tester.widget<CheckboxListTile>(
+      find.widgetWithText(CheckboxListTile, 'Any'),
+    );
+    expect(christianCheckbox.value, isFalse);
+    expect(anyCheckbox.value, isTrue);
+
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Any'), findsOneWidget);
+  });
 }

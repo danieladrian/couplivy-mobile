@@ -365,8 +365,8 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     Daftar sama dipakai keduanya: christian, catholic, muslim, buddhist,
     hindu, jewish, sikh, atheist_agnostic, spiritual, other.
     `religion_preference` di step Preferences JUGA diubah dari teks bebas
-    (`TextEditingController` + `AlertDialog`) jadi bottom sheet select
-    yang sama — sebelumnya tidak konsisten dengan field select lain
+    (`TextEditingController` + `AlertDialog`) jadi bottom sheet select —
+    sebelumnya tidak konsisten dengan field select lain
     (Ethnicity/Education). Icon row Preferences diganti dari
     `PhosphorIcons.cross()` (simbol salib, spesifik Kristen/Katolik) ke
     `PhosphorIcons.handsPraying()` (netral lintas agama).
@@ -376,6 +376,39 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     (`maxHeight: 70% layar`) + `ListView` scrollable (BUKAN `Column`
     polos) — daftar opsi yang panjang (Ethnicity 11, Religion 10,
     Education 7) bisa overflow di layar pendek kalau tidak dibatasi.
+  - **`religion_preference`/`education_preference` di step Preferences
+    MULTI-SELECT (checkbox), BUKAN single-select lagi** — `Set<String>`
+    (`_religionPreferences`/`_educationPreferences` di
+    `PreferencesStepScreen`), disimpan ke draft sebagai `List<String>`
+    JSON (bagian dari blob `preferences`, lihat
+    `DiscoverOnboardingDraftStorage.savePreferences`/`readPreferences`),
+    dikirim ke backend sebagai array (tabel anak
+    `dating_preference_religions`/`_educations`, lihat
+    `.ai/rules/architecture.md` backend).
+    - Bottom sheet BEDA dari `_showPickerSheet` (`ListTile` + return 1
+      value) — pakai `_showMultiSelectSheet` sendiri: `CheckboxListTile`
+      per opsi + `StatefulBuilder` (state sheet lokal, terpisah dari
+      state screen supaya centang langsung ke-render tanpa nutup sheet),
+      tombol Continue eksplisit di bawah (bukan `Navigator.pop` langsung
+      per-tap seperti single-select, karena user perlu bisa centang
+      BANYAK sebelum konfirmasi).
+    - **"any" SELALU opsi PERTAMA** di kedua Map options (`_religionOptions`/
+      `_educationOptions` di `PreferencesStepScreen` — beda urutan dari
+      `BioStepScreen._religionOptions` yang TIDAK PUNYA "any" sama
+      sekali) — permintaan produk supaya opsi paling umum/exclusive
+      langsung terlihat duluan, bukan di akhir daftar.
+    - **"any" EXCLUSIVE** — pilih "any" otomatis uncheck semua opsi lain
+      (karena "any" sudah mencakup semua), pilih opsi spesifik lain
+      otomatis uncheck "any". Mencegah kombinasi rancu seperti
+      "Any + Christian" yang secara makna sama saja dengan "Any" saja.
+      Logic ada di `_showMultiSelectSheet.toggle()`.
+    - **Summary row tampilkan SEMUA yang dipilih**, dipisah koma (mis.
+      "Christian, Muslim") — `_summaryFor()`, urutan ikut urutan Map
+      options (BUKAN urutan `Set`, yang tidak stabil/tidak terjamin
+      urutannya) supaya tampilan konsisten tiap kali sheet dibuka ulang.
+      `_PreferenceRow.value` dibungkus `Flexible` + `overflow: ellipsis`
+      (sebelumnya `Text` polos tanpa constraint) karena ringkasan
+      multi-select bisa jauh lebih panjang dari 1 nilai single-select.
 - **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
   di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
   (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang
