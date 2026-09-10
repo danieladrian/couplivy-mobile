@@ -13,8 +13,10 @@ import 'discover_onboarding_draft_storage.dart';
 /// couplivy-docs/flow/01-discover/onboarding/03-gender.html. Required,
 /// tidak ada tombol Skip.
 ///
-/// Cuma 2 opsi (Female/Male) — keputusan produk, HTML sumber aslinya
-/// punya Non-binary juga tapi sengaja dihapus dari scope sekarang.
+/// 3 opsi: Female, Male, Prefer not to say — HTML sumber aslinya punya
+/// Non-binary juga tapi sengaja dihapus dari scope sekarang. "Prefer not
+/// to say" ditambah belakangan supaya user yang tidak nyaman
+/// mengungkapkan gender tetap bisa lanjut onboarding.
 ///
 /// Dulunya tap kartu langsung lanjut (tanpa tombol Continue terpisah,
 /// sama pola GatewayChoiceScreen) — diubah supaya konsisten dengan step
@@ -112,6 +114,16 @@ class _GenderStepScreenState extends State<GenderStepScreen> {
                     title: l10n.genderMale,
                     selected: _selectedGender == 'male',
                     onTap: () => _select('male'),
+                  ),
+                  const SizedBox(height: 12),
+                  SelectableOptionCard(
+                    icon: PhosphorIcons.question(),
+                    iconBackgroundColor: AppColors.textSecondary.withValues(
+                      alpha: 0.15,
+                    ),
+                    title: l10n.genderPreferNotToSay,
+                    selected: _selectedGender == 'prefer_not_to_say',
+                    onTap: () => _select('prefer_not_to_say'),
                   ),
                 ],
               ),

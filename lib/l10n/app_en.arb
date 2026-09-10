@@ -113,6 +113,7 @@
   "genderSubtitle": "We'll show you better matches based on this.",
   "genderFemale": "Female",
   "genderMale": "Male",
+  "genderPreferNotToSay": "Prefer not to say",
 
   "photosTitle": "Add your photos",
   "photosSubtitle": "A few clear photos help you get better matches.",
@@ -266,6 +267,7 @@
       }
     }
   },
-  "previewSubmit": "Looks Good",
+  "previewLookingForTitle": "Looking for",
+  "previewSubmit": "Let's Go",
   "previewSubmitError": "Something went wrong saving your profile. Please try again."
 }

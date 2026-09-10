@@ -169,6 +169,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get genderMale => 'Laki-laki';
 
   @override
+  String get genderPreferNotToSay => 'Tidak ingin menyebutkan';
+
+  @override
   String get photosTitle => 'Tambahkan fotomu';
 
   @override
@@ -513,7 +516,10 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get previewSubmit => 'Sudah Sip';
+  String get previewLookingForTitle => 'Sedang mencari';
+
+  @override
+  String get previewSubmit => 'Ayo Mulai';
 
   @override
   String get previewSubmitError =>

@@ -58,6 +58,7 @@
   "genderSubtitle": "Ini membantu kami menunjukkan kecocokan yang lebih baik.",
   "genderFemale": "Perempuan",
   "genderMale": "Laki-laki",
+  "genderPreferNotToSay": "Tidak ingin menyebutkan",
 
   "photosTitle": "Tambahkan fotomu",
   "photosSubtitle": "Beberapa foto jelas membantu kamu dapat kecocokan lebih baik.",
@@ -174,6 +175,7 @@
   "previewTitle": "Hampir selesai!",
   "previewSubtitle": "Cek dulu profilmu sebelum lanjut.",
   "previewNameAge": "{nickName}, {age}",
-  "previewSubmit": "Sudah Sip",
+  "previewLookingForTitle": "Sedang mencari",
+  "previewSubmit": "Ayo Mulai",
   "previewSubmitError": "Ada masalah saat menyimpan profilmu. Coba lagi."
 }

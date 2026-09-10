@@ -9,10 +9,12 @@ import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
 /// Step 8/9 onboarding Discover — sumber:
-/// couplivy-docs/flow/01-discover/onboarding/09-preferences.html. Semua
-/// field OPTIONAL (default cukup masuk akal untuk dilewati begitu saja),
-/// tombol utama berlabel "Save Preferences" (bukan "Continue" seperti
-/// step lain).
+/// couplivy-docs/flow/01-discover/onboarding/09-preferences.html.
+/// Gender/Family/Religion/Education preference WAJIB diisi (Continue
+/// disabled sampai semuanya terisi) — keputusan produk, beda dari
+/// implementasi awal yang semuanya optional. Age range TIDAK termasuk
+/// wajib — RangeSlider selalu punya nilai default (25-35), jadi selalu
+/// "terisi" tanpa perlu disentuh user.
 ///
 /// `age_direction` dan `max_distance_km` ADA di skema `dating_preferences`
 /// tapi TIDAK ADA UI-nya di desain HTML sumber — sengaja tidak diisi di
@@ -66,16 +68,25 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     }
   }
 
+  // Gender/family/religion/education preference WAJIB diisi — Continue
+  // disabled sampai semuanya terpilih. Age range TIDAK dicek (selalu
+  // punya nilai default).
+  bool get _isComplete =>
+      _genderPreference != null &&
+      _familyPreference != null &&
+      _religionPreferences.isNotEmpty &&
+      _educationPreferences.isNotEmpty;
+
   Future<void> _submit() async {
+    if (!_isComplete) return;
+
     await DiscoverOnboardingDraftStorage.savePreferences({
       'age_min': _ageRange.start.round(),
       'age_max': _ageRange.end.round(),
-      if (_genderPreference != null) 'gender_preference': _genderPreference,
-      if (_familyPreference != null) 'family_preference': _familyPreference,
-      if (_religionPreferences.isNotEmpty)
-        'religion_preference': _religionPreferences.toList(),
-      if (_educationPreferences.isNotEmpty)
-        'education_preference': _educationPreferences.toList(),
+      'gender_preference': _genderPreference,
+      'family_preference': _familyPreference,
+      'religion_preference': _religionPreferences.toList(),
+      'education_preference': _educationPreferences.toList(),
     });
     if (mounted) context.go('/onboarding/discover/preview');
   }
@@ -306,7 +317,7 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
         onBack: _backToRelationshipGoal,
         bottomButton: AppButton(
           label: l10n.onboardingContinue,
-          onPressed: _submit,
+          onPressed: _isComplete ? _submit : null,
         ),
         body: _isLoadingDraft
             ? const SizedBox.shrink()
@@ -440,16 +451,23 @@ class _PreferenceRow extends StatelessWidget {
           children: [
             Icon(icon, size: 20, color: AppColors.deepViolet),
             const SizedBox(width: 12),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 14, color: AppColors.textDark),
+            // Lebar TETAP (bukan cuma Text polos) — supaya kolom value +
+            // chevron mulai dari titik X yang SAMA di semua row, terlepas
+            // dari panjang label ("Gender" vs "Family Preferences").
+            // Spacer saja TIDAK CUKUP: dia cuma dorong sisa konten ke
+            // kanan, jadi titik mulainya tetap ikut lebar label.
+            SizedBox(
+              width: 130,
+              child: Text(
+                label,
+                style: const TextStyle(fontSize: 14, color: AppColors.textDark),
+              ),
             ),
-            const Spacer(),
             // Flexible + ellipsis — value bisa jadi ringkasan panjang
             // untuk field MULTI-select (mis. "Christian, Muslim,
             // Buddhist"), Text polos tanpa constraint bisa overflow
             // horizontal.
-            Flexible(
+            Expanded(
               child: Text(
                 value ?? '—',
                 textAlign: TextAlign.end,

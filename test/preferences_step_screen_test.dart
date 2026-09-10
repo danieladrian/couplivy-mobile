@@ -31,6 +31,32 @@ void main() {
     );
   }
 
+  // Gender/Family/Religion/Education preference WAJIB diisi — dipakai
+  // beberapa test buat mem-fill semuanya via UI sebelum tap Continue.
+  Future<void> fillAllRequiredPreferences(WidgetTester tester) async {
+    await tester.tap(find.text('Gender'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Everyone'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Family preference'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Any').first);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Religion'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Any').last);
+    await tester.tap(find.text('Continue').last);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Education'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Any').last);
+    await tester.tap(find.text('Continue').last);
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('shows age range and preference rows, 8/9 progress', (
     WidgetTester tester,
   ) async {
@@ -51,7 +77,9 @@ void main() {
     expect(find.text('Save Preferences'), findsNothing);
   });
 
-  testWidgets('Continue navigates to Preview', (WidgetTester tester) async {
+  testWidgets('Continue disabled until all 4 preferences are picked', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: buildRouter(),
@@ -61,11 +89,36 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Continue'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Preview'), findsOneWidget);
+    final button = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'Continue'),
+    );
+    expect(button.onPressed, isNull);
   });
+
+  testWidgets(
+    'picking all 4 preferences then tapping Continue navigates to Preview',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await fillAllRequiredPreferences(tester);
+
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Preview'), findsOneWidget);
+    },
+  );
 
   testWidgets(
     'Religion row opens a checkbox multi-select sheet (not a free-text '

@@ -168,6 +168,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genderMale => 'Male';
 
   @override
+  String get genderPreferNotToSay => 'Prefer not to say';
+
+  @override
   String get photosTitle => 'Add your photos';
 
   @override
@@ -513,7 +516,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get previewSubmit => 'Looks Good';
+  String get previewLookingForTitle => 'Looking for';
+
+  @override
+  String get previewSubmit => 'Let\'s Go';
 
   @override
   String get previewSubmitError =>

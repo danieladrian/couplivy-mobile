@@ -18,12 +18,15 @@ import 'interest_repository.dart';
 
 /// Step 9/9 onboarding Discover (TERAKHIR) — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/10-preview.html. Read-only
-/// summary dari semua draft step 1-8 — TIDAK ada input baru di sini.
+/// summary dari semua draft step 1-8 — TIDAK ada input baru di sini,
+/// TERMASUK section "Looking for" (preferences step 8) yang sekarang
+/// ditampilkan lengkap di sini juga.
 ///
-/// Tombol "Looks Good" adalah SATU-SATUNYA titik yang benar-benar
-/// mengirim data ke server — memanggil `complete()` (field profil, JSON)
-/// DAN `uploadPhotos()` (file foto, multipart) sekaligus. Setelah
-/// keduanya sukses, draft lokal dihapus dan user masuk ke Discover.
+/// Tombol "Let's Go" (dulu "Looks Good") adalah SATU-SATUNYA titik yang
+/// benar-benar mengirim data ke server — memanggil `complete()` (field
+/// profil, JSON) DAN `uploadPhotos()` (file foto, multipart) sekaligus.
+/// Setelah keduanya sukses, draft lokal dihapus dan user masuk ke
+/// Discover.
 class PreviewStepScreen extends StatefulWidget {
   const PreviewStepScreen({super.key});
 
@@ -46,6 +49,17 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
   List<String> _interestSlugs = [];
   int? _age;
 
+  // Step 8 (Preferences) — ditampilkan di section "Looking for" terpisah
+  // (lihat build()), BUKAN digabung ke Wrap fact-pill yang sudah ada
+  // (gender/relationship goal/interests) karena beda kategori — yang
+  // satu "siapa saya", yang ini "siapa yang saya cari".
+  int? _ageRangeMin;
+  int? _ageRangeMax;
+  String? _genderPreference;
+  String? _familyPreference;
+  List<String> _religionPreferences = [];
+  List<String> _educationPreferences = [];
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +77,7 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
         await DiscoverOnboardingDraftStorage.readRelationshipGoal();
     final photoPaths = await DiscoverOnboardingDraftStorage.readPhotoPaths();
     final interestIds = await DiscoverOnboardingDraftStorage.readInterestIds();
+    final preferences = await DiscoverOnboardingDraftStorage.readPreferences();
 
     var interestSlugs = <String>[];
     if (interestIds.isNotEmpty) {
@@ -101,6 +116,18 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
         _relationshipGoal = relationshipGoal;
         _photoPaths = photoPaths;
         _interestSlugs = interestSlugs;
+        _ageRangeMin = preferences['age_min'] as int?;
+        _ageRangeMax = preferences['age_max'] as int?;
+        _genderPreference = preferences['gender_preference'] as String?;
+        _familyPreference = preferences['family_preference'] as String?;
+        _religionPreferences =
+            (preferences['religion_preference'] as List<dynamic>?)
+                ?.cast<String>() ??
+            [];
+        _educationPreferences =
+            (preferences['education_preference'] as List<dynamic>?)
+                ?.cast<String>() ??
+            [];
         _isLoadingDraft = false;
       });
     }
@@ -145,6 +172,7 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
   String? _genderLabel(AppLocalizations l10n) => switch (_gender) {
     'female' => l10n.genderFemale,
     'male' => l10n.genderMale,
+    'prefer_not_to_say' => l10n.genderPreferNotToSay,
     _ => null,
   };
 
@@ -154,6 +182,51 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
         'casual_dating' => l10n.relationshipGoalCasualTitle,
         'friendship' => l10n.relationshipGoalFriendshipTitle,
         _ => null,
+      };
+
+  // --- Label untuk section "Looking for" (preferences step 8) ---
+
+  String? _genderPreferenceLabel(AppLocalizations l10n) =>
+      switch (_genderPreference) {
+        'female' => l10n.genderFemale,
+        'male' => l10n.genderMale,
+        'everyone' => l10n.preferencesGenderAny,
+        _ => null,
+      };
+
+  String? _familyPreferenceLabel(AppLocalizations l10n) =>
+      switch (_familyPreference) {
+        'wants_children' => l10n.preferencesFamilyWantsChildren,
+        'not_wants_children' => l10n.preferencesFamilyNotWantsChildren,
+        'open_to_children' => l10n.preferencesFamilyOpenToChildren,
+        'any' => l10n.preferencesFamilyAny,
+        _ => null,
+      };
+
+  String _religionOptionLabel(AppLocalizations l10n, String key) =>
+      switch (key) {
+        'any' => l10n.preferencesReligionAny,
+        'christian' => l10n.religionChristian,
+        'catholic' => l10n.religionCatholic,
+        'muslim' => l10n.religionMuslim,
+        'buddhist' => l10n.religionBuddhist,
+        'hindu' => l10n.religionHindu,
+        'jewish' => l10n.religionJewish,
+        'sikh' => l10n.religionSikh,
+        'atheist_agnostic' => l10n.religionAtheistAgnostic,
+        'spiritual' => l10n.religionSpiritual,
+        _ => l10n.religionOther,
+      };
+
+  String _educationOptionLabel(AppLocalizations l10n, String key) =>
+      switch (key) {
+        'any' => l10n.educationAny,
+        'no_education' => l10n.educationNoEducation,
+        'elementary' => l10n.educationElementary,
+        'high_school' => l10n.educationHighSchool,
+        'bachelor' => l10n.educationBachelor,
+        'master' => l10n.educationMaster,
+        _ => l10n.educationDoctorate,
       };
 
   @override
@@ -282,6 +355,65 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
                         ),
                     ],
                   ),
+                  // Section terpisah — preferences step 8 ("siapa yang
+                  // saya cari"), BEDA kategori dari fact-pill di atas
+                  // ("siapa saya"). Tampilkan SEMUA yang sudah dipilih,
+                  // termasuk religion/education yang multi-select (join
+                  // koma, sama pola _summaryFor di PreferencesStepScreen).
+                  if (_ageRangeMin != null ||
+                      _genderPreferenceLabel(l10n) != null ||
+                      _familyPreferenceLabel(l10n) != null ||
+                      _religionPreferences.isNotEmpty ||
+                      _educationPreferences.isNotEmpty) ...[
+                    const SizedBox(height: 24),
+                    Text(
+                      l10n.previewLookingForTitle,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textDark,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        if (_ageRangeMin != null && _ageRangeMax != null)
+                          _FactPill(
+                            icon: PhosphorIcons.calendarBlank(),
+                            label: l10n.preferencesAgeRangeLabel(
+                              _ageRangeMin!,
+                              _ageRangeMax!,
+                            ),
+                          ),
+                        if (_genderPreferenceLabel(l10n) != null)
+                          _FactPill(
+                            icon: PhosphorIcons.user(),
+                            label: _genderPreferenceLabel(l10n)!,
+                          ),
+                        if (_familyPreferenceLabel(l10n) != null)
+                          _FactPill(
+                            icon: PhosphorIcons.heart(),
+                            label: _familyPreferenceLabel(l10n)!,
+                          ),
+                        if (_religionPreferences.isNotEmpty)
+                          _FactPill(
+                            icon: PhosphorIcons.handsPraying(),
+                            label: _religionPreferences
+                                .map((key) => _religionOptionLabel(l10n, key))
+                                .join(', '),
+                          ),
+                        if (_educationPreferences.isNotEmpty)
+                          _FactPill(
+                            icon: PhosphorIcons.graduationCap(),
+                            label: _educationPreferences
+                                .map((key) => _educationOptionLabel(l10n, key))
+                                .join(', '),
+                          ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
       ),

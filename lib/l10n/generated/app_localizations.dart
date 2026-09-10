@@ -398,6 +398,12 @@ abstract class AppLocalizations {
   /// **'Male'**
   String get genderMale;
 
+  /// No description provided for @genderPreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get genderPreferNotToSay;
+
   /// No description provided for @photosTitle.
   ///
   /// In en, this message translates to:
@@ -1052,10 +1058,16 @@ abstract class AppLocalizations {
   /// **'{nickName}, {age}'**
   String previewNameAge(String nickName, int age);
 
+  /// No description provided for @previewLookingForTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for'**
+  String get previewLookingForTitle;
+
   /// No description provided for @previewSubmit.
   ///
   /// In en, this message translates to:
-  /// **'Looks Good'**
+  /// **'Let\'s Go'**
   String get previewSubmit;
 
   /// No description provided for @previewSubmitError.

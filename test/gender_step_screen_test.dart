@@ -31,24 +31,26 @@ void main() {
     );
   }
 
-  testWidgets('shows only Female and Male options and 2/9 progress', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: buildRouter(),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-      ),
-    );
-    await tester.pumpAndSettle();
+  testWidgets(
+    'shows Female, Male, and Prefer not to say options and 2/9 progress',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text("What's your gender?"), findsOneWidget);
-    expect(find.text('2/9'), findsOneWidget);
-    expect(find.text('Female'), findsOneWidget);
-    expect(find.text('Male'), findsOneWidget);
-    expect(find.text('Non-binary'), findsNothing);
-  });
+      expect(find.text("What's your gender?"), findsOneWidget);
+      expect(find.text('2/9'), findsOneWidget);
+      expect(find.text('Female'), findsOneWidget);
+      expect(find.text('Male'), findsOneWidget);
+      expect(find.text('Prefer not to say'), findsOneWidget);
+      expect(find.text('Non-binary'), findsNothing);
+    },
+  );
 
   testWidgets('Continue disabled until an option is picked', (
     WidgetTester tester,
