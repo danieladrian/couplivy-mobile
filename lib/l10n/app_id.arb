@@ -177,5 +177,9 @@
   "previewNameAge": "{nickName}, {age}",
   "previewLookingForTitle": "Sedang mencari",
   "previewSubmit": "Ayo Mulai",
-  "previewSubmitError": "Ada masalah saat menyimpan profilmu. Coba lagi."
+  "previewSubmitError": "Ada masalah saat menyimpan profilmu. Coba lagi.",
+
+  "navDiscover": "Discover",
+  "navConnections": "Connections",
+  "navProfile": "Profil"
 }

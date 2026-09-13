@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/login_screen.dart';
 import '../features/auth/sign_up_screen.dart';
-import '../features/discover/discover_placeholder_screen.dart';
+import '../features/main_nav/main_navigation_screen.dart';
 import '../features/onboarding/discover/bio_step_screen.dart';
 import '../features/onboarding/discover/dob_step_screen.dart';
 import '../features/onboarding/discover/gender_step_screen.dart';
@@ -101,7 +101,7 @@ GoRouter createAppRouter() {
       GoRoute(
         path: '/discover',
         name: 'discover',
-        builder: (context, state) => const DiscoverPlaceholderScreen(),
+        builder: (context, state) => const MainNavigationScreen(),
       ),
     ],
   );

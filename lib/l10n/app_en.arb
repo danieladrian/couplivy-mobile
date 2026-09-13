@@ -269,5 +269,9 @@
   },
   "previewLookingForTitle": "Looking for",
   "previewSubmit": "Let's Go",
-  "previewSubmitError": "Something went wrong saving your profile. Please try again."
+  "previewSubmitError": "Something went wrong saving your profile. Please try again.",
+
+  "navDiscover": "Discover",
+  "navConnections": "Connections",
+  "navProfile": "Profile"
 }

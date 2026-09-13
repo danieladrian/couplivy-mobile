@@ -234,10 +234,16 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     Splash Screen di atas).
 - `GatewayOptionCard` (di `shared/widgets/`, bukan `features/onboarding/`
   karena pola "pilih 1 dari beberapa kartu besar" berpotensi dipakai ulang
-  di step onboarding lain) dan `DiscoverPlaceholderScreen`
-  (`features/discover/`) — placeholder sementara, Discover (feed utama)
-  belum dibangun; jadi titik akhir alur onboarding/login supaya bisa
-  diverifikasi end-to-end tanpa nyangkut di halaman yang belum ada.
+  di step onboarding lain) — pola "pilih 1 dari beberapa kartu besar"
+  berpotensi dipakai ulang di step onboarding lain.
+- Route `/discover` (titik akhir alur onboarding/login) sekarang
+  `MainNavigationScreen` (`features/main_nav/`) — container 3 tab
+  (Discover, Connections, Profile) lewat `BottomNavigationBar` +
+  `IndexedStack`, BUKAN 3 route URL terpisah (state tab lokal, bukan
+  go_router nested route/`StatefulShellRoute`). Ketiga tab
+  (`DiscoverPlaceholderScreen`, `ConnectionsScreen`, `ProfileScreen`)
+  MASIH placeholder kosong — belum dibangun, cuma jadi kerangka
+  navigasi supaya bottom nav bisa diverifikasi end-to-end.
 
 ## Onboarding — Step 1-9 Discover (DOB s.d. Preview) — SELESAI
 
@@ -255,10 +261,21 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   (`features/onboarding/discover/discover_onboarding_draft_storage.dart`,
   `DiscoverOnboardingDraftStorage` — SharedPreferences, 1 key per field,
   method baca/tulis per field DAN `readAllForSubmit()`/`clear()`), TIDAK
-  ADA network call sampai step TERAKHIR (Preview, tombol "Looks Good").
-  Tiap screen baca draft-nya sendiri di `initState` (pre-fill kalau user
-  balik ke step yang sama) dan `PopScope(canPop: false)` untuk hardware
-  back (pola sama Login/SignUp — lihat bagian Routing).
+  ADA network call sampai step TERAKHIR (Preview, tombol "Let's Go",
+  dulu "Looks Good"). Tiap screen baca draft-nya sendiri di `initState`
+  (pre-fill kalau user balik ke step yang sama) dan
+  `PopScope(canPop: false)` untuk hardware back (pola sama Login/SignUp
+  — lihat bagian Routing).
+- Selama submit (`_submit()` di Preview), `MatchingLoadingOverlay`
+  (`shared/widgets/matching_loading_overlay.dart`) menampilkan modal
+  full-screen non-dismissible — barrier `deepViolet` semi-transparan, 2
+  heart icon Phosphor putih yang saling mendekat lalu "nempel" (loop,
+  animasi murni `AnimationController`/`TweenSequence`, TIDAK ada
+  dependency lottie/rive). Ditutup manual (`.hide(context)`) di jalur
+  sukses MAUPUN error — WAJIB dipop SEBELUM `context.go('/discover')`
+  karena `go()` me-reset seluruh stack navigator (lihat bagian
+  Routing); dialog yang belum ditutup saat stack di-reset berisiko
+  nyangkut.
 - **Step Preview memanggil DUA network call sekaligus** (beda bentuk
   request, `discover_onboarding_repository.dart`):
   - `complete(fields)` (JSON) — SEMUA field profil dari

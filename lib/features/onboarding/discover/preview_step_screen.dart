@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/matching_loading_overlay.dart';
 import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import '../discover_onboarding_repository.dart';
 import 'discover_onboarding_draft_storage.dart';
@@ -138,6 +140,11 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
       _isSubmitting = true;
       _errorMessage = null;
     });
+    // Modal loading (2 heart "matching") menutupi seluruh layar selama
+    // request — menggantikan CircularProgressIndicator inline yang lama
+    // di bottomButton. Non-dismissible, ditutup manual di bawah baik di
+    // jalur sukses maupun error.
+    unawaited(MatchingLoadingOverlay.show(context));
 
     try {
       final fields = await DiscoverOnboardingDraftStorage.readAllForSubmit();
@@ -149,9 +156,17 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
 
       await DiscoverOnboardingDraftStorage.clear();
 
-      if (mounted) context.go('/discover');
+      if (mounted) {
+        // Tutup modal SEBELUM context.go() — go() me-reset seluruh
+        // stack navigator (lihat .ai/rules/architecture.md), jadi
+        // dialog route yang belum di-pop bisa nyangkut/exception kalau
+        // stack di baliknya sudah diganti duluan.
+        MatchingLoadingOverlay.hide(context);
+        context.go('/discover');
+      }
     } on ApiException catch (e) {
       if (mounted) {
+        MatchingLoadingOverlay.hide(context);
         setState(() {
           _errorMessage = e.message;
           _isSubmitting = false;
@@ -159,6 +174,7 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
       }
     } catch (_) {
       if (mounted) {
+        MatchingLoadingOverlay.hide(context);
         setState(() {
           _errorMessage = AppLocalizations.of(context).previewSubmitError;
           _isSubmitting = false;
@@ -243,18 +259,12 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
         totalSteps: 9,
         onBack: _backToPreferences,
         errorText: _errorMessage,
-        bottomButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppButton(
-              label: l10n.previewSubmit,
-              onPressed: _isSubmitting ? null : _submit,
-            ),
-            if (_isSubmitting) ...[
-              const SizedBox(height: 16),
-              const Center(child: CircularProgressIndicator()),
-            ],
-          ],
+        // Loading sekarang ditampilkan lewat MatchingLoadingOverlay (modal
+        // full-screen), BUKAN CircularProgressIndicator inline lagi —
+        // tombol cukup disabled saat submitting, tanpa indikator dobel.
+        bottomButton: AppButton(
+          label: l10n.previewSubmit,
+          onPressed: _isSubmitting ? null : _submit,
         ),
         body: _isLoadingDraft
             ? const SizedBox.shrink()

@@ -1075,6 +1075,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong saving your profile. Please try again.'**
   String get previewSubmitError;
+
+  /// No description provided for @navDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get navDiscover;
+
+  /// No description provided for @navConnections.
+  ///
+  /// In en, this message translates to:
+  /// **'Connections'**
+  String get navConnections;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
 }
 
 class _AppLocalizationsDelegate

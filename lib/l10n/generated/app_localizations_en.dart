@@ -524,4 +524,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get previewSubmitError =>
       'Something went wrong saving your profile. Please try again.';
+
+  @override
+  String get navDiscover => 'Discover';
+
+  @override
+  String get navConnections => 'Connections';
+
+  @override
+  String get navProfile => 'Profile';
 }

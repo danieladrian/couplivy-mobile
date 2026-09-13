@@ -524,4 +524,13 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get previewSubmitError =>
       'Ada masalah saat menyimpan profilmu. Coba lagi.';
+
+  @override
+  String get navDiscover => 'Discover';
+
+  @override
+  String get navConnections => 'Connections';
+
+  @override
+  String get navProfile => 'Profil';
 }
