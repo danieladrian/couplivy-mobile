@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:couplivy_mobile/core/theme/app_colors.dart';
 import 'package:couplivy_mobile/features/onboarding/gateway_choice_screen.dart';
 import 'package:couplivy_mobile/l10n/generated/app_localizations.dart';
 
@@ -62,6 +63,16 @@ void main() {
         find.widgetWithText(ElevatedButton, 'Continue'),
       );
       expect(continueButton.onPressed, isNull);
+
+      // Background layar putih polos sebelum kartu Discover dipilih —
+      // fade ke cream cuma terjadi SETELAH dipilih (lihat test di bawah).
+      // `color` di constructor AnimatedContainer cuma shorthand yang
+      // disimpan sebagai `decoration = BoxDecoration(color: ...)`.
+      final animatedContainer = tester.widget<AnimatedContainer>(
+        find.byType(AnimatedContainer),
+      );
+      final decoration = animatedContainer.decoration as BoxDecoration;
+      expect(decoration.color, Colors.white);
     },
   );
 
@@ -103,6 +114,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Looking for a new connection'));
+      // pumpAndSettle — nunggu animasi fade AnimatedContainer (350ms)
+      // benar-benar selesai, bukan cuma 1 frame.
       await tester.pumpAndSettle();
 
       // Checkmark cuma muncul pada kartu yang selected — 1 icon check
@@ -113,6 +126,13 @@ void main() {
         find.widgetWithText(ElevatedButton, 'Continue'),
       );
       expect(continueButton.onPressed, isNotNull);
+
+      // Background layar sudah FADE jadi cream setelah kartu dipilih.
+      final animatedContainer = tester.widget<AnimatedContainer>(
+        find.byType(AnimatedContainer),
+      );
+      final decoration = animatedContainer.decoration as BoxDecoration;
+      expect(decoration.color, AppColors.cream);
     },
   );
 }

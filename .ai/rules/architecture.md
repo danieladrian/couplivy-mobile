@@ -248,6 +248,16 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   dianggap tidak konsisten dengan pola step lain. `_discoverSelected`
   cukup `bool` (bukan `String? _selectedMode`) karena cuma 1 opsi yang
   bisa dipilih (Together permanen `enabled: false`).
+- **Background LAYAR Gateway Choice (bukan kartu) fade putih→cream saat
+  Discover dipilih** — `Scaffold.body` dibungkus `AnimatedContainer`
+  (duration 350ms, `Curves.easeInOut`), `color: _discoverSelected ?
+  AppColors.cream : Colors.white`. Sebelumnya `Scaffold.backgroundColor`
+  statis `AppColors.cream` sepanjang waktu — user secara eksplisit minta
+  putih polos dulu, baru fade ke cream begitu kartu Discover ditap;
+  efek ini KHUSUS kartu Discover, TIDAK relevan untuk Together (disabled
+  permanen). Kartu `GatewayOptionCard` sendiri TIDAK ikut fade — warnanya
+  tetap putih terus, cuma border+checkmark yang berubah saat selected
+  (beda concern dari background layar).
 - Route `/discover` (titik akhir alur onboarding/login) sekarang
   `MainNavigationScreen` (`features/main_nav/`) — container 3 tab
   (Discover, Connections, Profile) lewat `BottomNavigationBar` +

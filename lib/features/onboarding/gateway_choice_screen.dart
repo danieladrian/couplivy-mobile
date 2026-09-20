@@ -29,6 +29,11 @@ import 'providers/gateway_choice_controller.dart';
 /// Continue step lain (Gender, Relationship Goal; lihat
 /// .ai/rules/architecture.md). Cuma "Discover" yang bisa dipilih (satu-
 /// satunya opsi enabled), jadi `_selected` cukup bool, bukan String.
+///
+/// Background LAYAR (bukan kartu) putih polos secara default, FADE IN ke
+/// `AppColors.cream` (`AnimatedContainer`) begitu kartu "Discover"
+/// dipilih — efek ini KHUSUS untuk kartu Discover (satu-satunya yang
+/// bisa dipilih); kartu Together tidak relevan (permanen disabled).
 class GatewayChoiceScreen extends ConsumerStatefulWidget {
   const GatewayChoiceScreen({super.key});
 
@@ -83,63 +88,76 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
       // SplashScreen tidak punya tombol back.
       canPop: false,
       child: Scaffold(
-        backgroundColor: AppColors.cream,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  // Fallback ke judul tanpa nama kalau nickname belum
-                  // sempat ke-load (jeda 1 frame baca SharedPreferences) —
-                  // supaya tidak ada layout jump begitu nickname muncul.
-                  _nickName != null
-                      ? l10n.gatewayChoiceTitle(_nickName!)
-                      : l10n.gatewayChoiceTitleFallback,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.playfairDisplay(fontSize: 22),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.gatewayChoiceSubtitle,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.poppins(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
+        // Background LAYAR (bukan Scaffold.backgroundColor statis lagi)
+        // — AnimatedContainer supaya putih->cream FADE saat kartu
+        // Discover dipilih, bukan berubah instan.
+        backgroundColor: Colors.white,
+        body: AnimatedContainer(
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+          color: _discoverSelected ? AppColors.cream : Colors.white,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    // Fallback ke judul tanpa nama kalau nickname belum
+                    // sempat ke-load (jeda 1 frame baca SharedPreferences)
+                    // — supaya tidak ada layout jump begitu nickname
+                    // muncul.
+                    _nickName != null
+                        ? l10n.gatewayChoiceTitle(_nickName!)
+                        : l10n.gatewayChoiceTitleFallback,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.playfairDisplay(fontSize: 22),
                   ),
-                ),
-                const SizedBox(height: 28),
-                GatewayOptionCard(
-                  icon: PhosphorIcons.heart(),
-                  iconBackgroundColor: AppColors.lilac.withValues(alpha: 0.18),
-                  title: l10n.gatewayChoiceDiscoverTitle,
-                  description: l10n.gatewayChoiceDiscoverDescription,
-                  ctaLabel: l10n.gatewayChoiceDiscoverCta,
-                  selected: _discoverSelected,
-                  onTap: isLoading ? null : _selectDiscover,
-                ),
-                const SizedBox(height: 16),
-                GatewayOptionCard(
-                  icon: PhosphorIcons.handHeart(),
-                  iconBackgroundColor: AppColors.peach.withValues(alpha: 0.3),
-                  title: l10n.gatewayChoiceTogetherTitle,
-                  description: l10n.gatewayChoiceTogetherDescription,
-                  ctaLabel: l10n.gatewayChoiceTogetherCta,
-                  selected: false,
-                  enabled: false,
-                  onTap: null,
-                ),
-                const SizedBox(height: 24),
-                AppButton(
-                  label: l10n.onboardingContinue,
-                  onPressed: (_discoverSelected && !isLoading) ? _submit : null,
-                ),
-                if (isLoading) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.gatewayChoiceSubtitle,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.poppins(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  GatewayOptionCard(
+                    icon: PhosphorIcons.heart(),
+                    iconBackgroundColor: AppColors.lilac.withValues(
+                      alpha: 0.18,
+                    ),
+                    title: l10n.gatewayChoiceDiscoverTitle,
+                    description: l10n.gatewayChoiceDiscoverDescription,
+                    ctaLabel: l10n.gatewayChoiceDiscoverCta,
+                    selected: _discoverSelected,
+                    onTap: isLoading ? null : _selectDiscover,
+                  ),
+                  const SizedBox(height: 16),
+                  GatewayOptionCard(
+                    icon: PhosphorIcons.handHeart(),
+                    iconBackgroundColor: AppColors.peach.withValues(alpha: 0.3),
+                    title: l10n.gatewayChoiceTogetherTitle,
+                    description: l10n.gatewayChoiceTogetherDescription,
+                    ctaLabel: l10n.gatewayChoiceTogetherCta,
+                    selected: false,
+                    enabled: false,
+                    onTap: null,
+                  ),
                   const SizedBox(height: 24),
-                  const Center(child: CircularProgressIndicator()),
+                  AppButton(
+                    label: l10n.onboardingContinue,
+                    onPressed: (_discoverSelected && !isLoading)
+                        ? _submit
+                        : null,
+                  ),
+                  if (isLoading) ...[
+                    const SizedBox(height: 24),
+                    const Center(child: CircularProgressIndicator()),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
