@@ -7,6 +7,7 @@ import '../../core/storage/user_session_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/gateway_option_card.dart';
 import 'providers/gateway_choice_controller.dart';
 
@@ -22,6 +23,12 @@ import 'providers/gateway_choice_controller.dart';
 /// "Sudah punya pasangan" (mode=together) DI-DISABLE dulu — backend
 /// menolak mode itu (lihat GatewayChoiceRequest), UI-nya tetap tampil
 /// supaya user tahu fitur itu akan ada, cuma belum bisa dipilih.
+///
+/// Dulunya tap kartu langsung submit (tanpa state selected, tanpa tombol
+/// Continue terpisah) — diubah supaya konsisten dengan pola pilih+
+/// Continue step lain (Gender, Relationship Goal; lihat
+/// .ai/rules/architecture.md). Cuma "Discover" yang bisa dipilih (satu-
+/// satunya opsi enabled), jadi `_selected` cukup bool, bukan String.
 class GatewayChoiceScreen extends ConsumerStatefulWidget {
   const GatewayChoiceScreen({super.key});
 
@@ -32,6 +39,7 @@ class GatewayChoiceScreen extends ConsumerStatefulWidget {
 
 class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
   String? _nickName;
+  bool _discoverSelected = false;
 
   @override
   void initState() {
@@ -44,7 +52,10 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
     if (mounted) setState(() => _nickName = nickName);
   }
 
-  void _chooseDiscover() {
+  void _selectDiscover() => setState(() => _discoverSelected = true);
+
+  void _submit() {
+    if (!_discoverSelected) return;
     ref.read(gatewayChoiceProvider.notifier).choose('discover');
   }
 
@@ -105,7 +116,8 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
                   title: l10n.gatewayChoiceDiscoverTitle,
                   description: l10n.gatewayChoiceDiscoverDescription,
                   ctaLabel: l10n.gatewayChoiceDiscoverCta,
-                  onTap: isLoading ? null : _chooseDiscover,
+                  selected: _discoverSelected,
+                  onTap: isLoading ? null : _selectDiscover,
                 ),
                 const SizedBox(height: 16),
                 GatewayOptionCard(
@@ -114,8 +126,14 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
                   title: l10n.gatewayChoiceTogetherTitle,
                   description: l10n.gatewayChoiceTogetherDescription,
                   ctaLabel: l10n.gatewayChoiceTogetherCta,
+                  selected: false,
                   enabled: false,
                   onTap: null,
+                ),
+                const SizedBox(height: 24),
+                AppButton(
+                  label: l10n.onboardingContinue,
+                  onPressed: (_discoverSelected && !isLoading) ? _submit : null,
                 ),
                 if (isLoading) ...[
                   const SizedBox(height: 24),

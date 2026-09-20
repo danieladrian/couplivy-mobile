@@ -236,6 +236,18 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   karena pola "pilih 1 dari beberapa kartu besar" berpotensi dipakai ulang
   di step onboarding lain) — pola "pilih 1 dari beberapa kartu besar"
   berpotensi dipakai ulang di step onboarding lain.
+- **Gateway Choice pakai pola pilih+Continue** (SAMA seperti Gender/
+  Relationship Goal, TIDAK LAGI beda) — `GatewayOptionCard` sekarang
+  punya param `selected` (border+background lilac+checkmark, background
+  putih normal kalau belum dipilih), tap kartu Discover cuma
+  `setState()` (`_selectDiscover`), submit sesungguhnya
+  (`gatewayChoiceProvider.notifier.choose('discover')`) baru terjadi
+  saat tap tombol Continue terpisah di bawah (disabled sampai kartu
+  Discover dipilih). Dulunya tap kartu LANGSUNG submit tanpa state
+  selected sama sekali dan tanpa tombol Continue — diubah karena
+  dianggap tidak konsisten dengan pola step lain. `_discoverSelected`
+  cukup `bool` (bukan `String? _selectedMode`) karena cuma 1 opsi yang
+  bisa dipilih (Together permanen `enabled: false`).
 - Route `/discover` (titik akhir alur onboarding/login) sekarang
   `MainNavigationScreen` (`features/main_nav/`) — container 3 tab
   (Discover, Connections, Profile) lewat `BottomNavigationBar` +
@@ -517,8 +529,10 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   label "x/total", dipakai SEMUA step Discover. Param `step` 1-indexed.
   `SelectableOptionCard` (`shared/widgets/`) — radio card dengan state
   "selected" persisten (border+bg lilac+checkmark), dipakai step Gender
-  (icon-only) dan Relationship Goal (icon+deskripsi) — BEDA dari
-  `GatewayOptionCard` (murni navigasi, tanpa konsep "sedang dipilih").
+  (icon-only) dan Relationship Goal (icon+deskripsi). `GatewayOptionCard`
+  SEKARANG JUGA punya konsep "sedang dipilih" (param `selected`) — lihat
+  section "Onboarding — Gateway Choice (Step 1)" di atas — bedanya
+  cuma layout (Column besar dengan `ctaLabel` teks, bukan Row kecil).
 - **`relationship_goal` (step 7) GANTI TOTAL** dari 3 opsi lama
   (Serious Relationship/Casual Dating/Friendship) jadi 4 opsi baru:
   serious_dating, casual_dating, new_connections, still_figuring_out —
@@ -537,14 +551,15 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   tengah layar) boleh skip `OnboardingStepScaffold` untuk state itu
   saja dan pakai `OnboardingStepHeader` langsung — lihat
   `interests_step_screen.dart` sebagai contoh percabangan.
-- Pola pilih-lalu-Continue vs auto-navigate: Gender dan Relationship
-  Goal SEKARANG (setelah `OnboardingStepScaffold`) pakai tombol
-  Continue eksplisit — tap kartu cuma `setState()` (pilih), navigasi
-  baru terjadi saat tap "Continue" (disabled/`onPressed: null` kalau
-  belum ada pilihan). Ini KONSISTEN dengan step lain. `GatewayChoiceScreen`
-  SENGAJA TETAP auto-navigate (tap kartu langsung `context.go()`, tanpa
-  tombol Continue) — beda pola, sengaja TIDAK diseragamkan karena beda
-  konteks (pre-onboarding branch point, bukan step form).
+- Pola pilih-lalu-Continue: Gender, Relationship Goal, DAN
+  `GatewayChoiceScreen` (pre-onboarding, bukan step Discover tapi
+  polanya diseragamkan juga) semuanya pakai tombol Continue eksplisit
+  — tap kartu cuma `setState()` (pilih), aksi sesungguhnya (navigasi
+  ATAU submit API, tergantung screen) baru terjadi saat tap "Continue"
+  (disabled/`onPressed: null` kalau belum ada pilihan). TIDAK ADA lagi
+  step/screen yang auto-navigate/auto-submit langsung dari tap kartu —
+  yang terakhir (`GatewayChoiceScreen`) baru diseragamkan belakangan,
+  lihat section "Onboarding — Gateway Choice (Step 1)" di atas.
 - **Pelajaran (jangan diulang)**: `Padding` dengan `EdgeInsets` NEGATIF
   (mis. `EdgeInsets.only(right: -24)`) SELALU crash — assertion
   `'padding.isNonNegative': is not true`, Flutter tidak mengizinkan

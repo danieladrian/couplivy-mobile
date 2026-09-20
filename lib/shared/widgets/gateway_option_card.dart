@@ -9,6 +9,14 @@ import '../../core/theme/app_radius.dart';
 /// beberapa opsi besar"), makanya ditaruh di shared/, bukan di
 /// features/onboarding/. Sumber desain:
 /// couplivy-docs/flow/00-auth/05-gateway-choice.html (.option-card).
+///
+/// Punya state `selected` (border+background lilac+checkmark, sama pola
+/// visual `SelectableOptionCard`) — tap cuma MEMILIH, BUKAN langsung
+/// submit; submit sesungguhnya lewat tombol Continue terpisah di
+/// `GatewayChoiceScreen`. Dulunya tap = langsung submit (tanpa state
+/// selected sama sekali) — diubah supaya konsisten dengan pola pilih+
+/// Continue step lain (Gender, Relationship Goal; lihat
+/// .ai/rules/architecture.md).
 class GatewayOptionCard extends StatelessWidget {
   const GatewayOptionCard({
     super.key,
@@ -17,6 +25,7 @@ class GatewayOptionCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.ctaLabel,
+    required this.selected,
     required this.onTap,
     this.enabled = true,
   });
@@ -26,6 +35,7 @@ class GatewayOptionCard extends StatelessWidget {
   final String title;
   final String description;
   final String ctaLabel;
+  final bool selected;
   final VoidCallback? onTap;
 
   /// Opsi "Sudah Punya Pasangan" di-disable dulu (backend menolak
@@ -40,21 +50,45 @@ class GatewayOptionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: selected
+              ? AppColors.lilac.withValues(alpha: 0.08)
+              : Colors.white,
           borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: AppColors.border, width: 1.5),
+          border: Border.all(
+            color: selected ? AppColors.lilac : AppColors.border,
+            width: selected ? 2 : 1.5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: iconBackgroundColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(icon, color: AppColors.deepViolet, size: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: iconBackgroundColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(icon, color: AppColors.deepViolet, size: 24),
+                ),
+                if (selected)
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: const BoxDecoration(
+                      color: AppColors.deepViolet,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      PhosphorIcons.check(PhosphorIconsStyle.bold),
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 14),
             Text(
