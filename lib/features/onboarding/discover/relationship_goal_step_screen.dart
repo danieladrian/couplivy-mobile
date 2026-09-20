@@ -16,6 +16,11 @@ import 'discover_onboarding_draft_storage.dart';
 /// Dulunya tap kartu langsung lanjut (tanpa tombol Continue terpisah) —
 /// diubah supaya konsisten dengan step lain (pilih dulu, baru tap
 /// Continue eksplisit; lihat .ai/rules/architecture.md).
+///
+/// GANTI TOTAL dari 3 opsi lama (Serious Relationship/Casual Dating/
+/// Friendship) jadi 4 opsi baru (Serious Dating/Casual Dating/New
+/// Connections/Still Figuring It Out) — keputusan produk, "Friendship"
+/// DIHAPUS TOTAL, bukan di-rename.
 class RelationshipGoalStepScreen extends StatefulWidget {
   const RelationshipGoalStepScreen({super.key});
 
@@ -99,8 +104,8 @@ class _RelationshipGoalStepScreenState
                     ),
                     title: l10n.relationshipGoalSeriousTitle,
                     description: l10n.relationshipGoalSeriousDescription,
-                    selected: _selectedGoal == 'serious_relationship',
-                    onTap: () => _select('serious_relationship'),
+                    selected: _selectedGoal == 'serious_dating',
+                    onTap: () => _select('serious_dating'),
                   ),
                   const SizedBox(height: 12),
                   SelectableOptionCard(
@@ -117,10 +122,20 @@ class _RelationshipGoalStepScreenState
                     iconBackgroundColor: AppColors.dustyBlue.withValues(
                       alpha: 0.2,
                     ),
-                    title: l10n.relationshipGoalFriendshipTitle,
-                    description: l10n.relationshipGoalFriendshipDescription,
-                    selected: _selectedGoal == 'friendship',
-                    onTap: () => _select('friendship'),
+                    title: l10n.relationshipGoalNewConnectionsTitle,
+                    description: l10n.relationshipGoalNewConnectionsDescription,
+                    selected: _selectedGoal == 'new_connections',
+                    onTap: () => _select('new_connections'),
+                  ),
+                  const SizedBox(height: 12),
+                  SelectableOptionCard(
+                    icon: PhosphorIcons.compass(),
+                    iconBackgroundColor: AppColors.lilac.withValues(alpha: 0.2),
+                    title: l10n.relationshipGoalStillFiguringOutTitle,
+                    description:
+                        l10n.relationshipGoalStillFiguringOutDescription,
+                    selected: _selectedGoal == 'still_figuring_out',
+                    onTap: () => _select('still_figuring_out'),
                   ),
                 ],
               ),

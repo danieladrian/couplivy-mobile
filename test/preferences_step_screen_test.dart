@@ -144,13 +144,15 @@ void main() {
       // bebas, dan bukan radio single-select (ListTile check icon).
       expect(find.byType(AlertDialog), findsNothing);
       expect(find.byType(CheckboxListTile), findsWidgets);
-      expect(find.text('Christian'), findsOneWidget);
-      expect(find.text('Muslim'), findsOneWidget);
+      expect(find.text('Christianity'), findsOneWidget);
+      expect(find.text('Islam'), findsOneWidget);
       expect(find.text('Any'), findsOneWidget);
 
-      // Pilih 2 opsi sekaligus — summary harus tampilkan keduanya.
-      await tester.tap(find.text('Christian'));
-      await tester.tap(find.text('Muslim'));
+      // Pilih 2 opsi sekaligus — summary harus tampilkan keduanya, urutan
+      // ikut urutan Map `_religionOptions` (Islam sebelum Christianity),
+      // BUKAN urutan tap.
+      await tester.tap(find.text('Christianity'));
+      await tester.tap(find.text('Islam'));
       // `.last` — tombol "Continue" halaman utama tetap ada di tree di
       // belakang sheet (cuma tertutup visual), jadi ada 2 widget dengan
       // teks yang sama; tombol Continue di dalam sheet-nya sendiri
@@ -158,7 +160,7 @@ void main() {
       await tester.tap(find.text('Continue').last);
       await tester.pumpAndSettle();
 
-      expect(find.text('Christian, Muslim'), findsOneWidget);
+      expect(find.text('Islam, Christianity'), findsOneWidget);
     },
   );
 
@@ -181,14 +183,14 @@ void main() {
     await tester.tap(find.text('Religion'));
     await tester.pumpAndSettle();
 
-    // Pilih Christian dulu, lalu pilih Any — Christian harus ke-uncheck.
-    await tester.tap(find.text('Christian'));
+    // Pilih Christianity dulu, lalu pilih Any — Christianity harus ke-uncheck.
+    await tester.tap(find.text('Christianity'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Any'));
     await tester.pumpAndSettle();
 
     final christianCheckbox = tester.widget<CheckboxListTile>(
-      find.widgetWithText(CheckboxListTile, 'Christian'),
+      find.widgetWithText(CheckboxListTile, 'Christianity'),
     );
     final anyCheckbox = tester.widget<CheckboxListTile>(
       find.widgetWithText(CheckboxListTile, 'Any'),

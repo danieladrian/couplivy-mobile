@@ -398,14 +398,34 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     field ini) sampai ditambahkan sekarang. WAJIB, TANPA opsi "any"
     (beda dari `religion_preference` di step Preferences, yang punya
     "any" karena itu preferensi siapa yang dicari, bukan agama sendiri).
-    Daftar sama dipakai keduanya: christian, catholic, muslim, buddhist,
-    hindu, jewish, sikh, atheist_agnostic, spiritual, other.
     `religion_preference` di step Preferences JUGA diubah dari teks bebas
     (`TextEditingController` + `AlertDialog`) jadi bottom sheet select —
     sebelumnya tidak konsisten dengan field select lain
     (Ethnicity/Education). Icon row Preferences diganti dari
     `PhosphorIcons.cross()` (simbol salib, spesifik Kristen/Katolik) ke
     `PhosphorIcons.handsPraying()` (netral lintas agama).
+  - **`ethnicity`/`religion` daftar opsinya GANTI TOTAL** (bukan cuma
+    ditambah) — keputusan produk, dijalankan aman karena 0 baris data
+    existing saat perubahan dibuat. Enum SEKARANG (lihat
+    `BioStepScreen._ethnicityOptions`/`_religionOptions` dan
+    `PreferencesStepScreen._religionOptions` untuk definisi pasti, HARUS
+    sinkron dengan `couplivy-backend` `CompleteProfileRequest`):
+    - `ethnicity` (18 opsi): east_asian, south_asian, southeast_asian,
+      middle_eastern, black_african, hispanic_latino, white_european,
+      javanese, sundanese, batak, minangkabau, balinese, madurese,
+      betawi, bugis, dayak, papuan, other, prefer_not_to_say — campuran
+      kategori regional/rasial umum DAN suku Indonesia spesifik (pasar
+      utama app ini).
+    - `religion` (13 opsi): islam, christianity, catholic, hinduism,
+      buddhism, confucianism, judaism, sikhism, taoism, other,
+      agnostic, atheist, prefer_not_to_say. `religion_preference` di
+      step Preferences pakai enum SAMA + "any" (12 opsi + any, TANPA
+      `prefer_not_to_say` — tidak masuk akal sebagai preferensi siapa
+      yang dicari).
+  - `_summaryFor` (ringkasan multi-select di step Preferences) urutan
+    tampil MENGIKUTI urutan Map `_religionOptions`/`_educationOptions`
+    (bukan urutan tap user) — pilih "Christianity" lalu "Islam" tampil
+    sebagai "Islam, Christianity" karena Islam duluan di Map.
   - **Bottom sheet select generik** (`_BioStepScreenState._pickFromOptions`
     di `bio_step_screen.dart`, `_showPickerSheet` di
     `preferences_step_screen.dart`) SELALU dibatasi tinggi
@@ -470,6 +490,12 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   "selected" persisten (border+bg lilac+checkmark), dipakai step Gender
   (icon-only) dan Relationship Goal (icon+deskripsi) — BEDA dari
   `GatewayOptionCard` (murni navigasi, tanpa konsep "sedang dipilih").
+- **`relationship_goal` (step 7) GANTI TOTAL** dari 3 opsi lama
+  (Serious Relationship/Casual Dating/Friendship) jadi 4 opsi baru:
+  serious_dating, casual_dating, new_connections, still_figuring_out —
+  keputusan produk, "Friendship" DIHAPUS TOTAL bukan di-rename. 4 kartu
+  (bukan 3) tetap aman dari overflow karena `OnboardingStepScaffold`
+  sudah bungkus body dengan `SingleChildScrollView`.
 - `OnboardingStepScaffold` (`shared/widgets/onboarding_step_scaffold.dart`)
   — kerangka WAJIB semua step Discover: `OnboardingStepHeader` di atas,
   body scrollable di tengah, `bottomButton` opsional (biasanya tombol

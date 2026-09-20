@@ -194,9 +194,10 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
 
   String? _relationshipGoalLabel(AppLocalizations l10n) =>
       switch (_relationshipGoal) {
-        'serious_relationship' => l10n.relationshipGoalSeriousTitle,
+        'serious_dating' => l10n.relationshipGoalSeriousTitle,
         'casual_dating' => l10n.relationshipGoalCasualTitle,
-        'friendship' => l10n.relationshipGoalFriendshipTitle,
+        'new_connections' => l10n.relationshipGoalNewConnectionsTitle,
+        'still_figuring_out' => l10n.relationshipGoalStillFiguringOutTitle,
         _ => null,
       };
 
@@ -222,15 +223,17 @@ class _PreviewStepScreenState extends State<PreviewStepScreen> {
   String _religionOptionLabel(AppLocalizations l10n, String key) =>
       switch (key) {
         'any' => l10n.preferencesReligionAny,
-        'christian' => l10n.religionChristian,
+        'islam' => l10n.religionIslam,
+        'christianity' => l10n.religionChristianity,
         'catholic' => l10n.religionCatholic,
-        'muslim' => l10n.religionMuslim,
-        'buddhist' => l10n.religionBuddhist,
-        'hindu' => l10n.religionHindu,
-        'jewish' => l10n.religionJewish,
-        'sikh' => l10n.religionSikh,
-        'atheist_agnostic' => l10n.religionAtheistAgnostic,
-        'spiritual' => l10n.religionSpiritual,
+        'hinduism' => l10n.religionHinduism,
+        'buddhism' => l10n.religionBuddhism,
+        'confucianism' => l10n.religionConfucianism,
+        'judaism' => l10n.religionJudaism,
+        'sikhism' => l10n.religionSikhism,
+        'taoism' => l10n.religionTaoism,
+        'agnostic' => l10n.religionAgnostic,
+        'atheist' => l10n.religionAtheist,
         _ => l10n.religionOther,
       };
 

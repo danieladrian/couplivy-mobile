@@ -230,37 +230,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bioReligionHint => 'Select religion';
 
   @override
-  String get ethnicityAsian => 'Asian';
-
-  @override
-  String get ethnicityBlackAfricanDescent => 'Black / African Descent';
-
-  @override
-  String get ethnicityHispanicLatino => 'Hispanic / Latino';
-
-  @override
-  String get ethnicityMiddleEastern => 'Middle Eastern';
-
-  @override
-  String get ethnicityNativeAmerican => 'Native American';
-
-  @override
-  String get ethnicityPacificIslander => 'Pacific Islander';
+  String get ethnicityEastAsian => 'East Asian';
 
   @override
   String get ethnicitySouthAsian => 'South Asian';
 
   @override
-  String get ethnicityWhiteCaucasian => 'White / Caucasian';
+  String get ethnicitySoutheastAsian => 'Southeast Asian';
 
   @override
-  String get ethnicityMixedMultiracial => 'Mixed / Multiracial';
+  String get ethnicityMiddleEastern => 'Middle Eastern';
+
+  @override
+  String get ethnicityBlackAfrican => 'Black / African';
+
+  @override
+  String get ethnicityHispanicLatino => 'Hispanic / Latino';
+
+  @override
+  String get ethnicityWhiteEuropean => 'White / European';
+
+  @override
+  String get ethnicityJavanese => 'Javanese';
+
+  @override
+  String get ethnicitySundanese => 'Sundanese';
+
+  @override
+  String get ethnicityBatak => 'Bataknese';
+
+  @override
+  String get ethnicityMinangkabau => 'Minangkabau';
+
+  @override
+  String get ethnicityBalinese => 'Balinese';
+
+  @override
+  String get ethnicityMadurese => 'Madurese';
+
+  @override
+  String get ethnicityBetawi => 'Betawi';
+
+  @override
+  String get ethnicityBugis => 'Bugis';
+
+  @override
+  String get ethnicityDayak => 'Dayak';
+
+  @override
+  String get ethnicityPapuan => 'Papuan';
 
   @override
   String get ethnicityOther => 'Other';
 
   @override
-  String get ethnicityChinese => 'Chinese';
+  String get ethnicityPreferNotToSay => 'Prefer not to say';
 
   @override
   String get bioWantsChildrenLabel => 'Do you want children?';
@@ -437,7 +461,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'This helps us show you people with the same intentions.';
 
   @override
-  String get relationshipGoalSeriousTitle => 'Serious Relationship';
+  String get relationshipGoalSeriousTitle => 'Serious Dating';
 
   @override
   String get relationshipGoalSeriousDescription =>
@@ -451,11 +475,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Getting to know people, see where it goes';
 
   @override
-  String get relationshipGoalFriendshipTitle => 'Friendship';
+  String get relationshipGoalNewConnectionsTitle => 'New Connections';
 
   @override
-  String get relationshipGoalFriendshipDescription =>
-      'Looking to make new friends first';
+  String get relationshipGoalNewConnectionsDescription =>
+      'Open to meeting new people, no pressure';
+
+  @override
+  String get relationshipGoalStillFiguringOutTitle => 'Still Figuring It Out';
+
+  @override
+  String get relationshipGoalStillFiguringOutDescription =>
+      'Not sure yet, just exploring for now';
 
   @override
   String get preferencesTitle => 'Tell us what you\'re looking for';
@@ -493,34 +524,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesReligionAny => 'Any';
 
   @override
-  String get religionChristian => 'Christian';
+  String get religionIslam => 'Islam';
+
+  @override
+  String get religionChristianity => 'Christianity';
 
   @override
   String get religionCatholic => 'Catholic';
 
   @override
-  String get religionMuslim => 'Muslim';
+  String get religionHinduism => 'Hinduism';
 
   @override
-  String get religionBuddhist => 'Buddhist';
+  String get religionBuddhism => 'Buddhism';
 
   @override
-  String get religionHindu => 'Hindu';
+  String get religionConfucianism => 'Confucianism';
 
   @override
-  String get religionJewish => 'Jewish';
+  String get religionJudaism => 'Judaism';
 
   @override
-  String get religionSikh => 'Sikh';
+  String get religionSikhism => 'Sikhism';
 
   @override
-  String get religionAtheistAgnostic => 'Atheist / Agnostic';
-
-  @override
-  String get religionSpiritual => 'Spiritual (not religious)';
+  String get religionTaoism => 'Taoism';
 
   @override
   String get religionOther => 'Other';
+
+  @override
+  String get religionAgnostic => 'Agnostic';
+
+  @override
+  String get religionAtheist => 'Atheist';
+
+  @override
+  String get religionPreferNotToSay => 'Prefer not to say';
 
   @override
   String get preferencesEducationLabel => 'Education';

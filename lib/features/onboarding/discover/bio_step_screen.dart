@@ -144,35 +144,49 @@ class _BioStepScreenState extends State<BioStepScreen> {
     super.dispose();
   }
 
+  // GANTI TOTAL dari daftar lama (11 kategori luas generik) — keputusan
+  // produk. Campuran kategori regional/rasial umum DAN suku Indonesia
+  // spesifik (Javanese, Sundanese, dst — pasar utama app ini).
   Map<String, String> _ethnicityOptions(AppLocalizations l10n) => {
-    'asian': l10n.ethnicityAsian,
-    'black_african_descent': l10n.ethnicityBlackAfricanDescent,
-    'hispanic_latino': l10n.ethnicityHispanicLatino,
-    'middle_eastern': l10n.ethnicityMiddleEastern,
-    'native_american': l10n.ethnicityNativeAmerican,
-    'pacific_islander': l10n.ethnicityPacificIslander,
+    'east_asian': l10n.ethnicityEastAsian,
     'south_asian': l10n.ethnicitySouthAsian,
-    'white_caucasian': l10n.ethnicityWhiteCaucasian,
-    'mixed_multiracial': l10n.ethnicityMixedMultiracial,
-    'chinese': l10n.ethnicityChinese,
+    'southeast_asian': l10n.ethnicitySoutheastAsian,
+    'middle_eastern': l10n.ethnicityMiddleEastern,
+    'black_african': l10n.ethnicityBlackAfrican,
+    'hispanic_latino': l10n.ethnicityHispanicLatino,
+    'white_european': l10n.ethnicityWhiteEuropean,
+    'javanese': l10n.ethnicityJavanese,
+    'sundanese': l10n.ethnicitySundanese,
+    'batak': l10n.ethnicityBatak,
+    'minangkabau': l10n.ethnicityMinangkabau,
+    'balinese': l10n.ethnicityBalinese,
+    'madurese': l10n.ethnicityMadurese,
+    'betawi': l10n.ethnicityBetawi,
+    'bugis': l10n.ethnicityBugis,
+    'dayak': l10n.ethnicityDayak,
+    'papuan': l10n.ethnicityPapuan,
     'other': l10n.ethnicityOther,
+    'prefer_not_to_say': l10n.ethnicityPreferNotToSay,
   };
 
-  // Daftar agama umum secara global — TIDAK ADA opsi "any" di sini
-  // (beda dari religion_preference di step Preferences), karena "any"
-  // cuma masuk akal untuk preferensi siapa yang dicari, bukan agama
-  // milik user sendiri.
+  // GANTI TOTAL dari daftar lama — keputusan produk. TIDAK ADA opsi
+  // "any" di sini (beda dari religion_preference di step Preferences),
+  // karena "any" cuma masuk akal untuk preferensi siapa yang dicari,
+  // bukan agama milik user sendiri.
   Map<String, String> _religionOptions(AppLocalizations l10n) => {
-    'christian': l10n.religionChristian,
+    'islam': l10n.religionIslam,
+    'christianity': l10n.religionChristianity,
     'catholic': l10n.religionCatholic,
-    'muslim': l10n.religionMuslim,
-    'buddhist': l10n.religionBuddhist,
-    'hindu': l10n.religionHindu,
-    'jewish': l10n.religionJewish,
-    'sikh': l10n.religionSikh,
-    'atheist_agnostic': l10n.religionAtheistAgnostic,
-    'spiritual': l10n.religionSpiritual,
+    'hinduism': l10n.religionHinduism,
+    'buddhism': l10n.religionBuddhism,
+    'confucianism': l10n.religionConfucianism,
+    'judaism': l10n.religionJudaism,
+    'sikhism': l10n.religionSikhism,
+    'taoism': l10n.religionTaoism,
     'other': l10n.religionOther,
+    'agnostic': l10n.religionAgnostic,
+    'atheist': l10n.religionAtheist,
+    'prefer_not_to_say': l10n.religionPreferNotToSay,
   };
 
   /// Bottom sheet select generik — dipakai Ethnicity DAN Religion (dan

@@ -512,41 +512,11 @@ abstract class AppLocalizations {
   /// **'Select religion'**
   String get bioReligionHint;
 
-  /// No description provided for @ethnicityAsian.
+  /// No description provided for @ethnicityEastAsian.
   ///
   /// In en, this message translates to:
-  /// **'Asian'**
-  String get ethnicityAsian;
-
-  /// No description provided for @ethnicityBlackAfricanDescent.
-  ///
-  /// In en, this message translates to:
-  /// **'Black / African Descent'**
-  String get ethnicityBlackAfricanDescent;
-
-  /// No description provided for @ethnicityHispanicLatino.
-  ///
-  /// In en, this message translates to:
-  /// **'Hispanic / Latino'**
-  String get ethnicityHispanicLatino;
-
-  /// No description provided for @ethnicityMiddleEastern.
-  ///
-  /// In en, this message translates to:
-  /// **'Middle Eastern'**
-  String get ethnicityMiddleEastern;
-
-  /// No description provided for @ethnicityNativeAmerican.
-  ///
-  /// In en, this message translates to:
-  /// **'Native American'**
-  String get ethnicityNativeAmerican;
-
-  /// No description provided for @ethnicityPacificIslander.
-  ///
-  /// In en, this message translates to:
-  /// **'Pacific Islander'**
-  String get ethnicityPacificIslander;
+  /// **'East Asian'**
+  String get ethnicityEastAsian;
 
   /// No description provided for @ethnicitySouthAsian.
   ///
@@ -554,17 +524,95 @@ abstract class AppLocalizations {
   /// **'South Asian'**
   String get ethnicitySouthAsian;
 
-  /// No description provided for @ethnicityWhiteCaucasian.
+  /// No description provided for @ethnicitySoutheastAsian.
   ///
   /// In en, this message translates to:
-  /// **'White / Caucasian'**
-  String get ethnicityWhiteCaucasian;
+  /// **'Southeast Asian'**
+  String get ethnicitySoutheastAsian;
 
-  /// No description provided for @ethnicityMixedMultiracial.
+  /// No description provided for @ethnicityMiddleEastern.
   ///
   /// In en, this message translates to:
-  /// **'Mixed / Multiracial'**
-  String get ethnicityMixedMultiracial;
+  /// **'Middle Eastern'**
+  String get ethnicityMiddleEastern;
+
+  /// No description provided for @ethnicityBlackAfrican.
+  ///
+  /// In en, this message translates to:
+  /// **'Black / African'**
+  String get ethnicityBlackAfrican;
+
+  /// No description provided for @ethnicityHispanicLatino.
+  ///
+  /// In en, this message translates to:
+  /// **'Hispanic / Latino'**
+  String get ethnicityHispanicLatino;
+
+  /// No description provided for @ethnicityWhiteEuropean.
+  ///
+  /// In en, this message translates to:
+  /// **'White / European'**
+  String get ethnicityWhiteEuropean;
+
+  /// No description provided for @ethnicityJavanese.
+  ///
+  /// In en, this message translates to:
+  /// **'Javanese'**
+  String get ethnicityJavanese;
+
+  /// No description provided for @ethnicitySundanese.
+  ///
+  /// In en, this message translates to:
+  /// **'Sundanese'**
+  String get ethnicitySundanese;
+
+  /// No description provided for @ethnicityBatak.
+  ///
+  /// In en, this message translates to:
+  /// **'Bataknese'**
+  String get ethnicityBatak;
+
+  /// No description provided for @ethnicityMinangkabau.
+  ///
+  /// In en, this message translates to:
+  /// **'Minangkabau'**
+  String get ethnicityMinangkabau;
+
+  /// No description provided for @ethnicityBalinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Balinese'**
+  String get ethnicityBalinese;
+
+  /// No description provided for @ethnicityMadurese.
+  ///
+  /// In en, this message translates to:
+  /// **'Madurese'**
+  String get ethnicityMadurese;
+
+  /// No description provided for @ethnicityBetawi.
+  ///
+  /// In en, this message translates to:
+  /// **'Betawi'**
+  String get ethnicityBetawi;
+
+  /// No description provided for @ethnicityBugis.
+  ///
+  /// In en, this message translates to:
+  /// **'Bugis'**
+  String get ethnicityBugis;
+
+  /// No description provided for @ethnicityDayak.
+  ///
+  /// In en, this message translates to:
+  /// **'Dayak'**
+  String get ethnicityDayak;
+
+  /// No description provided for @ethnicityPapuan.
+  ///
+  /// In en, this message translates to:
+  /// **'Papuan'**
+  String get ethnicityPapuan;
 
   /// No description provided for @ethnicityOther.
   ///
@@ -572,11 +620,11 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get ethnicityOther;
 
-  /// No description provided for @ethnicityChinese.
+  /// No description provided for @ethnicityPreferNotToSay.
   ///
   /// In en, this message translates to:
-  /// **'Chinese'**
-  String get ethnicityChinese;
+  /// **'Prefer not to say'**
+  String get ethnicityPreferNotToSay;
 
   /// No description provided for @bioWantsChildrenLabel.
   ///
@@ -917,7 +965,7 @@ abstract class AppLocalizations {
   /// No description provided for @relationshipGoalSeriousTitle.
   ///
   /// In en, this message translates to:
-  /// **'Serious Relationship'**
+  /// **'Serious Dating'**
   String get relationshipGoalSeriousTitle;
 
   /// No description provided for @relationshipGoalSeriousDescription.
@@ -938,17 +986,29 @@ abstract class AppLocalizations {
   /// **'Getting to know people, see where it goes'**
   String get relationshipGoalCasualDescription;
 
-  /// No description provided for @relationshipGoalFriendshipTitle.
+  /// No description provided for @relationshipGoalNewConnectionsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Friendship'**
-  String get relationshipGoalFriendshipTitle;
+  /// **'New Connections'**
+  String get relationshipGoalNewConnectionsTitle;
 
-  /// No description provided for @relationshipGoalFriendshipDescription.
+  /// No description provided for @relationshipGoalNewConnectionsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Looking to make new friends first'**
-  String get relationshipGoalFriendshipDescription;
+  /// **'Open to meeting new people, no pressure'**
+  String get relationshipGoalNewConnectionsDescription;
+
+  /// No description provided for @relationshipGoalStillFiguringOutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Still Figuring It Out'**
+  String get relationshipGoalStillFiguringOutTitle;
+
+  /// No description provided for @relationshipGoalStillFiguringOutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure yet, just exploring for now'**
+  String get relationshipGoalStillFiguringOutDescription;
 
   /// No description provided for @preferencesTitle.
   ///
@@ -1016,11 +1076,17 @@ abstract class AppLocalizations {
   /// **'Any'**
   String get preferencesReligionAny;
 
-  /// No description provided for @religionChristian.
+  /// No description provided for @religionIslam.
   ///
   /// In en, this message translates to:
-  /// **'Christian'**
-  String get religionChristian;
+  /// **'Islam'**
+  String get religionIslam;
+
+  /// No description provided for @religionChristianity.
+  ///
+  /// In en, this message translates to:
+  /// **'Christianity'**
+  String get religionChristianity;
 
   /// No description provided for @religionCatholic.
   ///
@@ -1028,53 +1094,65 @@ abstract class AppLocalizations {
   /// **'Catholic'**
   String get religionCatholic;
 
-  /// No description provided for @religionMuslim.
+  /// No description provided for @religionHinduism.
   ///
   /// In en, this message translates to:
-  /// **'Muslim'**
-  String get religionMuslim;
+  /// **'Hinduism'**
+  String get religionHinduism;
 
-  /// No description provided for @religionBuddhist.
+  /// No description provided for @religionBuddhism.
   ///
   /// In en, this message translates to:
-  /// **'Buddhist'**
-  String get religionBuddhist;
+  /// **'Buddhism'**
+  String get religionBuddhism;
 
-  /// No description provided for @religionHindu.
+  /// No description provided for @religionConfucianism.
   ///
   /// In en, this message translates to:
-  /// **'Hindu'**
-  String get religionHindu;
+  /// **'Confucianism'**
+  String get religionConfucianism;
 
-  /// No description provided for @religionJewish.
+  /// No description provided for @religionJudaism.
   ///
   /// In en, this message translates to:
-  /// **'Jewish'**
-  String get religionJewish;
+  /// **'Judaism'**
+  String get religionJudaism;
 
-  /// No description provided for @religionSikh.
+  /// No description provided for @religionSikhism.
   ///
   /// In en, this message translates to:
-  /// **'Sikh'**
-  String get religionSikh;
+  /// **'Sikhism'**
+  String get religionSikhism;
 
-  /// No description provided for @religionAtheistAgnostic.
+  /// No description provided for @religionTaoism.
   ///
   /// In en, this message translates to:
-  /// **'Atheist / Agnostic'**
-  String get religionAtheistAgnostic;
-
-  /// No description provided for @religionSpiritual.
-  ///
-  /// In en, this message translates to:
-  /// **'Spiritual (not religious)'**
-  String get religionSpiritual;
+  /// **'Taoism'**
+  String get religionTaoism;
 
   /// No description provided for @religionOther.
   ///
   /// In en, this message translates to:
   /// **'Other'**
   String get religionOther;
+
+  /// No description provided for @religionAgnostic.
+  ///
+  /// In en, this message translates to:
+  /// **'Agnostic'**
+  String get religionAgnostic;
+
+  /// No description provided for @religionAtheist.
+  ///
+  /// In en, this message translates to:
+  /// **'Atheist'**
+  String get religionAtheist;
+
+  /// No description provided for @religionPreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get religionPreferNotToSay;
 
   /// No description provided for @preferencesEducationLabel.
   ///

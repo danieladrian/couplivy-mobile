@@ -32,7 +32,7 @@ void main() {
     );
   }
 
-  testWidgets('shows all 3 goal options and 7/9 progress', (
+  testWidgets('shows all 4 goal options and 7/9 progress', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -46,9 +46,10 @@ void main() {
 
     expect(find.text('What are you looking for?'), findsOneWidget);
     expect(find.text('7/9'), findsOneWidget);
-    expect(find.text('Serious Relationship'), findsOneWidget);
+    expect(find.text('Serious Dating'), findsOneWidget);
     expect(find.text('Casual Dating'), findsOneWidget);
-    expect(find.text('Friendship'), findsOneWidget);
+    expect(find.text('New Connections'), findsOneWidget);
+    expect(find.text('Still Figuring It Out'), findsOneWidget);
   });
 
   testWidgets('Continue disabled until an option is picked', (
@@ -81,7 +82,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Serious Relationship'));
+      await tester.tap(find.text('Serious Dating'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();

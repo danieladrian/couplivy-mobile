@@ -136,16 +136,18 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
   // TIDAK ADA "any" di sana — beda konteks, itu bukan preferensi).
   Map<String, String> _religionOptions(AppLocalizations l10n) => {
     'any': l10n.preferencesReligionAny,
-    'christian': l10n.religionChristian,
+    'islam': l10n.religionIslam,
+    'christianity': l10n.religionChristianity,
     'catholic': l10n.religionCatholic,
-    'muslim': l10n.religionMuslim,
-    'buddhist': l10n.religionBuddhist,
-    'hindu': l10n.religionHindu,
-    'jewish': l10n.religionJewish,
-    'sikh': l10n.religionSikh,
-    'atheist_agnostic': l10n.religionAtheistAgnostic,
-    'spiritual': l10n.religionSpiritual,
+    'hinduism': l10n.religionHinduism,
+    'buddhism': l10n.religionBuddhism,
+    'confucianism': l10n.religionConfucianism,
+    'judaism': l10n.religionJudaism,
+    'sikhism': l10n.religionSikhism,
+    'taoism': l10n.religionTaoism,
     'other': l10n.religionOther,
+    'agnostic': l10n.religionAgnostic,
+    'atheist': l10n.religionAtheist,
   };
 
   Future<void> _pickReligionPreferences() async {

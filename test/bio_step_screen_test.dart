@@ -105,12 +105,12 @@ void main() {
 
       await tester.tap(find.text('Select ethnicity'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Asian').last);
+      await tester.tap(find.text('East Asian').last);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Select religion'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Christian').last);
+      await tester.tap(find.text('Christianity').last);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Yes'));
@@ -123,30 +123,35 @@ void main() {
     },
   );
 
-  testWidgets('ethnicity picker includes Chinese right before Other', (
-    WidgetTester tester,
-  ) async {
-    tester.view.physicalSize = const Size(1080, 2400);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'ethnicity picker includes Indonesian ethnic groups and ends with '
+    'Other, Prefer not to say',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: buildRouter(),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-      ),
-    );
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Select ethnicity'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Select ethnicity'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Chinese'), findsOneWidget);
-    expect(find.text('Other'), findsOneWidget);
+      expect(find.text('Javanese'), findsOneWidget);
+      expect(find.text('Sundanese'), findsOneWidget);
+      expect(find.text('Other'), findsOneWidget);
+      expect(find.text('Prefer not to say'), findsOneWidget);
 
-    final options = tester.widgetList<ListTile>(find.byType(ListTile));
-    final labels = options.map((tile) => (tile.title as Text).data).toList();
-    expect(labels.indexOf('Chinese'), labels.indexOf('Other') - 1);
-  });
+      final options = tester.widgetList<ListTile>(find.byType(ListTile));
+      final labels = options.map((tile) => (tile.title as Text).data).toList();
+      expect(labels.last, 'Prefer not to say');
+      expect(labels[labels.length - 2], 'Other');
+    },
+  );
 }
