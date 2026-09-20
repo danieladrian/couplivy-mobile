@@ -62,7 +62,13 @@ class AppTextField extends StatelessWidget {
               fontSize: 11,
               color: AppColors.textSecondary,
             ),
+            // errorMaxLines — TANPA ini, default Flutter cuma 1 baris,
+            // dan pesan validasi Laravel yang panjang (mis. syarat
+            // kompleksitas password: "The password field must contain
+            // at least one uppercase and one lowercase letter.") KEPOTONG
+            // jadi "..." di tengah kalimat.
             errorText: errorText,
+            errorMaxLines: 3,
             suffixIcon: suffixIcon,
             filled: true,
             fillColor: Colors.white,
