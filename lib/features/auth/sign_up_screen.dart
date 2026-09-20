@@ -160,6 +160,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       AppTextField(
                         label: l10n.authPasswordLabel,
                         hintText: l10n.authPasswordHintSignUp,
+                        helperText: l10n.authPasswordHelperSignUp,
                         controller: _passwordController,
                         obscureText: true,
                         errorText: apiError?.errorFor('password'),

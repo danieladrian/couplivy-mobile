@@ -12,6 +12,7 @@ class AppTextField extends StatelessWidget {
     required this.label,
     this.controller,
     this.hintText,
+    this.helperText,
     this.obscureText = false,
     this.keyboardType,
     this.errorText,
@@ -21,6 +22,11 @@ class AppTextField extends StatelessWidget {
   final String label;
   final TextEditingController? controller;
   final String? hintText;
+  // Beda dari `hintText` (placeholder — hilang begitu user mulai
+  // mengetik): `helperText` TETAP TERLIHAT di bawah field sepanjang
+  // waktu. Dipakai untuk syarat yang perlu diingat user selama mengisi
+  // (mis. syarat kompleksitas password), bukan cuma sebelum mulai isi.
+  final String? helperText;
   final bool obscureText;
   final TextInputType? keyboardType;
   final String? errorText;
@@ -46,6 +52,16 @@ class AppTextField extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hintText,
+            // errorText MENGGANTIKAN helperText kalau ada error (perilaku
+            // bawaan InputDecoration) — jadi tidak perlu dicek manual di
+            // sini, tapi tetap eksplisit: helperText cuma tampil kalau
+            // TIDAK ada error.
+            helperText: errorText == null ? helperText : null,
+            helperMaxLines: 2,
+            helperStyle: const TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+            ),
             errorText: errorText,
             suffixIcon: suffixIcon,
             filled: true,

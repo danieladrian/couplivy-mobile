@@ -57,7 +57,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get authPasswordLabel => 'Password';
 
   @override
-  String get authPasswordHintSignUp => 'Minimal 8 karakter';
+  String get authPasswordHintSignUp => 'Buat password';
+
+  @override
+  String get authPasswordHelperSignUp =>
+      'Min 8 karakter, ada huruf besar, kecil & angka';
 
   @override
   String get authPasswordHintLogin => 'Password kamu';

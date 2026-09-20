@@ -57,7 +57,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authPasswordLabel => 'Password';
 
   @override
-  String get authPasswordHintSignUp => 'At least 8 characters';
+  String get authPasswordHintSignUp => 'Create a password';
+
+  @override
+  String get authPasswordHelperSignUp =>
+      'Min 8 characters, with uppercase, lowercase & a number';
 
   @override
   String get authPasswordHintLogin => 'Your password';

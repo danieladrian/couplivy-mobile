@@ -197,8 +197,14 @@ abstract class AppLocalizations {
   /// No description provided for @authPasswordHintSignUp.
   ///
   /// In en, this message translates to:
-  /// **'At least 8 characters'**
+  /// **'Create a password'**
   String get authPasswordHintSignUp;
+
+  /// No description provided for @authPasswordHelperSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Min 8 characters, with uppercase, lowercase & a number'**
+  String get authPasswordHelperSignUp;
 
   /// No description provided for @authPasswordHintLogin.
   ///
