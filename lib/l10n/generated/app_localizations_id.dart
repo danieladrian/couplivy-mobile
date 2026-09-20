@@ -338,76 +338,97 @@ class AppLocalizationsId extends AppLocalizations {
       'Pilih minimal 3 minat untuk melanjutkan.';
 
   @override
-  String get interestTravel => 'Traveling';
+  String get interestCategoryFood => 'Kuliner';
 
   @override
-  String get interestCoffee => 'Kopi / Teh';
+  String get interestCategoryTravel => 'Traveling';
 
   @override
-  String get interestHiking => 'Hiking';
+  String get interestCategorySports => 'Olahraga';
 
   @override
-  String get interestFood => 'Kuliner';
+  String get interestCategoryArts => 'Seni';
 
   @override
-  String get interestMusic => 'Musik';
+  String get interestCategoryEntertainment => 'Hiburan';
 
   @override
-  String get interestMovies => 'Film';
+  String get interestCoffeeTea => 'Kopi / Teh';
 
   @override
-  String get interestSports => 'Olahraga';
+  String get interestStreetFood => 'Kuliner Kaki Lima';
 
   @override
-  String get interestReading => 'Membaca';
+  String get interestGeneralFood => 'Kuliner';
+
+  @override
+  String get interestBeachTrips => 'Wisata Pantai';
+
+  @override
+  String get interestMountainTrips => 'Wisata Gunung';
+
+  @override
+  String get interestCulturalTrips => 'Wisata Budaya';
+
+  @override
+  String get interestCityTrips => 'Wisata Kota';
+
+  @override
+  String get interestGym => 'Gym';
+
+  @override
+  String get interestBallSport => 'Olahraga Bola';
+
+  @override
+  String get interestRacketSport => 'Olahraga Raket';
+
+  @override
+  String get interestRunning => 'Lari';
+
+  @override
+  String get interestMindBodyExercise => 'Olahraga Mind & Body';
+
+  @override
+  String get interestCardio => 'Kardio';
 
   @override
   String get interestArt => 'Seni';
 
   @override
-  String get interestNature => 'Alam';
+  String get interestMusic => 'Musik';
 
   @override
-  String get interestGaming => 'Gaming';
-
-  @override
-  String get interestPhotography => 'Fotografi';
-
-  @override
-  String get interestFitness => 'Kebugaran';
-
-  @override
-  String get interestCooking => 'Memasak';
+  String get interestSinging => 'Bernyanyi';
 
   @override
   String get interestDancing => 'Menari';
 
   @override
-  String get interestPets => 'Hewan Peliharaan';
+  String get interestPlayingMusic => 'Main Alat Musik';
 
   @override
-  String get interestFashion => 'Fashion';
+  String get interestTvSeries => 'Serial TV';
 
   @override
-  String get interestWine => 'Wine';
+  String get interestMovies => 'Film';
 
   @override
-  String get interestVolunteering => 'Sukarelawan';
+  String get interestAnime => 'Anime';
 
   @override
-  String get interestWriting => 'Menulis';
+  String get interestKDrama => 'Drama Korea';
 
   @override
-  String get interestGardening => 'Berkebun';
+  String get interestGaming => 'Gaming';
 
   @override
-  String get interestCamping => 'Camping';
+  String get interestStandUpComedy => 'Stand-up Comedy';
 
   @override
-  String get interestYoga => 'Yoga';
+  String get interestPodcast => 'Podcast';
 
   @override
-  String get interestTechnology => 'Teknologi';
+  String get interestBooks => 'Buku';
 
   @override
   String get relationshipGoalTitle => 'Kamu mencari apa?';

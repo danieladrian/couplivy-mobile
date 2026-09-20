@@ -1,41 +1,60 @@
 import '../../../l10n/generated/app_localizations.dart';
 
-/// Terjemahkan `slug` interest (dari `GET /api/interests`, mis. "travel")
-/// jadi label yang ditampilkan (lewat `AppLocalizations`, BUKAN teks
-/// langsung dari server — server cuma kirim slug, label per-bahasa ada di
-/// ARB, sesuai desain: "slug dipakai sebagai key i18n").
+/// Terjemahkan `slug`/`category` interest (dari `GET /api/interests`,
+/// mis. slug "coffee_tea", category "food") jadi label yang ditampilkan
+/// (lewat `AppLocalizations`, BUKAN teks langsung dari server — server
+/// cuma kirim slug/category, label per-bahasa ada di ARB).
+///
+/// GANTI TOTAL dari daftar lama (20 interest generik flat) — 26 interest
+/// baru, dikelompokkan 5 kategori (Food, Travel, Sports, Arts,
+/// Entertainment), keputusan produk (lihat couplivy-backend
+/// InterestSeeder).
 abstract final class InterestLabels {
   static String labelFor(AppLocalizations l10n, String slug) {
     return switch (slug) {
-      'travel' => l10n.interestTravel,
-      // Label diperluas jadi "Coffee / Tea" (bukan "&" — orang bisa suka
-      // salah satu tanpa suka keduanya) — slug tetap 'coffee' (tidak
-      // perlu migrasi data), cuma representasi tampilannya mewakili
-      // keduanya, konsisten dengan kategori luas lainnya.
-      'coffee' => l10n.interestCoffee,
-      'hiking' => l10n.interestHiking,
-      'food' => l10n.interestFood,
-      'music' => l10n.interestMusic,
-      'movies' => l10n.interestMovies,
-      'sports' => l10n.interestSports,
-      'reading' => l10n.interestReading,
+      'coffee_tea' => l10n.interestCoffeeTea,
+      'street_food' => l10n.interestStreetFood,
+      'general_food' => l10n.interestGeneralFood,
+      'beach_trips' => l10n.interestBeachTrips,
+      'mountain_trips' => l10n.interestMountainTrips,
+      'cultural_trips' => l10n.interestCulturalTrips,
+      'city_trips' => l10n.interestCityTrips,
+      'gym' => l10n.interestGym,
+      'ball_sport' => l10n.interestBallSport,
+      'racket_sport' => l10n.interestRacketSport,
+      'running' => l10n.interestRunning,
+      'mind_body_exercise' => l10n.interestMindBodyExercise,
+      'cardio' => l10n.interestCardio,
       'art' => l10n.interestArt,
-      'nature' => l10n.interestNature,
-      'gaming' => l10n.interestGaming,
-      'photography' => l10n.interestPhotography,
-      'fitness' => l10n.interestFitness,
-      'cooking' => l10n.interestCooking,
+      'music' => l10n.interestMusic,
+      'singing' => l10n.interestSinging,
       'dancing' => l10n.interestDancing,
-      'pets' => l10n.interestPets,
-      'fashion' => l10n.interestFashion,
-      'wine' => l10n.interestWine,
-      'volunteering' => l10n.interestVolunteering,
-      'writing' => l10n.interestWriting,
-      'gardening' => l10n.interestGardening,
-      'camping' => l10n.interestCamping,
-      'yoga' => l10n.interestYoga,
-      'technology' => l10n.interestTechnology,
+      'playing_music' => l10n.interestPlayingMusic,
+      'tv_series' => l10n.interestTvSeries,
+      'movies' => l10n.interestMovies,
+      'anime' => l10n.interestAnime,
+      'k_drama' => l10n.interestKDrama,
+      'gaming' => l10n.interestGaming,
+      'stand_up_comedy' => l10n.interestStandUpComedy,
+      'podcast' => l10n.interestPodcast,
+      'books' => l10n.interestBooks,
       _ => slug,
+    };
+  }
+
+  /// Judul section per kategori di step Interests (lihat
+  /// `InterestsStepScreen`) — urutan section HARUS ikut urutan
+  /// `category` yang dikembalikan API (Food, Travel, Sports, Arts,
+  /// Entertainment berturut-turut, lihat `InterestController`), bukan
+  /// diurutkan ulang di sini.
+  static String categoryLabelFor(AppLocalizations l10n, String category) {
+    return switch (category) {
+      'food' => l10n.interestCategoryFood,
+      'travel' => l10n.interestCategoryTravel,
+      'sports' => l10n.interestCategorySports,
+      'arts' => l10n.interestCategoryArts,
+      'entertainment' => l10n.interestCategoryEntertainment,
+      _ => category,
     };
   }
 }

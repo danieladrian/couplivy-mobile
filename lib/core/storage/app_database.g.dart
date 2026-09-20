@@ -27,8 +27,20 @@ class $CachedInterestsTable extends CachedInterests
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, slug];
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, slug, category];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -52,6 +64,12 @@ class $CachedInterestsTable extends CachedInterests
     } else if (isInserting) {
       context.missing(_slugMeta);
     }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    }
     return context;
   }
 
@@ -69,6 +87,10 @@ class $CachedInterestsTable extends CachedInterests
         DriftSqlType.string,
         data['${effectivePrefix}slug'],
       )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
     );
   }
 
@@ -81,17 +103,27 @@ class $CachedInterestsTable extends CachedInterests
 class CachedInterest extends DataClass implements Insertable<CachedInterest> {
   final int id;
   final String slug;
-  const CachedInterest({required this.id, required this.slug});
+  final String category;
+  const CachedInterest({
+    required this.id,
+    required this.slug,
+    required this.category,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['slug'] = Variable<String>(slug);
+    map['category'] = Variable<String>(category);
     return map;
   }
 
   CachedInterestsCompanion toCompanion(bool nullToAbsent) {
-    return CachedInterestsCompanion(id: Value(id), slug: Value(slug));
+    return CachedInterestsCompanion(
+      id: Value(id),
+      slug: Value(slug),
+      category: Value(category),
+    );
   }
 
   factory CachedInterest.fromJson(
@@ -102,6 +134,7 @@ class CachedInterest extends DataClass implements Insertable<CachedInterest> {
     return CachedInterest(
       id: serializer.fromJson<int>(json['id']),
       slug: serializer.fromJson<String>(json['slug']),
+      category: serializer.fromJson<String>(json['category']),
     );
   }
   @override
@@ -110,15 +143,21 @@ class CachedInterest extends DataClass implements Insertable<CachedInterest> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'slug': serializer.toJson<String>(slug),
+      'category': serializer.toJson<String>(category),
     };
   }
 
-  CachedInterest copyWith({int? id, String? slug}) =>
-      CachedInterest(id: id ?? this.id, slug: slug ?? this.slug);
+  CachedInterest copyWith({int? id, String? slug, String? category}) =>
+      CachedInterest(
+        id: id ?? this.id,
+        slug: slug ?? this.slug,
+        category: category ?? this.category,
+      );
   CachedInterest copyWithCompanion(CachedInterestsCompanion data) {
     return CachedInterest(
       id: data.id.present ? data.id.value : this.id,
       slug: data.slug.present ? data.slug.value : this.slug,
+      category: data.category.present ? data.category.value : this.category,
     );
   }
 
@@ -126,44 +165,59 @@ class CachedInterest extends DataClass implements Insertable<CachedInterest> {
   String toString() {
     return (StringBuffer('CachedInterest(')
           ..write('id: $id, ')
-          ..write('slug: $slug')
+          ..write('slug: $slug, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, slug);
+  int get hashCode => Object.hash(id, slug, category);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CachedInterest &&
           other.id == this.id &&
-          other.slug == this.slug);
+          other.slug == this.slug &&
+          other.category == this.category);
 }
 
 class CachedInterestsCompanion extends UpdateCompanion<CachedInterest> {
   final Value<int> id;
   final Value<String> slug;
+  final Value<String> category;
   const CachedInterestsCompanion({
     this.id = const Value.absent(),
     this.slug = const Value.absent(),
+    this.category = const Value.absent(),
   });
   CachedInterestsCompanion.insert({
     this.id = const Value.absent(),
     required String slug,
+    this.category = const Value.absent(),
   }) : slug = Value(slug);
   static Insertable<CachedInterest> custom({
     Expression<int>? id,
     Expression<String>? slug,
+    Expression<String>? category,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (slug != null) 'slug': slug,
+      if (category != null) 'category': category,
     });
   }
 
-  CachedInterestsCompanion copyWith({Value<int>? id, Value<String>? slug}) {
-    return CachedInterestsCompanion(id: id ?? this.id, slug: slug ?? this.slug);
+  CachedInterestsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? slug,
+    Value<String>? category,
+  }) {
+    return CachedInterestsCompanion(
+      id: id ?? this.id,
+      slug: slug ?? this.slug,
+      category: category ?? this.category,
+    );
   }
 
   @override
@@ -175,6 +229,9 @@ class CachedInterestsCompanion extends UpdateCompanion<CachedInterest> {
     if (slug.present) {
       map['slug'] = Variable<String>(slug.value);
     }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
     return map;
   }
 
@@ -182,7 +239,8 @@ class CachedInterestsCompanion extends UpdateCompanion<CachedInterest> {
   String toString() {
     return (StringBuffer('CachedInterestsCompanion(')
           ..write('id: $id, ')
-          ..write('slug: $slug')
+          ..write('slug: $slug, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
@@ -202,9 +260,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 typedef $$CachedInterestsTableCreateCompanionBuilder =
-    CachedInterestsCompanion Function({Value<int> id, required String slug});
+    CachedInterestsCompanion Function({
+      Value<int> id,
+      required String slug,
+      Value<String> category,
+    });
 typedef $$CachedInterestsTableUpdateCompanionBuilder =
-    CachedInterestsCompanion Function({Value<int> id, Value<String> slug});
+    CachedInterestsCompanion Function({
+      Value<int> id,
+      Value<String> slug,
+      Value<String> category,
+    });
 
 class $$CachedInterestsTableFilterComposer
     extends Composer<_$AppDatabase, $CachedInterestsTable> {
@@ -222,6 +288,11 @@ class $$CachedInterestsTableFilterComposer
 
   ColumnFilters<String> get slug => $composableBuilder(
     column: $table.slug,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -244,6 +315,11 @@ class $$CachedInterestsTableOrderingComposer
     column: $table.slug,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CachedInterestsTableAnnotationComposer
@@ -260,6 +336,9 @@ class $$CachedInterestsTableAnnotationComposer
 
   GeneratedColumn<String> get slug =>
       $composableBuilder(column: $table.slug, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
 }
 
 class $$CachedInterestsTableTableManager
@@ -301,10 +380,22 @@ class $$CachedInterestsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> slug = const Value.absent(),
-              }) => CachedInterestsCompanion(id: id, slug: slug),
+                Value<String> category = const Value.absent(),
+              }) => CachedInterestsCompanion(
+                id: id,
+                slug: slug,
+                category: category,
+              ),
           createCompanionCallback:
-              ({Value<int> id = const Value.absent(), required String slug}) =>
-                  CachedInterestsCompanion.insert(id: id, slug: slug),
+              ({
+                Value<int> id = const Value.absent(),
+                required String slug,
+                Value<String> category = const Value.absent(),
+              }) => CachedInterestsCompanion.insert(
+                id: id,
+                slug: slug,
+                category: category,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),

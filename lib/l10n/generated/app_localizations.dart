@@ -716,53 +716,113 @@ abstract class AppLocalizations {
   /// **'Choose at least 3 interests to continue.'**
   String get interestsMinimumError;
 
-  /// No description provided for @interestTravel.
-  ///
-  /// In en, this message translates to:
-  /// **'Travel'**
-  String get interestTravel;
-
-  /// No description provided for @interestCoffee.
-  ///
-  /// In en, this message translates to:
-  /// **'Coffee / Tea'**
-  String get interestCoffee;
-
-  /// No description provided for @interestHiking.
-  ///
-  /// In en, this message translates to:
-  /// **'Hiking'**
-  String get interestHiking;
-
-  /// No description provided for @interestFood.
+  /// No description provided for @interestCategoryFood.
   ///
   /// In en, this message translates to:
   /// **'Food'**
-  String get interestFood;
+  String get interestCategoryFood;
 
-  /// No description provided for @interestMusic.
+  /// No description provided for @interestCategoryTravel.
   ///
   /// In en, this message translates to:
-  /// **'Music'**
-  String get interestMusic;
+  /// **'Travel'**
+  String get interestCategoryTravel;
 
-  /// No description provided for @interestMovies.
-  ///
-  /// In en, this message translates to:
-  /// **'Movies'**
-  String get interestMovies;
-
-  /// No description provided for @interestSports.
+  /// No description provided for @interestCategorySports.
   ///
   /// In en, this message translates to:
   /// **'Sports'**
-  String get interestSports;
+  String get interestCategorySports;
 
-  /// No description provided for @interestReading.
+  /// No description provided for @interestCategoryArts.
   ///
   /// In en, this message translates to:
-  /// **'Reading'**
-  String get interestReading;
+  /// **'Arts'**
+  String get interestCategoryArts;
+
+  /// No description provided for @interestCategoryEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get interestCategoryEntertainment;
+
+  /// No description provided for @interestCoffeeTea.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee / Tea'**
+  String get interestCoffeeTea;
+
+  /// No description provided for @interestStreetFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Street Food'**
+  String get interestStreetFood;
+
+  /// No description provided for @interestGeneralFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get interestGeneralFood;
+
+  /// No description provided for @interestBeachTrips.
+  ///
+  /// In en, this message translates to:
+  /// **'Beach Trips'**
+  String get interestBeachTrips;
+
+  /// No description provided for @interestMountainTrips.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain Trips'**
+  String get interestMountainTrips;
+
+  /// No description provided for @interestCulturalTrips.
+  ///
+  /// In en, this message translates to:
+  /// **'Cultural Trips'**
+  String get interestCulturalTrips;
+
+  /// No description provided for @interestCityTrips.
+  ///
+  /// In en, this message translates to:
+  /// **'City Trips'**
+  String get interestCityTrips;
+
+  /// No description provided for @interestGym.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym'**
+  String get interestGym;
+
+  /// No description provided for @interestBallSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Ball Sport'**
+  String get interestBallSport;
+
+  /// No description provided for @interestRacketSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Racket Sport'**
+  String get interestRacketSport;
+
+  /// No description provided for @interestRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get interestRunning;
+
+  /// No description provided for @interestMindBodyExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Mind & Body Exercise'**
+  String get interestMindBodyExercise;
+
+  /// No description provided for @interestCardio.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardio'**
+  String get interestCardio;
 
   /// No description provided for @interestArt.
   ///
@@ -770,35 +830,17 @@ abstract class AppLocalizations {
   /// **'Art'**
   String get interestArt;
 
-  /// No description provided for @interestNature.
+  /// No description provided for @interestMusic.
   ///
   /// In en, this message translates to:
-  /// **'Nature'**
-  String get interestNature;
+  /// **'Music'**
+  String get interestMusic;
 
-  /// No description provided for @interestGaming.
+  /// No description provided for @interestSinging.
   ///
   /// In en, this message translates to:
-  /// **'Gaming'**
-  String get interestGaming;
-
-  /// No description provided for @interestPhotography.
-  ///
-  /// In en, this message translates to:
-  /// **'Photography'**
-  String get interestPhotography;
-
-  /// No description provided for @interestFitness.
-  ///
-  /// In en, this message translates to:
-  /// **'Fitness'**
-  String get interestFitness;
-
-  /// No description provided for @interestCooking.
-  ///
-  /// In en, this message translates to:
-  /// **'Cooking'**
-  String get interestCooking;
+  /// **'Singing'**
+  String get interestSinging;
 
   /// No description provided for @interestDancing.
   ///
@@ -806,59 +848,59 @@ abstract class AppLocalizations {
   /// **'Dancing'**
   String get interestDancing;
 
-  /// No description provided for @interestPets.
+  /// No description provided for @interestPlayingMusic.
   ///
   /// In en, this message translates to:
-  /// **'Pets'**
-  String get interestPets;
+  /// **'Playing Music'**
+  String get interestPlayingMusic;
 
-  /// No description provided for @interestFashion.
+  /// No description provided for @interestTvSeries.
   ///
   /// In en, this message translates to:
-  /// **'Fashion'**
-  String get interestFashion;
+  /// **'TV Series'**
+  String get interestTvSeries;
 
-  /// No description provided for @interestWine.
+  /// No description provided for @interestMovies.
   ///
   /// In en, this message translates to:
-  /// **'Wine'**
-  String get interestWine;
+  /// **'Movies'**
+  String get interestMovies;
 
-  /// No description provided for @interestVolunteering.
+  /// No description provided for @interestAnime.
   ///
   /// In en, this message translates to:
-  /// **'Volunteering'**
-  String get interestVolunteering;
+  /// **'Anime'**
+  String get interestAnime;
 
-  /// No description provided for @interestWriting.
+  /// No description provided for @interestKDrama.
   ///
   /// In en, this message translates to:
-  /// **'Writing'**
-  String get interestWriting;
+  /// **'K-Drama'**
+  String get interestKDrama;
 
-  /// No description provided for @interestGardening.
+  /// No description provided for @interestGaming.
   ///
   /// In en, this message translates to:
-  /// **'Gardening'**
-  String get interestGardening;
+  /// **'Gaming'**
+  String get interestGaming;
 
-  /// No description provided for @interestCamping.
+  /// No description provided for @interestStandUpComedy.
   ///
   /// In en, this message translates to:
-  /// **'Camping'**
-  String get interestCamping;
+  /// **'Stand-up Comedy'**
+  String get interestStandUpComedy;
 
-  /// No description provided for @interestYoga.
+  /// No description provided for @interestPodcast.
   ///
   /// In en, this message translates to:
-  /// **'Yoga'**
-  String get interestYoga;
+  /// **'Podcast'**
+  String get interestPodcast;
 
-  /// No description provided for @interestTechnology.
+  /// No description provided for @interestBooks.
   ///
   /// In en, this message translates to:
-  /// **'Technology'**
-  String get interestTechnology;
+  /// **'Books'**
+  String get interestBooks;
 
   /// No description provided for @relationshipGoalTitle.
   ///

@@ -93,6 +93,22 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
   void _backToWorkEducation() =>
       context.go('/onboarding/discover/work-education');
 
+  /// Kelompokkan interest per `category`, MEMPERTAHANKAN urutan
+  /// kemunculan pertama tiap kategori di `interests` (BUKAN diurutkan
+  /// ulang secara alfabet/lain) — API sudah mengembalikan dalam urutan
+  /// Food, Travel, Sports, Arts, Entertainment (lihat
+  /// `InterestController::index`, `orderBy('id')` ikut urutan seed),
+  /// jadi urutan section di UI mengikuti urutan itu apa adanya.
+  List<_InterestCategoryGroup> _groupByCategory(List<Interest> interests) {
+    final groups = <String, List<Interest>>{};
+    for (final interest in interests) {
+      groups.putIfAbsent(interest.category, () => []).add(interest);
+    }
+    return groups.entries
+        .map((e) => _InterestCategoryGroup(category: e.key, interests: e.value))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -159,19 +175,30 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final interest in _interests)
-                  _InterestChip(
-                    label: InterestLabels.labelFor(l10n, interest.slug),
-                    selected: _selectedIds.contains(interest.id),
-                    onTap: () => _toggle(interest.id),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
+            for (final group in _groupByCategory(_interests)) ...[
+              Text(
+                InterestLabels.categoryLabelFor(l10n, group.category),
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textDark,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final interest in group.interests)
+                    _InterestChip(
+                      label: InterestLabels.labelFor(l10n, interest.slug),
+                      selected: _selectedIds.contains(interest.id),
+                      onTap: () => _toggle(interest.id),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
             Text(
               l10n.interestsSelectedCount(_selectedIds.length),
               style: const TextStyle(
@@ -213,6 +240,18 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
       ),
     );
   }
+}
+
+/// Satu section di step Interests — judul kategori + interest miliknya,
+/// lihat `_InterestsStepScreenState._groupByCategory`.
+class _InterestCategoryGroup {
+  const _InterestCategoryGroup({
+    required this.category,
+    required this.interests,
+  });
+
+  final String category;
+  final List<Interest> interests;
 }
 
 class _InterestChip extends StatelessWidget {

@@ -26,7 +26,23 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        // v1 -> v2: tambah kolom `category` (grouping chip Interests per
+        // kategori Food/Travel/Sports/Arts/Entertainment, lihat
+        // backend InterestSeeder). Default '' untuk baris lama — akan
+        // langsung ditimpa oleh `refreshCache()` di request login/
+        // register berikutnya, jadi nilai sementara ini tidak pernah
+        // benar-benar dipakai user.
+        await m.addColumn(cachedInterests, cachedInterests.category);
+      }
+    },
+  );
 }
 
 LazyDatabase _openConnection() {
@@ -39,10 +55,13 @@ LazyDatabase _openConnection() {
 
 /// Cache `GET /api/interests` — di-refresh tiap login/register sukses
 /// (lihat `InterestRepository.refreshCache()`), dibaca instan di step
-/// Interests onboarding tanpa network round-trip.
+/// Interests onboarding tanpa network round-trip. `category` dipakai
+/// mengelompokkan chip per section (Food/Travel/Sports/Arts/
+/// Entertainment) — ditambah di schemaVersion 2, lihat [AppDatabase.migration].
 class CachedInterests extends Table {
   IntColumn get id => integer()();
   TextColumn get slug => text()();
+  TextColumn get category => text().withDefault(const Constant(''))();
 
   @override
   Set<Column> get primaryKey => {id};

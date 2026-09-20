@@ -65,7 +65,11 @@ class InterestRepository {
 
   Future<List<Interest>> _readCache() async {
     final rows = await _db.select(_db.cachedInterests).get();
-    return rows.map((row) => Interest(id: row.id, slug: row.slug)).toList();
+    return rows
+        .map(
+          (row) => Interest(id: row.id, slug: row.slug, category: row.category),
+        )
+        .toList();
   }
 
   Future<void> _writeCache(List<Interest> interests) async {
@@ -74,7 +78,11 @@ class InterestRepository {
       batch.insertAll(
         _db.cachedInterests,
         interests.map(
-          (i) => CachedInterestsCompanion.insert(id: Value(i.id), slug: i.slug),
+          (i) => CachedInterestsCompanion.insert(
+            id: Value(i.id),
+            slug: i.slug,
+            category: Value(i.category),
+          ),
         ),
       );
     });

@@ -317,11 +317,30 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     lalu `context.go('/discover')`.
 - `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`
   (`InterestRepository`), model `core/models/interest.dart` (`Interest`,
-  cuma `{id, slug}`). `interest_labels.dart` (`InterestLabels.labelFor()`)
-  terjemahkan `slug` → label i18n (switch statement manual, BUKAN dari
-  server — server cuma kirim slug).
+  `{id, slug, category}`). `interest_labels.dart` punya 2 method: 
+  `labelFor()` terjemahkan `slug` → label chip, `categoryLabelFor()`
+  terjemahkan `category` → judul section (switch statement manual,
+  BUKAN dari server — server cuma kirim slug/category).
+  - **26 interest, 5 kategori** (Food, Travel, Sports, Arts,
+    Entertainment) — GANTI TOTAL dari daftar lama (20 interest generik
+    flat, tanpa kategori: travel/hiking/food/dst), keputusan produk.
+    Daftar lengkap & urutan per kategori: lihat
+    `couplivy-backend/database/seeders/InterestSeeder.php`. Kolom
+    `category` ditambah ke tabel `interests` backend (migration
+    `add_category_to_interests_table` + `replace_interests_with_
+    categorized_list` yang hapus 20 slug lama, cascade ke
+    `user_interests`, lalu re-seed).
+  - **UI dikelompokkan per section** (`InterestsStepScreen`) — judul
+    kategori (`InterestLabels.categoryLabelFor`) di atas tiap `Wrap`
+    chip-nya sendiri, BUKAN 1 `Wrap` flat lagi. Urutan section
+    MENGIKUTI urutan kemunculan `category` di response API (`orderBy
+    ('id')` di `InterestController`, ikut urutan seed) — `_groupByCategory()`
+    pakai `Map` biasa (insertion order), BUKAN `groupBy`+sort ulang.
   - **Di-cache lokal via drift (SQLite)** — `core/storage/app_database.dart`
-    (`AppDatabase`, tabel `CachedInterests { id, slug }`). Alasan pakai
+    (`AppDatabase`, tabel `CachedInterests { id, slug, category }`,
+    `schemaVersion` 2 — kolom `category` ditambah lewat `MigrationStrategy.
+    onUpgrade` `addColumn`, default `''` untuk baris lama, langsung
+    ditimpa `refreshCache()` di login/register berikutnya). Alasan pakai
     SQLite (bukan SharedPreferences+JSON seperti draft onboarding):
     keputusan produk untuk data master yang berpotensi bertambah banyak
     ke depan (bukan cuma 10 baris interests) dan bisa dipakai fitur lain.
