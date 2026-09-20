@@ -315,6 +315,35 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     (bukan sideload) tidak akan mengalami ini.
   - Setelah KEDUANYA sukses: `DiscoverOnboardingDraftStorage.clear()`,
     lalu `context.go('/discover')`.
+- **Bug kritis: `android.permission.INTERNET` TIDAK ADA di
+  `AndroidManifest.xml`** sejak initial commit — ditemukan saat
+  `flutter build apk --release` lalu install ke device fisik: SEMUA
+  network call gagal dengan `Failed host lookup: 'couplivy.kriukgo.id'`
+  meski domain valid (curl langsung dari luar ke `/api/health` sukses
+  200) dan device terkoneksi internet normal (WiFi + LTE aktif,
+  `ping`/`nslookup` domain dari shell device berhasil). Root cause:
+  tanpa permission ini, Android memblokir resolusi DNS untuk app di
+  level OS SECARA SENYAP — request tidak pernah sampai ke
+  `NetdEventListenerService` sama sekali (dikonfirmasi via `adb logcat`
+  — nol baris "DNS Requested by ... com.couplivy.app", padahal app
+  lain di device yang sama berhasil resolve). `flutter run` (debug
+  mode) entah bagaimana tidak kena bug ini (kemungkinan jalur berbeda
+  di debug build) — makanya baru ketahuan setelah `--release` build
+  benar-benar dites di device, bukan cuma hot-reload harian. Fix: tambah
+  `<uses-permission android:name="android.permission.INTERNET" />` di
+  `AndroidManifest.xml`. **PELAJARAN**: kalau ada laporan "network
+  error"/"failed host lookup" yang aneh (domain terbukti hidup, device
+  online), cek `AndroidManifest.xml` untuk permission INTERNET SEBELUM
+  curiga ke DNS/firewall/Private DNS device — App tanpa permission ini
+  gagal secara identik dengan gejala DNS rusak.
+  - **Jebakan XML tambahan saat menambahkan komentar ke manifest**:
+    komentar XML TIDAK BOLEH mengandung `--` (double-hyphen ASCII) di
+    tengahnya sama sekali — termasuk dalam contoh command/flag seperti
+    `flutter build apk --release` yang ditulis apa adanya di komentar.
+    Manifest merger Gradle gagal dengan `SAXParseException: The string
+    "--" is not permitted within comments` (bukan error yang jelas
+    menunjuk baris penyebab tanpa `--stacktrace`). Em-dash Unicode (—)
+    AMAN dipakai, cuma double-hyphen ASCII literal yang dilarang.
 - `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`
   (`InterestRepository`), model `core/models/interest.dart` (`Interest`,
   `{id, slug, category}`). `interest_labels.dart` punya 2 method: 

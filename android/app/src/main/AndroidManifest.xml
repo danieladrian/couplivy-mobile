@@ -1,4 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- WAJIB untuk SEMUA network call (Dio/HTTP ke backend) — tanpa ini,
+         Android memblokir resolusi DNS di level OS untuk app ini secara
+         SENYAP (request tidak pernah sampai ke netd sama sekali, muncul
+         sebagai "Failed host lookup" di Dart meski domain valid dan
+         backend sehat). TIDAK ADA di manifest sejak initial commit,
+         baru ketahuan saat build release gagal total akses API
+         (kemungkinan flutter run debug mode selama ini menutupi bug ini
+         lewat jalur berbeda). Lihat .ai/rules/architecture.md. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- image_picker: ambil foto dari kamera langsung di step Photos
          onboarding (couplivy-docs/flow/01-discover/onboarding/
          04-photos.html) — dibutuhkan hanya untuk ImageSource.camera,
