@@ -164,10 +164,13 @@
   "ethnicityPapuan": "Papuan",
   "ethnicityOther": "Other",
   "ethnicityPreferNotToSay": "Prefer not to say",
-  "bioWantsChildrenLabel": "Do you want children?",
-  "bioWantsChildrenYes": "Yes",
-  "bioWantsChildrenNo": "No",
-  "bioWantsChildrenNotSure": "Not sure yet",
+  "bioLoveLanguageLabel": "What is your love language? (max 2)",
+  "loveLanguageWordsOfAffirmation": "Words of Affirmation",
+  "loveLanguageQualityTime": "Quality Time",
+  "loveLanguageActsOfService": "Acts of Service",
+  "loveLanguagePhysicalTouch": "Physical Touch",
+  "loveLanguageGifts": "Gifts",
+  "loveLanguageDontKnowYet": "Don't know yet",
   "bioAllFieldsRequiredError": "Please fill in all fields to continue.",
 
   "workEducationTitle": "What do you do?",
@@ -182,12 +185,11 @@
   "educationBachelor": "Bachelor's Degree",
   "educationMaster": "Master's Degree",
   "educationDoctorate": "Doctorate",
-  "educationAny": "Any",
   "workEducationAllFieldsRequiredError": "Please fill in occupation and education to continue.",
 
   "interestsTitle": "What are your interests?",
   "interestsSubtitle": "Choose a few things you enjoy.",
-  "interestsSelectedCount": "{count} selected · choose at least 3",
+  "interestsSelectedCount": "{count}/5 selected · choose at least 3",
   "@interestsSelectedCount": {
     "placeholders": {
       "count": {
@@ -196,6 +198,42 @@
     }
   },
   "interestsMinimumError": "Choose at least 3 interests to continue.",
+  "interestsMaximumError": "Choose at most 5 interests.",
+
+  "lifestyleTitle": "Your lifestyle",
+  "lifestyleSubtitle": "Help others get to know your everyday habits.",
+  "lifestyleDrinkingLabel": "Drinking",
+  "lifestyleSmokingLabel": "Smoking",
+  "lifestylePetsLabel": "Pets",
+  "drinkingNever": "Never",
+  "drinkingOccasionally": "Occasionally",
+  "drinkingSocially": "Socially",
+  "drinkingRegularly": "Regularly",
+  "drinkingPreferNotToSay": "Prefer not to say",
+  "smokingNever": "Never",
+  "smokingOccasionally": "Occasionally",
+  "smokingRegularly": "Regularly",
+  "smokingPreferNotToSay": "Prefer not to say",
+  "petPreferenceLovePets": "Love pets",
+  "petPreferenceNeutral": "Neutral",
+  "petPreferenceNotAFan": "Not a fan",
+  "lifestyleAllFieldsRequiredError": "Please fill in all fields to continue.",
+
+  "futureTitle": "Looking ahead",
+  "futureSubtitle": "Where you stand on children and marriage.",
+  "futureChildrenLabel": "Children",
+  "futureMarriageLabel": "Marriage",
+  "childrenPreferenceWantChildren": "Want children",
+  "childrenPreferenceNotWantChildren": "Don't want children",
+  "childrenPreferenceHaveChildren": "Have children",
+  "childrenPreferenceOpenToChildren": "Open to children",
+  "childrenPreferenceNotSure": "Not sure",
+  "childrenPreferencePreferNotToSay": "Prefer not to say",
+  "marriagePreferenceWantMarriage": "Want marriage",
+  "marriagePreferenceOpenToMarriage": "Open to marriage",
+  "marriagePreferenceNotWantMarriage": "Don't want marriage",
+  "marriagePreferenceNotSure": "Not sure",
+  "futureAllFieldsRequiredError": "Please fill in all fields to continue.",
 
   "interestCategoryFood": "Food",
   "interestCategoryTravel": "Travel",
@@ -257,15 +295,16 @@
       }
     }
   },
+  "preferencesOpenForAll": "Open for all",
   "preferencesGenderLabel": "Gender",
-  "preferencesGenderAny": "Everyone",
-  "preferencesFamilyLabel": "Family preference",
-  "preferencesFamilyWantsChildren": "Wants children",
-  "preferencesFamilyNotWantsChildren": "Doesn't want children",
-  "preferencesFamilyOpenToChildren": "Open to children",
-  "preferencesFamilyAny": "Any",
+  "preferencesChildrenLabel": "Children",
+  "preferencesMarriageLabel": "Marriage",
+  "preferencesEthnicityLabel": "Ethnicity",
   "preferencesReligionLabel": "Religion",
-  "preferencesReligionAny": "Any",
+  "preferencesEducationLabel": "Education",
+  "preferencesDrinkingLabel": "Drinking",
+  "preferencesSmokingLabel": "Smoking",
+  "preferencesPetsLabel": "Pets",
   "religionIslam": "Islam",
   "religionChristianity": "Christianity",
   "religionCatholic": "Catholic",
@@ -279,7 +318,6 @@
   "religionAgnostic": "Agnostic",
   "religionAtheist": "Atheist",
   "religionPreferNotToSay": "Prefer not to say",
-  "preferencesEducationLabel": "Education",
 
   "previewTitle": "Almost there!",
   "previewSubtitle": "Review your profile before continuing.",
@@ -300,5 +338,84 @@
 
   "navDiscover": "Discover",
   "navConnections": "Connections",
-  "navProfile": "Profile"
+  "navProfile": "Profile",
+
+  "discoverEmptyMessage": "No more profiles right now — check back later or refresh.",
+  "discoverRefreshLabel": "Refresh Recommendations",
+  "discoverDistanceLabel": "{occupation} · {distanceKm} km",
+  "@discoverDistanceLabel": {
+    "placeholders": {
+      "occupation": {"type": "String"},
+      "distanceKm": {"type": "int"}
+    }
+  },
+  "discoverCompatibleLabel": "COMPATIBLE",
+
+  "connectionsTitle": "Connections",
+  "connectionsMatchesTab": "Matches",
+  "connectionsEmptyMessage": "No matches yet — keep exploring Discover!",
+  "connectionsSharedInterestsLabel": "You both like {interests}",
+  "@connectionsSharedInterestsLabel": {
+    "placeholders": {
+      "interests": {"type": "String"}
+    }
+  },
+
+  "chatTypeMessageHint": "Type a message...",
+  "chatOnlineStatus": "Online",
+
+  "profileCompletenessLabel": "Profile completeness",
+  "profileUpgradeTitle": "Upgrade to Couplivy Plus",
+  "profileUpgradeSubtitle": "Unlock more ways to connect",
+  "profileMenuMyProfile": "My Profile",
+  "profileMenuMyPreferences": "My Preferences",
+  "profileMenuNotifications": "Notifications",
+  "profileMenuPrivacy": "Privacy & Visibility",
+  "profileMenuSafety": "Safety & Reporting",
+  "profileMenuAppSettings": "App Settings",
+  "profileMenuTerms": "Terms & Privacy",
+  "profileMenuLogOut": "Log Out",
+  "profileLogOutConfirmTitle": "Log out?",
+  "profileLogOutConfirmMessage": "You'll need to log in again to access your account.",
+  "profileLogOutConfirmCancel": "Cancel",
+  "profileLogOutConfirmConfirm": "Log Out",
+  "profileComingSoonTitle": "Coming soon",
+  "profileComingSoonMessage": "This section isn't ready yet — check back later.",
+
+  "myProfileLoveLanguageLabel": "Love language",
+  "myProfileRelationshipGoalLabel": "Relationship goal",
+  "myPreferencesTitle": "My Preferences",
+  "myPreferencesAgeRangeLabel": "Age range",
+  "myPreferencesEmptyMessage": "You haven't set your preferences yet.",
+  "myProfileAboutTitle": "About",
+  "myProfileInterestsTitle": "Interests",
+  "editLabel": "Edit",
+  "editProfileSaveLabel": "Save",
+
+  "appSettingsTitle": "App Settings",
+  "appSettingsLanguageLabel": "Language",
+  "appSettingsLanguageEnglish": "English",
+  "appSettingsLanguageIndonesian": "Indonesian",
+  "appSettingsVersionLabel": "App version",
+
+  "termsTitle": "Terms & Privacy",
+  "termsOfServiceLabel": "Terms of Service",
+  "termsPrivacyPolicyLabel": "Privacy Policy",
+
+  "privacyTitle": "Privacy & Visibility",
+  "privacyHideProfileLabel": "Hide my profile",
+  "privacyHideProfileDescription": "Your profile won't appear in Discover to anyone.",
+  "privacyShowReligionLabel": "Show religion",
+  "privacyShowReligionDescription": "Let others see your religion on your profile.",
+  "privacyShowEthnicityLabel": "Show ethnicity",
+  "privacyShowEthnicityDescription": "Let others see your ethnicity on your profile.",
+  "privacyShowHeightWeightLabel": "Show height",
+  "privacyShowHeightWeightDescription": "Let others see your height on your profile.",
+  "privacyAllowDirectAddLabel": "Allow direct add",
+  "privacyAllowDirectAddDescription": "Let others add you directly without matching first.",
+  "privacyShowOnlineStatusLabel": "Show online status",
+  "privacyShowOnlineStatusDescription": "Let others see when you're active.",
+  "privacyAiConversationAssistantLabel": "AI conversation assistant",
+  "privacyAiConversationAssistantDescription": "Get AI-suggested icebreakers and replies in chats.",
+  "privacySaveError": "Couldn't save your changes. Please try again."
 }

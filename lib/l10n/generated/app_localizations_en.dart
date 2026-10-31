@@ -291,16 +291,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ethnicityPreferNotToSay => 'Prefer not to say';
 
   @override
-  String get bioWantsChildrenLabel => 'Do you want children?';
+  String get bioLoveLanguageLabel => 'What is your love language? (max 2)';
 
   @override
-  String get bioWantsChildrenYes => 'Yes';
+  String get loveLanguageWordsOfAffirmation => 'Words of Affirmation';
 
   @override
-  String get bioWantsChildrenNo => 'No';
+  String get loveLanguageQualityTime => 'Quality Time';
 
   @override
-  String get bioWantsChildrenNotSure => 'Not sure yet';
+  String get loveLanguageActsOfService => 'Acts of Service';
+
+  @override
+  String get loveLanguagePhysicalTouch => 'Physical Touch';
+
+  @override
+  String get loveLanguageGifts => 'Gifts';
+
+  @override
+  String get loveLanguageDontKnowYet => 'Don\'t know yet';
 
   @override
   String get bioAllFieldsRequiredError =>
@@ -343,9 +352,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationDoctorate => 'Doctorate';
 
   @override
-  String get educationAny => 'Any';
-
-  @override
   String get workEducationAllFieldsRequiredError =>
       'Please fill in occupation and education to continue.';
 
@@ -357,12 +363,117 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String interestsSelectedCount(int count) {
-    return '$count selected · choose at least 3';
+    return '$count/5 selected · choose at least 3';
   }
 
   @override
   String get interestsMinimumError =>
       'Choose at least 3 interests to continue.';
+
+  @override
+  String get interestsMaximumError => 'Choose at most 5 interests.';
+
+  @override
+  String get lifestyleTitle => 'Your lifestyle';
+
+  @override
+  String get lifestyleSubtitle =>
+      'Help others get to know your everyday habits.';
+
+  @override
+  String get lifestyleDrinkingLabel => 'Drinking';
+
+  @override
+  String get lifestyleSmokingLabel => 'Smoking';
+
+  @override
+  String get lifestylePetsLabel => 'Pets';
+
+  @override
+  String get drinkingNever => 'Never';
+
+  @override
+  String get drinkingOccasionally => 'Occasionally';
+
+  @override
+  String get drinkingSocially => 'Socially';
+
+  @override
+  String get drinkingRegularly => 'Regularly';
+
+  @override
+  String get drinkingPreferNotToSay => 'Prefer not to say';
+
+  @override
+  String get smokingNever => 'Never';
+
+  @override
+  String get smokingOccasionally => 'Occasionally';
+
+  @override
+  String get smokingRegularly => 'Regularly';
+
+  @override
+  String get smokingPreferNotToSay => 'Prefer not to say';
+
+  @override
+  String get petPreferenceLovePets => 'Love pets';
+
+  @override
+  String get petPreferenceNeutral => 'Neutral';
+
+  @override
+  String get petPreferenceNotAFan => 'Not a fan';
+
+  @override
+  String get lifestyleAllFieldsRequiredError =>
+      'Please fill in all fields to continue.';
+
+  @override
+  String get futureTitle => 'Looking ahead';
+
+  @override
+  String get futureSubtitle => 'Where you stand on children and marriage.';
+
+  @override
+  String get futureChildrenLabel => 'Children';
+
+  @override
+  String get futureMarriageLabel => 'Marriage';
+
+  @override
+  String get childrenPreferenceWantChildren => 'Want children';
+
+  @override
+  String get childrenPreferenceNotWantChildren => 'Don\'t want children';
+
+  @override
+  String get childrenPreferenceHaveChildren => 'Have children';
+
+  @override
+  String get childrenPreferenceOpenToChildren => 'Open to children';
+
+  @override
+  String get childrenPreferenceNotSure => 'Not sure';
+
+  @override
+  String get childrenPreferencePreferNotToSay => 'Prefer not to say';
+
+  @override
+  String get marriagePreferenceWantMarriage => 'Want marriage';
+
+  @override
+  String get marriagePreferenceOpenToMarriage => 'Open to marriage';
+
+  @override
+  String get marriagePreferenceNotWantMarriage => 'Don\'t want marriage';
+
+  @override
+  String get marriagePreferenceNotSure => 'Not sure';
+
+  @override
+  String get futureAllFieldsRequiredError =>
+      'Please fill in all fields to continue.';
 
   @override
   String get interestCategoryFood => 'Food';
@@ -501,31 +612,34 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get preferencesOpenForAll => 'Open for all';
+
+  @override
   String get preferencesGenderLabel => 'Gender';
 
   @override
-  String get preferencesGenderAny => 'Everyone';
+  String get preferencesChildrenLabel => 'Children';
 
   @override
-  String get preferencesFamilyLabel => 'Family preference';
+  String get preferencesMarriageLabel => 'Marriage';
 
   @override
-  String get preferencesFamilyWantsChildren => 'Wants children';
-
-  @override
-  String get preferencesFamilyNotWantsChildren => 'Doesn\'t want children';
-
-  @override
-  String get preferencesFamilyOpenToChildren => 'Open to children';
-
-  @override
-  String get preferencesFamilyAny => 'Any';
+  String get preferencesEthnicityLabel => 'Ethnicity';
 
   @override
   String get preferencesReligionLabel => 'Religion';
 
   @override
-  String get preferencesReligionAny => 'Any';
+  String get preferencesEducationLabel => 'Education';
+
+  @override
+  String get preferencesDrinkingLabel => 'Drinking';
+
+  @override
+  String get preferencesSmokingLabel => 'Smoking';
+
+  @override
+  String get preferencesPetsLabel => 'Pets';
 
   @override
   String get religionIslam => 'Islam';
@@ -567,9 +681,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get religionPreferNotToSay => 'Prefer not to say';
 
   @override
-  String get preferencesEducationLabel => 'Education';
-
-  @override
   String get previewTitle => 'Almost there!';
 
   @override
@@ -598,4 +709,201 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navProfile => 'Profile';
+
+  @override
+  String get discoverEmptyMessage =>
+      'No more profiles right now — check back later or refresh.';
+
+  @override
+  String get discoverRefreshLabel => 'Refresh Recommendations';
+
+  @override
+  String discoverDistanceLabel(String occupation, int distanceKm) {
+    return '$occupation · $distanceKm km';
+  }
+
+  @override
+  String get discoverCompatibleLabel => 'COMPATIBLE';
+
+  @override
+  String get connectionsTitle => 'Connections';
+
+  @override
+  String get connectionsMatchesTab => 'Matches';
+
+  @override
+  String get connectionsEmptyMessage =>
+      'No matches yet — keep exploring Discover!';
+
+  @override
+  String connectionsSharedInterestsLabel(String interests) {
+    return 'You both like $interests';
+  }
+
+  @override
+  String get chatTypeMessageHint => 'Type a message...';
+
+  @override
+  String get chatOnlineStatus => 'Online';
+
+  @override
+  String get profileCompletenessLabel => 'Profile completeness';
+
+  @override
+  String get profileUpgradeTitle => 'Upgrade to Couplivy Plus';
+
+  @override
+  String get profileUpgradeSubtitle => 'Unlock more ways to connect';
+
+  @override
+  String get profileMenuMyProfile => 'My Profile';
+
+  @override
+  String get profileMenuMyPreferences => 'My Preferences';
+
+  @override
+  String get profileMenuNotifications => 'Notifications';
+
+  @override
+  String get profileMenuPrivacy => 'Privacy & Visibility';
+
+  @override
+  String get profileMenuSafety => 'Safety & Reporting';
+
+  @override
+  String get profileMenuAppSettings => 'App Settings';
+
+  @override
+  String get profileMenuTerms => 'Terms & Privacy';
+
+  @override
+  String get profileMenuLogOut => 'Log Out';
+
+  @override
+  String get profileLogOutConfirmTitle => 'Log out?';
+
+  @override
+  String get profileLogOutConfirmMessage =>
+      'You\'ll need to log in again to access your account.';
+
+  @override
+  String get profileLogOutConfirmCancel => 'Cancel';
+
+  @override
+  String get profileLogOutConfirmConfirm => 'Log Out';
+
+  @override
+  String get profileComingSoonTitle => 'Coming soon';
+
+  @override
+  String get profileComingSoonMessage =>
+      'This section isn\'t ready yet — check back later.';
+
+  @override
+  String get myProfileLoveLanguageLabel => 'Love language';
+
+  @override
+  String get myProfileRelationshipGoalLabel => 'Relationship goal';
+
+  @override
+  String get myPreferencesTitle => 'My Preferences';
+
+  @override
+  String get myPreferencesAgeRangeLabel => 'Age range';
+
+  @override
+  String get myPreferencesEmptyMessage =>
+      'You haven\'t set your preferences yet.';
+
+  @override
+  String get myProfileAboutTitle => 'About';
+
+  @override
+  String get myProfileInterestsTitle => 'Interests';
+
+  @override
+  String get editLabel => 'Edit';
+
+  @override
+  String get editProfileSaveLabel => 'Save';
+
+  @override
+  String get appSettingsTitle => 'App Settings';
+
+  @override
+  String get appSettingsLanguageLabel => 'Language';
+
+  @override
+  String get appSettingsLanguageEnglish => 'English';
+
+  @override
+  String get appSettingsLanguageIndonesian => 'Indonesian';
+
+  @override
+  String get appSettingsVersionLabel => 'App version';
+
+  @override
+  String get termsTitle => 'Terms & Privacy';
+
+  @override
+  String get termsOfServiceLabel => 'Terms of Service';
+
+  @override
+  String get termsPrivacyPolicyLabel => 'Privacy Policy';
+
+  @override
+  String get privacyTitle => 'Privacy & Visibility';
+
+  @override
+  String get privacyHideProfileLabel => 'Hide my profile';
+
+  @override
+  String get privacyHideProfileDescription =>
+      'Your profile won\'t appear in Discover to anyone.';
+
+  @override
+  String get privacyShowReligionLabel => 'Show religion';
+
+  @override
+  String get privacyShowReligionDescription =>
+      'Let others see your religion on your profile.';
+
+  @override
+  String get privacyShowEthnicityLabel => 'Show ethnicity';
+
+  @override
+  String get privacyShowEthnicityDescription =>
+      'Let others see your ethnicity on your profile.';
+
+  @override
+  String get privacyShowHeightWeightLabel => 'Show height';
+
+  @override
+  String get privacyShowHeightWeightDescription =>
+      'Let others see your height on your profile.';
+
+  @override
+  String get privacyAllowDirectAddLabel => 'Allow direct add';
+
+  @override
+  String get privacyAllowDirectAddDescription =>
+      'Let others add you directly without matching first.';
+
+  @override
+  String get privacyShowOnlineStatusLabel => 'Show online status';
+
+  @override
+  String get privacyShowOnlineStatusDescription =>
+      'Let others see when you\'re active.';
+
+  @override
+  String get privacyAiConversationAssistantLabel => 'AI conversation assistant';
+
+  @override
+  String get privacyAiConversationAssistantDescription =>
+      'Get AI-suggested icebreakers and replies in chats.';
+
+  @override
+  String get privacySaveError =>
+      'Couldn\'t save your changes. Please try again.';
 }

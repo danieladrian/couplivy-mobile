@@ -9,7 +9,7 @@ import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import '../../../shared/widgets/selectable_option_card.dart';
 import 'discover_onboarding_draft_storage.dart';
 
-/// Step 7/9 onboarding Discover — sumber:
+/// Step 9/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/08-relationship-goal.html.
 /// Required, tidak ada tombol Skip.
 ///
@@ -56,7 +56,7 @@ class _RelationshipGoalStepScreenState
     if (mounted) context.go('/onboarding/discover/preferences');
   }
 
-  void _backToInterests() => context.go('/onboarding/discover/interests');
+  void _backToFuture() => context.go('/onboarding/discover/future');
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +65,12 @@ class _RelationshipGoalStepScreenState
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) _backToInterests();
+        if (!didPop) _backToFuture();
       },
       child: OnboardingStepScaffold(
-        step: 7,
-        totalSteps: 9,
-        onBack: _backToInterests,
+        step: 9,
+        totalSteps: 11,
+        onBack: _backToFuture,
         bottomButton: AppButton(
           label: l10n.onboardingContinue,
           onPressed: _selectedGoal != null ? _submit : null,

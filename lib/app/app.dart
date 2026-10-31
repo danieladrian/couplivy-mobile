@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/theme/app_theme.dart';
 import '../l10n/generated/app_localizations.dart';
+import '../shared/widgets/debug_route_overlay.dart';
 import 'router.dart';
 
 /// Root widget aplikasi. Ditaruh di lib/app/ (bukan lib/main.dart langsung)
@@ -33,6 +34,12 @@ class _CouplivyAppState extends State<CouplivyApp> {
       routerConfig: _router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      // Badge debug (path route aktif, pojok kiri atas) — lihat
+      // DebugRouteOverlay, otomatis hilang di release build.
+      builder: (context, child) => DebugRouteOverlay(
+        router: _router,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }

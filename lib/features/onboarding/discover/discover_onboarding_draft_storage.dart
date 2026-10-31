@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Draft SEMUA field onboarding Discover (step 1-8) — disimpan LOKAL di
+/// Draft SEMUA field onboarding Discover (step 1-10) — disimpan LOKAL di
 /// SharedPreferences sepanjang user mengisi step, TIDAK dikirim ke server
 /// sampai step terakhir (Preview). Lihat
 /// DiscoverOnboardingRepository.complete()/uploadPhotos().
@@ -22,12 +22,19 @@ abstract final class DiscoverOnboardingDraftStorage {
   static const _heightCmKey = 'onboarding_discover_draft_height_cm';
   static const _ethnicityKey = 'onboarding_discover_draft_ethnicity';
   static const _religionKey = 'onboarding_discover_draft_religion';
-  static const _wantsChildrenKey = 'onboarding_discover_draft_wants_children';
+  static const _loveLanguagesKey = 'onboarding_discover_draft_love_languages';
   static const _heightUnitPreferenceKey =
       'onboarding_discover_draft_height_unit_preference';
   static const _occupationKey = 'onboarding_discover_draft_occupation';
   static const _educationKey = 'onboarding_discover_draft_education';
   static const _interestIdsKey = 'onboarding_discover_draft_interest_ids';
+  static const _drinkingKey = 'onboarding_discover_draft_drinking';
+  static const _smokingKey = 'onboarding_discover_draft_smoking';
+  static const _petPreferenceKey = 'onboarding_discover_draft_pet_preference';
+  static const _childrenPreferenceKey =
+      'onboarding_discover_draft_children_preference';
+  static const _marriagePreferenceKey =
+      'onboarding_discover_draft_marriage_preference';
   static const _relationshipGoalKey =
       'onboarding_discover_draft_relationship_goal';
   static const _preferencesKey = 'onboarding_discover_draft_preferences';
@@ -123,29 +130,19 @@ abstract final class DiscoverOnboardingDraftStorage {
     return prefs.getString(_religionKey);
   }
 
-  /// null = belum dijawab (belum sentuh pilihan), true/false = jawaban.
-  static Future<void> saveWantsChildren(bool? wantsChildren) async {
+  /// GANTI slot pertanyaan "Do you want children?" (dulu `wants_children`
+  /// boolean, DIHAPUS TOTAL — dipindah jadi `children_preference` di
+  /// step Future). MULTI-SELECT max 2 — list kosong = belum dipilih
+  /// sama sekali (beda dari step Preferences yang list kosong = "any"
+  /// diperbolehkan; di sini WAJIB minimal 1).
+  static Future<void> saveLoveLanguages(List<String> loveLanguages) async {
     final prefs = await SharedPreferences.getInstance();
-    if (wantsChildren == null) {
-      await prefs.remove(_wantsChildrenKey);
-    } else {
-      await prefs.setBool(_wantsChildrenKey, wantsChildren);
-    }
+    await prefs.setStringList(_loveLanguagesKey, loveLanguages);
   }
 
-  static Future<bool?> readWantsChildren() async {
+  static Future<List<String>> readLoveLanguages() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_wantsChildrenKey);
-  }
-
-  /// "Not sure yet" DISIMPAN sebagai null — sama seperti "belum pernah
-  /// disentuh sama sekali". [readWantsChildren] tidak bisa bedakan
-  /// keduanya, jadi step Bio (yang sekarang mewajibkan field ini) pakai
-  /// method ini untuk tahu apakah user SUDAH memilih salah satu opsi
-  /// (termasuk "Not sure yet") atau belum menyentuh sama sekali.
-  static Future<bool> hasWantsChildrenKey() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(_wantsChildrenKey);
+    return prefs.getStringList(_loveLanguagesKey) ?? [];
   }
 
   /// Preferensi TAMPILAN unit height ('cm' atau 'ft') — MURNI lokal,
@@ -207,7 +204,59 @@ abstract final class DiscoverOnboardingDraftStorage {
     return raw.map(int.parse).toList();
   }
 
-  // --- Step 7: Relationship Goal ---
+  // --- Step 7: Lifestyle (BARU) ---
+  static Future<void> saveDrinking(String drinking) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_drinkingKey, drinking);
+  }
+
+  static Future<String?> readDrinking() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_drinkingKey);
+  }
+
+  static Future<void> saveSmoking(String smoking) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_smokingKey, smoking);
+  }
+
+  static Future<String?> readSmoking() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_smokingKey);
+  }
+
+  static Future<void> savePetPreference(String petPreference) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_petPreferenceKey, petPreference);
+  }
+
+  static Future<String?> readPetPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_petPreferenceKey);
+  }
+
+  // --- Step 8: Future (BARU) ---
+  static Future<void> saveChildrenPreference(String childrenPreference) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_childrenPreferenceKey, childrenPreference);
+  }
+
+  static Future<String?> readChildrenPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_childrenPreferenceKey);
+  }
+
+  static Future<void> saveMarriagePreference(String marriagePreference) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_marriagePreferenceKey, marriagePreference);
+  }
+
+  static Future<String?> readMarriagePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_marriagePreferenceKey);
+  }
+
+  // --- Step 9: Relationship Goal ---
   static Future<void> saveRelationshipGoal(String goal) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_relationshipGoalKey, goal);
@@ -218,7 +267,7 @@ abstract final class DiscoverOnboardingDraftStorage {
     return prefs.getString(_relationshipGoalKey);
   }
 
-  // --- Step 8: Dating Preferences — disimpan sebagai 1 JSON blob (bukan
+  // --- Step 10: Dating Preferences — disimpan sebagai 1 JSON blob (bukan
   // key terpisah per field) karena bentuknya nested object saat dikirim
   // ke API (`preferences: {...}`), jadi lebih mudah round-trip lewat Map. ---
   static Future<void> savePreferences(Map<String, dynamic> preferences) async {
@@ -244,10 +293,15 @@ abstract final class DiscoverOnboardingDraftStorage {
     final heightCm = await readHeightCm();
     final ethnicity = await readEthnicity();
     final religion = await readReligion();
-    final wantsChildren = await readWantsChildren();
+    final loveLanguages = await readLoveLanguages();
     final occupation = await readOccupation();
     final education = await readEducation();
     final interestIds = await readInterestIds();
+    final drinking = await readDrinking();
+    final smoking = await readSmoking();
+    final petPreference = await readPetPreference();
+    final childrenPreference = await readChildrenPreference();
+    final marriagePreference = await readMarriagePreference();
     final relationshipGoal = await readRelationshipGoal();
     final preferences = await readPreferences();
 
@@ -258,10 +312,15 @@ abstract final class DiscoverOnboardingDraftStorage {
       'height_cm': ?heightCm,
       'ethnicity': ?ethnicity,
       'religion': ?religion,
-      'wants_children': ?wantsChildren,
+      if (loveLanguages.isNotEmpty) 'love_languages': loveLanguages,
       'occupation': ?occupation,
       'education': ?education,
       'interests': interestIds,
+      'drinking': ?drinking,
+      'smoking': ?smoking,
+      'pet_preference': ?petPreference,
+      'children_preference': ?childrenPreference,
+      'marriage_preference': ?marriagePreference,
       'relationship_goal': ?relationshipGoal,
       if (preferences.isNotEmpty) 'preferences': preferences,
     };
@@ -276,16 +335,28 @@ abstract final class DiscoverOnboardingDraftStorage {
   /// Cuma cek field yang WAJIB per step (tidak ada tombol Skip di HTML
   /// sumbernya) — step optional (Bio, Work/Education, Interests,
   /// Preferences) dianggap "boleh kosong selamanya" jadi tidak bisa
-  /// dipakai sebagai penanda "belum sampai sini". Kalau user pernah lewat
-  /// step optional (skip atau isi), dia akan mendarat di Preview begitu
-  /// semua step wajib (DOB, Gender, Photos, Relationship Goal) terisi —
-  /// draft optional yang sudah diisi tetap ke-preserve dan tampil di
-  /// Preview, cuma urutan "kembali ke mana" yang disederhanakan.
+  /// dipakai sebagai penanda "belum sampai sini". Lifestyle dan Future
+  /// SEMUA field-nya wajib (BARU ditambah), jadi ikut dicek di sini
+  /// sama seperti Relationship Goal — kalau user pernah lewat step
+  /// optional (skip atau isi), dia akan mendarat di Preview begitu
+  /// semua step wajib (DOB, Gender, Photos, Lifestyle, Future,
+  /// Relationship Goal) terisi — draft optional yang sudah diisi tetap
+  /// ke-preserve dan tampil di Preview, cuma urutan "kembali ke mana"
+  /// yang disederhanakan.
   static Future<String> resolveNextStepRoute() async {
     if (await readDob() == null) return '/onboarding/discover/dob';
     if (await readGender() == null) return '/onboarding/discover/gender';
     if ((await readPhotoPaths()).isEmpty) {
       return '/onboarding/discover/photos';
+    }
+    if (await readDrinking() == null ||
+        await readSmoking() == null ||
+        await readPetPreference() == null) {
+      return '/onboarding/discover/lifestyle';
+    }
+    if (await readChildrenPreference() == null ||
+        await readMarriagePreference() == null) {
+      return '/onboarding/discover/future';
     }
     if (await readRelationshipGoal() == null) {
       return '/onboarding/discover/relationship-goal';
@@ -307,10 +378,15 @@ abstract final class DiscoverOnboardingDraftStorage {
       prefs.remove(_heightCmKey),
       prefs.remove(_ethnicityKey),
       prefs.remove(_religionKey),
-      prefs.remove(_wantsChildrenKey),
+      prefs.remove(_loveLanguagesKey),
       prefs.remove(_occupationKey),
       prefs.remove(_educationKey),
       prefs.remove(_interestIdsKey),
+      prefs.remove(_drinkingKey),
+      prefs.remove(_smokingKey),
+      prefs.remove(_petPreferenceKey),
+      prefs.remove(_childrenPreferenceKey),
+      prefs.remove(_marriagePreferenceKey),
       prefs.remove(_relationshipGoalKey),
       prefs.remove(_preferencesKey),
     ]);

@@ -96,6 +96,14 @@ class _GatewayChoiceScreenState extends ConsumerState<GatewayChoiceScreen> {
           duration: const Duration(milliseconds: 350),
           curve: Curves.easeInOut,
           color: _discoverSelected ? AppColors.cream : Colors.white,
+          // WAJIB — tanpa constraints eksplisit ini, AnimatedContainer
+          // cuma setinggi konten di dalam SingleChildScrollView (BUKAN
+          // setinggi layar). Di layar yang lebih tinggi dari konten, sisa
+          // ruang di bawah balik ke Scaffold.backgroundColor (putih)
+          // walau "Discover" sudah dipilih — muncul sebagai strip putih
+          // di bawah fade cream.
+          width: double.infinity,
+          height: double.infinity,
           child: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),

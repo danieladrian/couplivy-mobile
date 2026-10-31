@@ -38,11 +38,18 @@ class DiscoverOnboardingRepository {
   /// urutan slot, index 0 = foto utama.
   Future<void> uploadPhotos(List<String> photoPaths) async {
     try {
+      // `ListFormat.multiCompatible` WAJIB — default Dio (`.multi`)
+      // mengirim key `photos` berulang TANPA bracket untuk tiap file,
+      // yang PHP/Laravel terima sebagai 1 field tunggal (ke-overwrite
+      // jadi file TERAKHIR saja), bukan array. `.multiCompatible`
+      // mengirim `photos[]` (bracket kosong) yang PHP kenali sebagai
+      // array — tanpa ini, `UploadPhotosRequest` gagal validasi
+      // "The photos field must be an array" begitu ada foto ke-2+.
       final formData = FormData.fromMap({
         'photos': [
           for (final path in photoPaths) await MultipartFile.fromFile(path),
         ],
-      });
+      }, ListFormat.multiCompatible);
       await _dio.post('/onboarding/discover/photos', data: formData);
     } on DioException catch (e) {
       throw ApiException.fromDioException(e);

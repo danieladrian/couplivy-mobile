@@ -293,16 +293,25 @@ class AppLocalizationsId extends AppLocalizations {
   String get ethnicityPreferNotToSay => 'Tidak ingin menyebutkan';
 
   @override
-  String get bioWantsChildrenLabel => 'Kamu mau punya anak?';
+  String get bioLoveLanguageLabel => 'Apa bahasa cintamu? (maks 2)';
 
   @override
-  String get bioWantsChildrenYes => 'Ya';
+  String get loveLanguageWordsOfAffirmation => 'Kata-kata Penegasan';
 
   @override
-  String get bioWantsChildrenNo => 'Tidak';
+  String get loveLanguageQualityTime => 'Waktu Berkualitas';
 
   @override
-  String get bioWantsChildrenNotSure => 'Belum yakin';
+  String get loveLanguageActsOfService => 'Tindakan Pelayanan';
+
+  @override
+  String get loveLanguagePhysicalTouch => 'Sentuhan Fisik';
+
+  @override
+  String get loveLanguageGifts => 'Hadiah';
+
+  @override
+  String get loveLanguageDontKnowYet => 'Belum tahu';
 
   @override
   String get bioAllFieldsRequiredError => 'Isi semua field untuk melanjutkan.';
@@ -344,9 +353,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get educationDoctorate => 'S3';
 
   @override
-  String get educationAny => 'Semua';
-
-  @override
   String get workEducationAllFieldsRequiredError =>
       'Isi pekerjaan dan pendidikan untuk melanjutkan.';
 
@@ -358,12 +364,117 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String interestsSelectedCount(int count) {
-    return '$count dipilih · pilih minimal 3';
+    return '$count/5 dipilih · pilih minimal 3';
   }
 
   @override
   String get interestsMinimumError =>
       'Pilih minimal 3 minat untuk melanjutkan.';
+
+  @override
+  String get interestsMaximumError => 'Pilih maksimal 5 minat.';
+
+  @override
+  String get lifestyleTitle => 'Gaya hidupmu';
+
+  @override
+  String get lifestyleSubtitle =>
+      'Bantu orang lain mengenal kebiasaan sehari-harimu.';
+
+  @override
+  String get lifestyleDrinkingLabel => 'Minum Alkohol';
+
+  @override
+  String get lifestyleSmokingLabel => 'Merokok';
+
+  @override
+  String get lifestylePetsLabel => 'Hewan Peliharaan';
+
+  @override
+  String get drinkingNever => 'Tidak Pernah';
+
+  @override
+  String get drinkingOccasionally => 'Sesekali';
+
+  @override
+  String get drinkingSocially => 'Saat Bersosialisasi';
+
+  @override
+  String get drinkingRegularly => 'Rutin';
+
+  @override
+  String get drinkingPreferNotToSay => 'Tidak ingin menyebutkan';
+
+  @override
+  String get smokingNever => 'Tidak Pernah';
+
+  @override
+  String get smokingOccasionally => 'Sesekali';
+
+  @override
+  String get smokingRegularly => 'Rutin';
+
+  @override
+  String get smokingPreferNotToSay => 'Tidak ingin menyebutkan';
+
+  @override
+  String get petPreferenceLovePets => 'Suka hewan peliharaan';
+
+  @override
+  String get petPreferenceNeutral => 'Biasa saja';
+
+  @override
+  String get petPreferenceNotAFan => 'Kurang suka';
+
+  @override
+  String get lifestyleAllFieldsRequiredError =>
+      'Isi semua field untuk melanjutkan.';
+
+  @override
+  String get futureTitle => 'Rencana ke depan';
+
+  @override
+  String get futureSubtitle => 'Pandanganmu soal anak dan pernikahan.';
+
+  @override
+  String get futureChildrenLabel => 'Anak';
+
+  @override
+  String get futureMarriageLabel => 'Pernikahan';
+
+  @override
+  String get childrenPreferenceWantChildren => 'Ingin punya anak';
+
+  @override
+  String get childrenPreferenceNotWantChildren => 'Tidak ingin punya anak';
+
+  @override
+  String get childrenPreferenceHaveChildren => 'Sudah punya anak';
+
+  @override
+  String get childrenPreferenceOpenToChildren => 'Terbuka untuk punya anak';
+
+  @override
+  String get childrenPreferenceNotSure => 'Belum yakin';
+
+  @override
+  String get childrenPreferencePreferNotToSay => 'Tidak ingin menyebutkan';
+
+  @override
+  String get marriagePreferenceWantMarriage => 'Ingin menikah';
+
+  @override
+  String get marriagePreferenceOpenToMarriage => 'Terbuka untuk menikah';
+
+  @override
+  String get marriagePreferenceNotWantMarriage => 'Tidak ingin menikah';
+
+  @override
+  String get marriagePreferenceNotSure => 'Belum yakin';
+
+  @override
+  String get futureAllFieldsRequiredError =>
+      'Isi semua field untuk melanjutkan.';
 
   @override
   String get interestCategoryFood => 'Kuliner';
@@ -502,31 +613,34 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get preferencesOpenForAll => 'Terbuka untuk semua';
+
+  @override
   String get preferencesGenderLabel => 'Jenis Kelamin';
 
   @override
-  String get preferencesGenderAny => 'Semua';
+  String get preferencesChildrenLabel => 'Anak';
 
   @override
-  String get preferencesFamilyLabel => 'Preferensi keluarga';
+  String get preferencesMarriageLabel => 'Pernikahan';
 
   @override
-  String get preferencesFamilyWantsChildren => 'Mau punya anak';
-
-  @override
-  String get preferencesFamilyNotWantsChildren => 'Tidak mau punya anak';
-
-  @override
-  String get preferencesFamilyOpenToChildren => 'Terbuka soal anak';
-
-  @override
-  String get preferencesFamilyAny => 'Semua';
+  String get preferencesEthnicityLabel => 'Etnis';
 
   @override
   String get preferencesReligionLabel => 'Agama';
 
   @override
-  String get preferencesReligionAny => 'Semua';
+  String get preferencesEducationLabel => 'Pendidikan';
+
+  @override
+  String get preferencesDrinkingLabel => 'Minum Alkohol';
+
+  @override
+  String get preferencesSmokingLabel => 'Merokok';
+
+  @override
+  String get preferencesPetsLabel => 'Hewan Peliharaan';
 
   @override
   String get religionIslam => 'Islam';
@@ -568,9 +682,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get religionPreferNotToSay => 'Tidak ingin menyebutkan';
 
   @override
-  String get preferencesEducationLabel => 'Pendidikan';
-
-  @override
   String get previewTitle => 'Hampir selesai!';
 
   @override
@@ -599,4 +710,199 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get navProfile => 'Profil';
+
+  @override
+  String get discoverEmptyMessage =>
+      'Belum ada profil lagi untuk sekarang — cek lagi nanti atau refresh.';
+
+  @override
+  String get discoverRefreshLabel => 'Refresh Rekomendasi';
+
+  @override
+  String discoverDistanceLabel(String occupation, int distanceKm) {
+    return '$occupation · $distanceKm km';
+  }
+
+  @override
+  String get discoverCompatibleLabel => 'COMPATIBLE';
+
+  @override
+  String get connectionsTitle => 'Connections';
+
+  @override
+  String get connectionsMatchesTab => 'Matches';
+
+  @override
+  String get connectionsEmptyMessage =>
+      'Belum ada match — terus jelajahi Discover!';
+
+  @override
+  String connectionsSharedInterestsLabel(String interests) {
+    return 'Kalian berdua suka $interests';
+  }
+
+  @override
+  String get chatTypeMessageHint => 'Ketik pesan...';
+
+  @override
+  String get chatOnlineStatus => 'Online';
+
+  @override
+  String get profileCompletenessLabel => 'Kelengkapan profil';
+
+  @override
+  String get profileUpgradeTitle => 'Upgrade ke Couplivy Plus';
+
+  @override
+  String get profileUpgradeSubtitle => 'Buka lebih banyak cara untuk terhubung';
+
+  @override
+  String get profileMenuMyProfile => 'Profil Saya';
+
+  @override
+  String get profileMenuMyPreferences => 'Preferensi Saya';
+
+  @override
+  String get profileMenuNotifications => 'Notifikasi';
+
+  @override
+  String get profileMenuPrivacy => 'Privasi & Visibilitas';
+
+  @override
+  String get profileMenuSafety => 'Keamanan & Laporan';
+
+  @override
+  String get profileMenuAppSettings => 'Pengaturan Aplikasi';
+
+  @override
+  String get profileMenuTerms => 'Ketentuan & Privasi';
+
+  @override
+  String get profileMenuLogOut => 'Keluar';
+
+  @override
+  String get profileLogOutConfirmTitle => 'Keluar?';
+
+  @override
+  String get profileLogOutConfirmMessage =>
+      'Kamu perlu login lagi untuk mengakses akunmu.';
+
+  @override
+  String get profileLogOutConfirmCancel => 'Batal';
+
+  @override
+  String get profileLogOutConfirmConfirm => 'Keluar';
+
+  @override
+  String get profileComingSoonTitle => 'Segera hadir';
+
+  @override
+  String get profileComingSoonMessage =>
+      'Bagian ini belum siap — cek lagi nanti.';
+
+  @override
+  String get myProfileLoveLanguageLabel => 'Bahasa cinta';
+
+  @override
+  String get myProfileRelationshipGoalLabel => 'Tujuan hubungan';
+
+  @override
+  String get myPreferencesTitle => 'Preferensi Saya';
+
+  @override
+  String get myPreferencesAgeRangeLabel => 'Rentang usia';
+
+  @override
+  String get myPreferencesEmptyMessage => 'Kamu belum mengatur preferensimu.';
+
+  @override
+  String get myProfileAboutTitle => 'Tentang';
+
+  @override
+  String get myProfileInterestsTitle => 'Minat';
+
+  @override
+  String get editLabel => 'Ubah';
+
+  @override
+  String get editProfileSaveLabel => 'Simpan';
+
+  @override
+  String get appSettingsTitle => 'Pengaturan Aplikasi';
+
+  @override
+  String get appSettingsLanguageLabel => 'Bahasa';
+
+  @override
+  String get appSettingsLanguageEnglish => 'Inggris';
+
+  @override
+  String get appSettingsLanguageIndonesian => 'Indonesia';
+
+  @override
+  String get appSettingsVersionLabel => 'Versi aplikasi';
+
+  @override
+  String get termsTitle => 'Ketentuan & Privasi';
+
+  @override
+  String get termsOfServiceLabel => 'Ketentuan Layanan';
+
+  @override
+  String get termsPrivacyPolicyLabel => 'Kebijakan Privasi';
+
+  @override
+  String get privacyTitle => 'Privasi & Visibilitas';
+
+  @override
+  String get privacyHideProfileLabel => 'Sembunyikan profil saya';
+
+  @override
+  String get privacyHideProfileDescription =>
+      'Profilmu tidak akan muncul di Discover untuk siapa pun.';
+
+  @override
+  String get privacyShowReligionLabel => 'Tampilkan agama';
+
+  @override
+  String get privacyShowReligionDescription =>
+      'Izinkan orang lain melihat agamamu di profil.';
+
+  @override
+  String get privacyShowEthnicityLabel => 'Tampilkan etnis';
+
+  @override
+  String get privacyShowEthnicityDescription =>
+      'Izinkan orang lain melihat etnismu di profil.';
+
+  @override
+  String get privacyShowHeightWeightLabel => 'Tampilkan tinggi badan';
+
+  @override
+  String get privacyShowHeightWeightDescription =>
+      'Izinkan orang lain melihat tinggi badanmu di profil.';
+
+  @override
+  String get privacyAllowDirectAddLabel => 'Izinkan tambah langsung';
+
+  @override
+  String get privacyAllowDirectAddDescription =>
+      'Izinkan orang lain menambahkanmu langsung tanpa match dulu.';
+
+  @override
+  String get privacyShowOnlineStatusLabel => 'Tampilkan status online';
+
+  @override
+  String get privacyShowOnlineStatusDescription =>
+      'Izinkan orang lain melihat kapan kamu aktif.';
+
+  @override
+  String get privacyAiConversationAssistantLabel => 'Asisten percakapan AI';
+
+  @override
+  String get privacyAiConversationAssistantDescription =>
+      'Dapatkan saran pembuka obrolan dan balasan dari AI di chat.';
+
+  @override
+  String get privacySaveError => 'Gagal menyimpan perubahanmu. Coba lagi.';
 }

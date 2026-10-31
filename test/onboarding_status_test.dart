@@ -10,14 +10,14 @@ void main() {
   });
 
   group('OnboardingStatus.resolveResumeRoute', () {
-    test('completed -> /discover regardless of step', () async {
+    test('completed -> /main regardless of step', () async {
       const status = OnboardingStatus(
         completed: true,
         currentStep: 'gateway_choice',
         mode: 'discover',
       );
 
-      expect(await status.resolveResumeRoute(), '/discover');
+      expect(await status.resolveResumeRoute(), '/main');
     });
 
     test(
@@ -53,8 +53,8 @@ void main() {
       expect(await status.resolveResumeRoute(), '/onboarding/discover/dob');
     });
 
-    test('mode discover, DOB+Gender+Photos filled -> resume at Relationship '
-        'Goal (step 7, first unfilled REQUIRED step)', () async {
+    test('mode discover, DOB+Gender+Photos filled -> resume at Lifestyle '
+        '(step 7, first unfilled REQUIRED step)', () async {
       await DiscoverOnboardingDraftStorage.saveDob('1996-08-20');
       await DiscoverOnboardingDraftStorage.saveGender('male');
       await DiscoverOnboardingDraftStorage.savePhotoPaths(['/tmp/a.jpg']);
@@ -67,8 +67,26 @@ void main() {
 
       expect(
         await status.resolveResumeRoute(),
-        '/onboarding/discover/relationship-goal',
+        '/onboarding/discover/lifestyle',
       );
+    });
+
+    test('mode discover, DOB+Gender+Photos+Lifestyle filled -> resume at '
+        'Future (step 8, first unfilled REQUIRED step)', () async {
+      await DiscoverOnboardingDraftStorage.saveDob('1996-08-20');
+      await DiscoverOnboardingDraftStorage.saveGender('male');
+      await DiscoverOnboardingDraftStorage.savePhotoPaths(['/tmp/a.jpg']);
+      await DiscoverOnboardingDraftStorage.saveDrinking('never');
+      await DiscoverOnboardingDraftStorage.saveSmoking('never');
+      await DiscoverOnboardingDraftStorage.savePetPreference('love_pets');
+
+      const status = OnboardingStatus(
+        completed: false,
+        currentStep: 'gateway_choice',
+        mode: 'discover',
+      );
+
+      expect(await status.resolveResumeRoute(), '/onboarding/discover/future');
     });
 
     test(
@@ -77,6 +95,11 @@ void main() {
         await DiscoverOnboardingDraftStorage.saveDob('1996-08-20');
         await DiscoverOnboardingDraftStorage.saveGender('male');
         await DiscoverOnboardingDraftStorage.savePhotoPaths(['/tmp/a.jpg']);
+        await DiscoverOnboardingDraftStorage.saveDrinking('never');
+        await DiscoverOnboardingDraftStorage.saveSmoking('never');
+        await DiscoverOnboardingDraftStorage.savePetPreference('love_pets');
+        await DiscoverOnboardingDraftStorage.saveChildrenPreference('not_sure');
+        await DiscoverOnboardingDraftStorage.saveMarriagePreference('not_sure');
         await DiscoverOnboardingDraftStorage.saveRelationshipGoal(
           'serious_relationship',
         );

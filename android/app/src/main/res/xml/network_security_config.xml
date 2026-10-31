@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Izinkan cleartext HTTP (bukan HTTPS) HANYA ke IP Tailscale laptop dev
+     (lihat api_client.dart — baseUrl SEMENTARA ke 100.72.128.55 selagi
+     production belum ter-deploy kode terbaru). Android 9+ blokir
+     cleartext secara default; TIDAK dibuka global (tidak ada
+     base-config cleartextTrafficPermitted="true") supaya domain lain
+     tetap wajib HTTPS. HAPUS domain-config ini begitu baseUrl kembali
+     ke production (HTTPS, tidak butuh exception apapun). -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">100.72.128.55</domain>
+    </domain-config>
+</network-security-config>

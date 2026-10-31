@@ -9,7 +9,7 @@ import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import '../../../shared/widgets/selectable_option_card.dart';
 import 'discover_onboarding_draft_storage.dart';
 
-/// Step 2/9 onboarding Discover — sumber:
+/// Step 2/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/03-gender.html. Required,
 /// tidak ada tombol Skip.
 ///
@@ -68,7 +68,7 @@ class _GenderStepScreenState extends State<GenderStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 2,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToDob,
         bottomButton: AppButton(
           label: l10n.onboardingContinue,

@@ -46,7 +46,7 @@ class OnboardingStatus {
   /// draft dibuat — server tidak tahu progress step 1-8, lihat
   /// .ai/rules/architecture.md backend).
   Future<String> resolveResumeRoute() async {
-    if (completed) return '/discover';
+    if (completed) return '/main';
     if (mode != 'discover') return '/gateway-choice';
 
     return DiscoverOnboardingDraftStorage.resolveNextStepRoute();

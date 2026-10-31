@@ -10,7 +10,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
-/// Step 5/9 onboarding Discover — sumber:
+/// Step 5/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/06-work-education.html.
 /// Occupation dan Education WAJIB diisi (tombol Skip dihapus) — keputusan
 /// produk, lihat catatan di .ai/rules/architecture.md. Education pakai
@@ -127,7 +127,7 @@ class _WorkEducationStepScreenState extends State<WorkEducationStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 5,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToBio,
         errorText: _errorText,
         bottomButton: AppButton(

@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('What do you do?'), findsOneWidget);
-    expect(find.text('5/9'), findsOneWidget);
+    expect(find.text('5/11'), findsOneWidget);
     expect(find.text('Occupation'), findsOneWidget);
     expect(find.text('Education'), findsOneWidget);
     expect(find.text('Skip'), findsNothing);

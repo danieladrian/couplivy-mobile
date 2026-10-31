@@ -267,19 +267,22 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   MASIH placeholder kosong — belum dibangun, cuma jadi kerangka
   navigasi supaya bottom nav bisa diverifikasi end-to-end.
 
-## Onboarding — Step 1-9 Discover (DOB s.d. Preview) — SELESAI
+## Onboarding — Step 1-11 Discover (DOB s.d. Preview) — SELESAI
 
 - **Step "Name" (dulu step 2) DIHAPUS TOTAL** — nickname sekarang diisi
   saat Sign Up (lihat section Auth di atas), BUKAN step onboarding
-  terpisah. Onboarding Discover sekarang **9 step, SEMUA SUDAH DIBUAT**:
-  1 DOB, 2 Gender, 3 Photos, 4 Bio (+Detail Diri), 5 Work/Education,
-  6 Interests, 7 Relationship Goal, 8 Preferences, 9 Preview.
+  terpisah. Onboarding Discover sekarang **11 step, SEMUA SUDAH DIBUAT**:
+  1 DOB, 2 Gender, 3 Photos, 4 Bio (+Detail Diri, TERMASUK Love
+  Language), 5 Work/Education, 6 Interests (max 5), 7 Lifestyle (BARU),
+  8 Future (BARU), 9 Relationship Goal, 10 Preferences, 11 Preview.
   `features/onboarding/discover/*_step_screen.dart` — 1 file per step.
-- Step 1-8 (spesifik jalur "Mencari koneksi baru") dipisah dari Gateway
+  Lihat section "Onboarding — Step 7 (Lifestyle), Step 8 (Future), Love
+  Language & Interests max 5" di bawah untuk detail 3 fitur BARU ini.
+- Step 1-10 (spesifik jalur "Mencari koneksi baru") dipisah dari Gateway
   Choice (step 0 alur lama, sekarang gerbang sebelum step 1) — sama pola
   pemisahan di backend (`DiscoverOnboardingController`/`Service`, route
   `/api/onboarding/discover/*`, lihat `.ai/rules/architecture.md` backend).
-- **BUKAN per-step ke API** — step 1-8 diisi & disimpan LOKAL di Flutter
+- **BUKAN per-step ke API** — step 1-10 diisi & disimpan LOKAL di Flutter
   (`features/onboarding/discover/discover_onboarding_draft_storage.dart`,
   `DiscoverOnboardingDraftStorage` — SharedPreferences, 1 key per field,
   method baca/tulis per field DAN `readAllForSubmit()`/`clear()`), TIDAK
@@ -294,7 +297,7 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
   heart icon Phosphor putih yang saling mendekat lalu "nempel" (loop,
   animasi murni `AnimationController`/`TweenSequence`, TIDAK ada
   dependency lottie/rive). Ditutup manual (`.hide(context)`) di jalur
-  sukses MAUPUN error — WAJIB dipop SEBELUM `context.go('/discover')`
+  sukses MAUPUN error — WAJIB dipop SEBELUM `context.go('/main')`
   karena `go()` me-reset seluruh stack navigator (lihat bagian
   Routing); dialog yang belum ditutup saat stack di-reset berisiko
   nyangkut.
@@ -336,7 +339,8 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     device/OS, bukan bug aplikasi — reproduksi ulang di device release
     (bukan sideload) tidak akan mengalami ini.
   - Setelah KEDUANYA sukses: `DiscoverOnboardingDraftStorage.clear()`,
-    lalu `context.go('/discover')`.
+    lalu `context.go('/main')` (GANTI dari `/discover` lama — lihat
+    section "Route `/main`" di bawah).
 - **Bug kritis: `android.permission.INTERNET` TIDAK ADA di
   `AndroidManifest.xml`** sejak initial commit — ditemukan saat
   `flutter build apk --release` lalu install ke device fisik: SEMUA
@@ -366,6 +370,130 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
     "--" is not permitted within comments` (bukan error yang jelas
     menunjuk baris penyebab tanpa `--stacktrace`). Em-dash Unicode (—)
     AMAN dipakai, cuma double-hyphen ASCII literal yang dilarang.
+## Onboarding — Step 7 (Lifestyle), Step 8 (Future), Love Language & Interests max 5 — SELESAI
+
+- **Interests (step 6) sekarang WAJIB minimal 3, MAKSIMAL 5** (dulu
+  tanpa batas atas). Begitu 5 terpilih, chip yang BELUM dipilih jadi
+  redup (`Opacity` 0.4) dan tidak bisa di-tap (`onTap: null`) sampai
+  user uncheck salah satu dulu — BUKAN diam-diam mengabaikan tap ke-6,
+  atau auto-swap pilihan pertama. `_toggle()` di
+  `InterestsStepScreen` cuma nambah id baru kalau
+  `_selectedIds.length < _maximumInterests`.
+- **Step 7 Lifestyle (BARU, TIDAK ADA di desain HTML asli)** —
+  `lifestyle_step_screen.dart`. 3 field, SEMUA WAJIB (tanpa Skip,
+  konsisten step lain): Drinking (never/occasionally/socially/
+  regularly/prefer_not_to_say), Smoking (never/occasionally/regularly/
+  prefer_not_to_say — TANPA "socially", beda dari Drinking), Pets
+  (love_pets/neutral/not_a_fan). UI 3 `PreferenceRow` (row select, tap
+  buka bottom sheet single-select `showSingleSelectSheet` — lihat
+  bagian `PreferenceRow` di bawah).
+- **Step 8 Future (BARU, TIDAK ADA di desain HTML asli)** —
+  `future_step_screen.dart`. 2 field, SEMUA WAJIB: Children
+  (`children_preference` — want_children/not_want_children/
+  have_children/open_to_children/not_sure/prefer_not_to_say), Marriage
+  (`marriage_preference` — want_marriage/open_to_marriage/
+  not_want_marriage/not_sure). UI 2 `PreferenceRow`, pola sama
+  Lifestyle.
+  - **`children_preference` GANTI TOTAL `wants_children` lama** — dulu
+    field boolean 3-pilihan (Yes/No/Not sure) di step Bio, SEKARANG
+    dihapus total (bukan cuma di-rename) dan diganti 6 opsi di step
+    Future ini. Slot pertanyaan di step Bio yang ditinggalkan diisi
+    Love Language (lihat poin berikut).
+- **Love Language (BARU) — slot pengganti "Do you want children?" di
+  step Bio (step 4)**. Multi-select MAKSIMAL 2 dari 6 opsi
+  (words_of_affirmation/quality_time/acts_of_service/physical_touch/
+  gifts/dont_know_yet), state `Set<String> _loveLanguages` di
+  `BioStepScreen`. Sama pola disable/dim seperti Interests max 5 —
+  chip yang belum dipilih jadi redup begitu sudah 2 terpilih. Disimpan
+  ke draft via `saveLoveLanguages()`/`readLoveLanguages()`
+  (`SharedPreferences.setStringList`), dikirim ke backend sebagai
+  `love_languages` (array) — backend simpan ke tabel anak terpisah
+  `profile_love_languages` (`HasMany` dari `Profile`, BUKAN
+  `BelongsToMany` — nilainya enum string tetap, bukan master data;
+  lihat `.ai/rules/architecture.md` backend).
+- **Urutan step direindex** akibat 2 step baru disisipkan SETELAH
+  Interests, SEBELUM Relationship Goal: Relationship Goal 7→9,
+  Preferences 8→10, Preview 9→11. `totalSteps` di SEMUA
+  `OnboardingStepScaffold`/`OnboardingStepHeader` step Discover jadi
+  11 (dulu 9), termasuk step SEBELUM Lifestyle (DOB/Gender/Photos/Bio/
+  Work-Education/Interests) yang step number-nya sendiri tidak
+  berubah.
+- **`DiscoverOnboardingDraftStorage.resolveNextStepRoute()`** — Lifestyle
+  dan Future dicek SETELAH Photos, SEBELUM Relationship Goal (KEDUANYA
+  wajib semua field, beda dari Bio/Work-Education/Interests/Preferences
+  yang tetap dianggap step optional untuk keperluan resume — lihat
+  komentar method itu).
+
+## Onboarding — Step 10 (Preferences) redesign: "Open for all" & 6 field baru — SELESAI
+
+- **GANTI TOTAL** — SEMUA opsi "any"/"everyone" di step Preferences
+  GANTI jadi "Open for all" (`open_for_all`), SEMUA opsi
+  "prefer_not_to_say"/"other"/"neutral" DIHAPUS dari enum preferensi di
+  step ini (beda dari field serupa milik profil sendiri di step Bio/
+  Lifestyle/Future yang TETAP punya opsi itu — lihat backend
+  `.ai/rules/architecture.md` untuk daftar enum pasti tiap field).
+  `_openForAllKey` (GANTI `_anyOptionKey` lama) di
+  `PreferencesStepScreen`.
+- **Gender TETAP single-select** (`showSingleSelectSheet`) — cuma
+  "everyone" → "open_for_all". SEMUA field lain (8 total) SEKARANG
+  MULTI-select via `_showMultiSelectSheet` (checkbox, "open_for_all"
+  exclusive — pilih itu otomatis uncheck opsi lain, sama pola "any"
+  lama):
+  - **`family_preference` (kolom tunggal) DIHAPUS TOTAL** — digantikan
+    2 field terpisah, KEDUANYA multi-select: **Children**
+    (`children_preference` — want_children/not_want_children/
+    have_children/open_to_children/not_sure/open_for_all, enum SAMA
+    dengan `children_preference` step Future MINUS
+    "prefer_not_to_say") dan **Marriage** (`marriage_preference` —
+    want_marriage/open_to_marriage/not_want_marriage/not_sure/
+    open_for_all, enum SAMA dengan step Future).
+  - **4 field multi-select BARU**, tidak ada UI-nya sebelumnya di step
+    ini:
+    - **Ethnicity** (`ethnicity_preference`) — enum SAMA dengan
+      `BioStepScreen._ethnicityOptions` MINUS "other"/
+      "prefer_not_to_say", PLUS "open_for_all".
+    - **Drinking** (`drinking_preference`) — enum SAMA dengan
+      `LifestyleStepScreen._drinkingOptions` MINUS
+      "prefer_not_to_say", PLUS "open_for_all".
+    - **Smoking** (`smoking_preference`) — enum SAMA dengan
+      `LifestyleStepScreen._smokingOptions` MINUS
+      "prefer_not_to_say", PLUS "open_for_all".
+    - **Pets** (`pet_preference` — NAMA FIELD SAMA PERSIS dengan
+      `pet_preference` milik profil sendiri di step Lifestyle, TAPI
+      beda konteks/tipe: di sini multi-select preferensi pasangan,
+      cuma 3 opsi love_pets/not_a_fan/open_for_all, **TANPA "neutral"**
+      — keputusan produk: "neutral" dianggap setara "open_for_all"
+      untuk preferensi pasangan (BEDA dari `pet_preference` milik
+      profil sendiri yang PUNYA opsi neutral).
+  - `religion_preference`/`education_preference` (SUDAH ADA
+    sebelumnya) — enum-nya berubah: "any" → "open_for_all", "other"
+    DIHAPUS dari opsi Religion.
+  - `_openForAllKey` SELALU opsi TERAKHIR di tiap Map options (BEDA
+    dari "any" lama yang selalu di PALING ATAS — keputusan produk kali
+    ini, opsi spesifik didahulukan).
+- **9 `PreferenceRow` total** di step ini sekarang: Gender, Children,
+  Marriage, Ethnicity, Religion, Education, Drinking, Smoking, Pets
+  (urutan tampil di `build()`) — draft disimpan sebagai 1 JSON blob
+  `preferences` (`savePreferences()`/`readPreferences()`, TIDAK
+  berubah strukturnya), field baru cuma nambah key di Map yang sama.
+- **`PreviewStepScreen`** — field state lama `_familyPreference`
+  (String tunggal) diganti `_childrenPreferences`/`_marriagePreferences`
+  (List), ditambah `_ethnicityPreferences`/`_drinkingPreferences`/
+  `_smokingPreferences`/`_petPreferences` (semua List) — section
+  "Looking for" tampilkan SEMUA field baru dengan pola summary
+  join-koma yang sama (`_childrenOptionLabel`/`_marriageOptionLabel`/
+  dst, method baru per field — BUKAN switch tunggal lama
+  `_familyPreferenceLabel` yang cuma untuk 1 nilai).
+- Backend: migration `replace_family_preference_with_children_and_
+  marriage_preference_in_dating_preferences_table` (drop kolom) + 6
+  migration `create_dating_preference_{ethnicities,children,marriages,
+  drinkings,smokings,pets}_table` (tabel anak baru, pola sama
+  `dating_preference_religions`) — lihat `.ai/rules/architecture.md`
+  backend untuk detail lengkap model/service. `DiscoverOnboardingService::
+  completeProfile()` validasi manual "open_for_all tidak boleh
+  digabung opsi lain" per field (pertahanan lapis kedua, Flutter sudah
+  mencegah ini di UI).
+
 - `GET /api/interests` — `features/onboarding/discover/interest_repository.dart`
   (`InterestRepository`), model `core/models/interest.dart` (`Interest`,
   `{id, slug, category}`). `interest_labels.dart` punya 2 method: 
@@ -516,6 +644,11 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
       `_PreferenceRow.value` dibungkus `Flexible` + `overflow: ellipsis`
       (sebelumnya `Text` polos tanpa constraint) karena ringkasan
       multi-select bisa jauh lebih panjang dari 1 nilai single-select.
+    - **`_PreferenceRow` DIEKSTRAK jadi `PreferenceRow`** (shared widget,
+      `shared/widgets/preference_row.dart`) + `showSingleSelectSheet()`
+      top-level function — dipakai ulang di step Lifestyle & Future
+      (lihat section di atas) supaya tidak duplikasi kode. Kontrak sama
+      persis dengan implementasi privat lama di sini.
 - **Trade-off yang DITERIMA sebagai keputusan produk**: kalau app
   di-uninstall atau user logout SEBELUM sampai step terakhir, draft lokal
   (termasuk foto yang sudah di-copy ke temp dir, belum ter-upload) hilang
@@ -649,3 +782,243 @@ sendiri. Jangan taruh screen di `core/` atau sebaliknya.
 - Setelah ganti `assets/icons/app_icon.png`, WAJIB jalankan ulang:
   `dart run flutter_launcher_icons` DAN `dart run flutter_native_splash:create`
   (splash juga pakai source yang sama).
+
+## Route `/main` (GANTI dari `/discover` lama) — SELESAI
+
+- Route 3-tab container (`MainNavigationScreen` — Discover, Connections,
+  Profile) DULU dinamai `/discover` (nama sisa dari sebelum fitur
+  Connections/Profile dibangun, waktu halaman ini memang cuma 1 fitur).
+  **GANTI TOTAL jadi `/main`** — nama lama MENYESATKAN (seolah halaman
+  ini cuma fitur Discover, padahal isinya 3 tab termasuk Profile yang
+  sekarang sudah dibangun penuh). Ditemukan user lewat
+  `DebugRouteOverlay` (badge path route, lihat section di bawah) yang
+  terus menampilkan `/discover` walau sedang di tab Profile/Connections
+  — jadi jelas nama route-nya sendiri yang keliru, bukan overlay-nya.
+- SEMUA referensi `context.go('/discover')`/`'/discover'` di-ganti jadi
+  `/main`: `router.dart` (`GoRoute.path`/`name`),
+  `OnboardingStatus.resolveResumeRoute()` (`core/models/`),
+  `PreviewStepScreen._submit()` (redirect setelah submit onboarding
+  sukses). Path `/onboarding/discover/*` (step onboarding) TIDAK
+  berubah — itu namespace terpisah, tetap "discover" karena memang
+  spesifik jalur onboarding mode Discover.
+
+## Development di Chrome (`flutter run -d chrome`) — SELESAI
+
+- **App sekarang bisa dijalankan di web** (`flutter run -d chrome` atau
+  `flutter build web`) untuk iterasi UI cepat TANPA install APK ke
+  device fisik tiap kali — dipakai sebagai alat bantu DEVELOPMENT, BUKAN
+  target rilis (app ini mobile-first, web TIDAK di-maintain untuk
+  production).
+- **Blocker yang DIPERBAIKI**: `AppDatabase` (drift, cache Interests,
+  lihat `core/storage/app_database.dart`) pakai `package:drift/native.dart`
+  → transitif import `package:sqlite3` → `dart:ffi`, yang GAGAL DI-COMPILE
+  SAMA SEKALI untuk target web (bukan cuma gagal runtime) — error
+  `"Pointer isn't a type"` dkk muncul begitu `app_database.dart` ikut
+  ter-include di dependency graph kompail web, TERLEPAS apakah kode itu
+  benar-benar dipanggil saat runtime atau tidak.
+- **Fix: abstraksi `InterestCache` + conditional import** — BUKAN setup
+  drift-wasm penuh (butuh download manual `sqlite3.wasm` dari GitHub +
+  compile drift worker ke JS + taruh di folder `web/`, dipertimbangkan
+  tapi ditolak karena terlalu rumit untuk tujuan "dev cepat di browser"):
+  - `core/storage/interest_cache.dart` — interface `InterestCache`
+    (`readAll()`/`writeAll()`), SATU kontrak dipakai `InterestRepository`.
+  - `core/storage/interest_cache_native.dart` — `NativeInterestCache`,
+    isinya PERSIS logic drift yang dulu ada langsung di
+    `InterestRepository` (tidak berubah perilaku, cuma dipindah).
+  - `core/storage/interest_cache_web.dart` — `WebInterestCache`,
+    in-memory `List` biasa. **TIDAK PERSIST antar reload browser**
+    (hilang tiap refresh tab) — trade-off yang DITERIMA, `InterestRepository.
+    list()` tetap fallback ke network kalau cache kosong, jadi fitur
+    Interests tetap berfungsi penuh di web, cuma selalu network call
+    ulang setelah reload (beda dari native yang persist di SQLite).
+  - `core/storage/interest_cache_factory.dart` — titik masuk tunggal,
+    pilih implementasi lewat **conditional import**
+    (`if (dart.library.js_interop) 'interest_cache_web.dart'`), DICEK
+    SAAT COMPILE TIME — BUKAN `kIsWeb` runtime biasa. Ini WAJIB
+    conditional import (bukan if/else runtime) karena masalahnya ada di
+    tahap COMPILE, bukan tahap pemanggilan method.
+  - `InterestRepository` diubah construktornya dari `(Dio, AppDatabase)`
+    jadi `(Dio, InterestCache)` — `interestRepository` singleton pakai
+    `createInterestCache()` dari factory, BUKAN `appDatabase` langsung
+    lagi. `AppDatabase`/`appDatabase` (drift) sendiri TIDAK diubah/
+    dihapus — tetap dipakai penuh di native, cuma TIDAK PERNAH di-import
+    dari kode yang ikut compile ke web.
+  - **PELAJARAN untuk dependency native lain ke depan** (`flutter_secure_
+    storage`, `path_provider`, dst) — kalau ada paket baru yang transitif
+    pakai `dart:ffi`/`dart:io` dan perlu tetap berfungsi (bukan cuma
+    tidak crash compile) di web, pola yang SAMA (interface + 2
+    implementasi + conditional import factory) yang harus diikuti,
+    BUKAN coba cari workaround runtime (`kIsWeb` check) karena itu TIDAK
+    MENYELESAIKAN masalah compile-time.
+- **`flutter_secure_storage` (TokenStorage) BELUM diverifikasi penuh di
+  web** saat fitur ini pertama dibuat — kemungkinan fallback ke
+  `localStorage` browser (kurang aman, tapi biasanya tetap fungsional
+  untuk testing). Kalau ditemukan blocker serupa drift di atas, fix-nya
+  kemungkinan pola yang sama (abstraksi + conditional import).
+- **Cara jalankan**: `flutter run -d chrome` (device `chrome`/`Chrome
+  (web)` otomatis terdeteksi kalau Chrome terinstall, lihat `flutter
+  devices`). Di lingkungan TANPA TTY interaktif (mis. dijalankan background
+  oleh automation), proses CLI `flutter run` akan keluar begitu
+  attach/compile selesai (tidak ada sesi `r`/`R`/`q` hot-reload interaktif)
+  — TAPI dev server Dart VM-nya (`dartvm` process, default port 9100-an
+  atau sesuai `--web-port`) TETAP HIDUP dan bisa diakses via browser/curl
+  selama proses background itu tidak di-kill — cek `lsof -i :<port>`
+  atau `curl localhost:<port>` untuk konfirmasi server masih serve,
+  JANGAN asumsikan app gagal jalan hanya karena command exit code-nya
+  balik ke shell.
+
+## Profile/Account — Tab "Profile" — SEBAGIAN SELESAI
+
+- Sumber desain: `couplivy-docs/flow/03-shared/profile-account.html`
+  (§6.10, satu halaman menu vertikal — BUKAN tab/section yang bisa
+  di-swipe, tiap menu item link ke halaman TERPISAH). `ProfileScreen`
+  (`features/profile/profile_screen.dart`) DULU cuma placeholder kosong
+  (`Scaffold(backgroundColor: AppColors.lightGray)`), sekarang dibangun
+  penuh: header (avatar/nama+umur/occupation · education), completeness
+  box, upgrade banner (gradient `AppColors.peach` → `AppColors.lilac`,
+  sama hex dengan CSS `linear-gradient(135deg,#FFD5B5,#A788FA)` di HTML
+  sumber), 8 menu item.
+
+### Database lokal profil — prinsip "local-first", BUKAN cache
+
+- **Keputusan arsitektur eksplisit (bukan istilah teknis semata)**: data
+  profil milik user sendiri di HP (My Profile, My Preferences, nanti
+  Privacy) disimpan di **database lokal** (`ProfileDatabase`, SQLite via
+  drift) yang dianggap SUMBER UTAMA yang dibaca UI — BUKAN sekadar
+  "cache" (salinan sementara/sekunder dari server). Server (`GET /me`)
+  dipakai HANYA untuk SYNC (tarik data terbaru masuk, dorong perubahan
+  edit keluar), bukan sumber yang langsung dibaca UI tiap saat. Istilah
+  "cache" SENGAJA DIHINDARI di penamaan kelas/tabel/komentar bagian ini
+  (beda dari `CachedInterests` yang MEMANG cache beneran — master data
+  publik, bukan data user, boleh hilang & refetch kapan saja) — kalau
+  menulis kode baru di area ini dan tergoda menamai sesuatu "cache",
+  berhenti dan pakai istilah "local database"/"sync" sebagai gantinya.
+- **Lingkup keputusan ini**: KHUSUS Profile (My Profile, My Preferences,
+  Privacy). Draft onboarding (`DiscoverOnboardingDraftStorage`,
+  SharedPreferences) dan cache Interests (`CachedInterests`, drift)
+  TIDAK ikut diubah — keduanya sudah punya pola sendiri yang berjalan,
+  di luar scope ini.
+- **Riwayat singkat (supaya tidak bingung kalau nemu sisa istilah lama)**:
+  versi PERTAMA fitur ini (dalam sesi yang sama) sempat dibangun sebagai
+  `MyProfileStorage` (SharedPreferences, JSON blob tunggal) lalu
+  `ProfileCache` (drift, tapi masih dinamai "cache") — KEDUANYA
+  DIGANTI TOTAL ke `ProfileDatabase` setelah user secara eksplisit
+  mengoreksi arah desainnya: bukan cache, tapi database lokal yang
+  sah. Kalau nemu nama lama itu di komentar/riwayat percakapan lama,
+  itu sudah usang — `ProfileDatabase` adalah nama final.
+- **4 ATURAN BACA/TULIS tegas** (lihat docstring `ProfileDatabase` untuk
+  versi lengkap):
+  1. **Baca**: SEMUA layar Profile baca dari `ProfileDatabase.read()` —
+     TIDAK ADA logic tersembunyi lain. Kalau local DB kosong, itu SINYAL
+     "belum pernah sync", bukan alasan diam-diam fetch terus-menerus di
+     background.
+  2. **Sync masuk (download)** — titik-titik EKSPLISIT saja, TIDAK ADA
+     background sync/polling:
+     - Setelah login/register sukses (`AuthRepository._post()`, HANYA
+       kalau `onboarding.completed == true` — percuma fetch `GET /me`
+       kalau profil belum pernah dibuat di server).
+     - Setelah onboarding submit sukses (`PreviewStepScreen._submit()`).
+     - Fallback DI DALAM `ProfileScreen._loadProfile()` kalau local DB
+       MASIH kosong di titik itu (device baru/reinstall yang somehow
+       belum sempat sync di titik 1/2 — mis. app di-kill di tengah).
+  3. **Edit (tulis)** — MENYUSUL, belum dibangun. WAJIB online: submit
+     ke server dulu, SUKSES baru panggil `ProfileDatabase.save()` dengan
+     response server. TIDAK ADA optimistic write (local DB tidak boleh
+     berubah sebelum server confirm) — gagal network = tidak ada yang
+     berubah di mana pun, user lihat pesan error.
+  4. **Tidak ada background sync/polling** sama sekali — cuma 3 titik
+     eksplisit di atas.
+- **`ProfileDatabase` (`core/storage/profile_database.dart`)** — static
+  methods `save()`/`read()`/`clear()`, backing SQLite via drift
+  (`appDatabase`, `core/storage/app_database.dart`). Tabel: `Profiles`
+  (1 baris, `id` selalu 0 — field scalar: bio, occupation, education,
+  ethnicity, dst, PLUS field scalar dating-preference seperti
+  `preferenceAgeMin`/`preferenceGenderPreference`) + 9 tabel anak field
+  array (`LoveLanguages`, `ProfileInterests`, `Photos` — punya
+  `position`/`isMain`, bukan cuma `value` — dan 7 tabel `Preference*`
+  untuk tiap kategori dating preference). Tabel anak SEMUA 1 kolom
+  `value` string (kecuali `Photos`), replace-total (`delete` lalu
+  `insertAll`) tiap `save()`, BUKAN update parsial — pola sama
+  `dating_preference_religions` dkk di backend.
+  - **`appDatabase` SENGAJA bukan `final`** (`AppDatabase appDatabase =
+    AppDatabase();`) — widget test ganti instance ini dengan
+    `AppDatabase.forTesting(NativeDatabase.memory())` lewat
+    `test/test_helpers/profile_database_test_helper.dart`
+    (`useInMemoryAppDatabaseForTesting()` di `setUp()`,
+    `seedProfileDatabase(MyProfile)` untuk isi data sebelum
+    `pumpWidget()`) — production code TIDAK PERNAH reassign ini.
+  - `driftRuntimeOptions.dontWarnAboutMultipleDatabases = true` di-set
+    di helper test itu — drift biasanya warning kalau `AppDatabase`
+    dibuat berkali-kali (indikasi bug di app beneran), tapi di test
+    MEMANG disengaja (instance baru per test case, `QueryExecutor`
+    in-memory terpisah tiap kali, tidak ada race condition nyata).
+- **`ProfileRepository.syncMyProfile()` (`features/profile/profile_repository.dart`,
+  dulu `fetchAndCacheMyProfile()`)** — panggil `GET /me`, lalu
+  `ProfileDatabase.save()` dengan hasilnya. SATU-SATUNYA jalur masuk
+  data profil dari server ke local DB. Kegagalan di titik pemanggilan
+  manapun (login, submit onboarding, fallback ProfileScreen) DIABAIKAN
+  (tidak dilempar ulang ke pemanggil) — tidak boleh menggagalkan
+  login/submit onboarding, dan ProfileScreen tetap render dengan data
+  kosong daripada stuck loading.
+- **8 menu di `ProfileScreen`, status per menu**:
+  - **My Profile** (`my_profile_screen.dart`) — READ-ONLY dari
+    `ProfileDatabase.read()`, BISA DIBUKA OFFLINE. TIDAK ADA editing
+    (menyusul sesi terpisah). Semua field detail (height, gender,
+    ethnicity, religion, education, relationship goal, love language,
+    drinking, smoking, pets, children/marriage preference) via
+    `ProfileLabels` (label mapping generik, lihat di bawah).
+  - **My Preferences** (`my_preferences_screen.dart`) — READ-ONLY dari
+    `ProfileDatabase.read()` (field `preferences`), BISA DIBUKA OFFLINE.
+    Dulu SELALU fetch `GET /me` tiap dibuka — diubah supaya konsisten
+    aturan baca #1 di atas.
+  - **Privacy & Visibility** (`privacy_settings_screen.dart`) — 7
+    `Switch`, `GET`/`PATCH /privacy-settings`. BELUM migrasi ke local DB
+    (TIDAK dalam scope sesi yang membangun `ProfileDatabase` — masih
+    fetch fresh tiap dibuka, datanya kecil & jarang diakses). Kalau
+    nanti disatukan prinsip local-first-nya, ini kandidat berikutnya.
+    Optimistic update (`_toggle()`): UI berubah dulu, PATCH di
+    background, rollback + tampilkan error kalau gagal.
+  - **App Settings** (`app_settings_screen.dart`) & **Terms & Privacy**
+    (`terms_screen.dart`) — UI STATIS, TANPA backend baru (keputusan
+    produk). Bahasa app cuma DITAMPILKAN (`Localizations.localeOf`),
+    TIDAK bisa diganti dari dalam app (`CouplivyApp` belum punya toggle
+    locale manual, lihat `app.dart`). Versi app HARDCODE
+    (`AppSettingsScreen._appVersion`) — project belum pakai
+    `package_info_plus` untuk baca versi runtime, WAJIB update manual
+    kalau `pubspec.yaml` `version:` naik, sampai package itu ditambahkan.
+    Terms of Service/Privacy Policy row di `TermsScreen` SENGAJA
+    `onTap: () {}` (no-op) — konten legal belum ditulis, di luar scope
+    frontend/backend.
+  - **Notifications & Safety & Reporting** — BELUM ADA tabel/model/
+    controller SAMA SEKALI di backend (beda dari Privacy yang tabelnya
+    sudah ada sejak awal) — route `/profile/notifications` dan
+    `/profile/safety` render `ComingSoonScreen` (`widgets/
+    coming_soon_screen.dart`, placeholder generik dipakai lintas menu
+    yang belum dibangun). **Upgrade to Couplivy Plus** banner juga
+    push ke `/profile/upgrade` yang SAMA-SAMA `ComingSoonScreen` — fitur
+    Plus itu sendiri belum ada scope-nya sama sekali.
+- **`ProfileLabels` (`features/profile/profile_labels.dart`)** — SATU
+  sumber kebenaran translate enum → label tampil untuk MyProfileScreen
+  DAN MyPreferencesScreen. SENGAJA method static terpisah, BUKAN reuse
+  langsung dari method privat `BioStepScreen`/`LifestyleStepScreen`/
+  `FutureStepScreen`/`PreferencesStepScreen` (screen ONBOARDING itu
+  tetap simpan switch-case sendiri) — helper ini murni untuk fitur BARU
+  read-only di luar alur onboarding, supaya tidak menambah shared-state
+  lintas fitur yang tidak perlu. `ProfileLabels.joinAll()` mengikuti
+  URUTAN LIST INPUT apa adanya (BUKAN urutan kemunculan di Map options)
+  — beda dari `_summaryFor()` di `PreferencesStepScreen` (onboarding)
+  yang sengaja urut berdasar Map options demi tampilan konsisten; di
+  sini tidak ada requirement itu.
+- **`AuthRepository.logout()`** — panggil `POST /auth/logout` (revoke
+  token Sanctum server-side) SEBELUM hapus `TokenStorage`/
+  `UserSessionStorage`/`ProfileDatabase`/`DiscoverOnboardingDraftStorage`
+  lokal. Kegagalan network SENGAJA DIABAIKAN (tidak dilempar ulang) —
+  user harus tetap bisa "logout" dari device ini meski offline; token/
+  database lokal tetap dihapus di jalur manapun. Dipanggil dari
+  `ProfileScreen._confirmLogOut()` (dialog konfirmasi dulu, `AlertDialog`
+  — bukan aksi 1-tap langsung), redirect ke `/welcome` setelah selesai.
+- **`ProfileMenuRow` (`features/profile/widgets/profile_menu_row.dart`)**
+  — row menu generik (icon+label+chevron, opsional badge dot merah untuk
+  Notifications, `isDestructive` untuk Log Out yang teksnya merah TANPA
+  chevron) — pola row terpisah dari `PreferenceRow` (`shared/widgets/`)
+  karena kontraknya beda (menu navigasi murni, bukan pick-a-value).

@@ -4,14 +4,17 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../connections/connections_screen.dart';
-import '../discover/discover_placeholder_screen.dart';
+import '../discover/discover_screen.dart';
 import '../profile/profile_screen.dart';
 
 /// Container 3 tab utama app setelah onboarding selesai — Discover,
-/// Connections, Profile. Dipasang di route `/discover` (satu-satunya
+/// Connections, Profile. Dipasang di route `/main` (satu-satunya
 /// entry point setelah Gateway Choice/onboarding/login berhasil, lihat
-/// router.dart), BUKAN 3 route URL terpisah — tab dikelola state lokal
-/// (`_selectedIndex`), bukan lewat go_router nested routes.
+/// router.dart) — nama path SENGAJA `/main` (bukan `/discover`, nama
+/// lama sebelum fitur Connections/Profile ada) supaya tidak menyesatkan
+/// seolah halaman ini cuma 1 fitur. BUKAN 3 route URL terpisah — tab
+/// dikelola state lokal (`_selectedIndex`), bukan lewat go_router nested
+/// routes.
 ///
 /// `IndexedStack` (bukan cuma render tab aktif) — supaya state tiap tab
 /// (mis. scroll position, form yang sedang diisi) PERSIST saat pindah
@@ -27,7 +30,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
   static const _tabs = [
-    DiscoverPlaceholderScreen(),
+    DiscoverScreen(),
     ConnectionsScreen(),
     ProfileScreen(),
   ];

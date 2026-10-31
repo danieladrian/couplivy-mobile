@@ -8,7 +8,7 @@ import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
 
-/// Step 1/9 onboarding Discover — sumber:
+/// Step 1/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/02-dob.html (nomor file lama
 /// "02", step "Name" yang lama sudah dihapus dari alur).
 ///
@@ -97,7 +97,7 @@ class _DobStepScreenState extends State<DobStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 1,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToGatewayChoice,
         errorText: _errorText,
         bottomButton: AppButton(

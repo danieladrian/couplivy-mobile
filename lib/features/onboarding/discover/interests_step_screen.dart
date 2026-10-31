@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/models/interest.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_radius.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/interest_chip.dart';
 import '../../../shared/widgets/onboarding_step_header.dart';
 import '../../../shared/widgets/onboarding_step_scaffold.dart';
 import 'discover_onboarding_draft_storage.dart';
@@ -13,15 +13,21 @@ import 'interest_labels.dart';
 import 'interest_repository.dart';
 
 const _minimumInterests = 3;
+const _maximumInterests = 5;
 
-/// Step 6/9 onboarding Discover — sumber:
+/// Step 6/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/07-interests.html. Daftar
 /// interest di-cache lokal (lihat [InterestRepository]) sejak login/
 /// register, jadi step ini biasanya render instan tanpa network round-
-/// trip. WAJIB pilih minimal 3 (tombol Skip dihapus — keputusan produk,
-/// lihat .ai/rules/architecture.md) — divalidasi lagi di server saat
-/// submit akhir, tapi dicek juga di sini supaya user tidak perlu tunggu
-/// sampai step Preview untuk tahu ada masalah.
+/// trip. WAJIB pilih minimal 3, MAKSIMAL 5 (tombol Skip dihapus —
+/// keputusan produk, lihat .ai/rules/architecture.md) — divalidasi lagi
+/// di server saat submit akhir, tapi dicek juga di sini supaya user
+/// tidak perlu tunggu sampai step Preview untuk tahu ada masalah.
+///
+/// Begitu sudah 5 terpilih, chip yang BELUM dipilih jadi disabled/redup
+/// (tidak bisa ditap) sampai user uncheck salah satu dulu — bukan
+/// membiarkan tap ke-6 diabaikan tanpa feedback, atau auto-swap yang
+/// pertama dipilih.
 class InterestsStepScreen extends StatefulWidget {
   const InterestsStepScreen({super.key});
 
@@ -72,7 +78,7 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
     setState(() {
       if (_selectedIds.contains(id)) {
         _selectedIds.remove(id);
-      } else {
+      } else if (_selectedIds.length < _maximumInterests) {
         _selectedIds.add(id);
       }
       _errorText = null;
@@ -87,7 +93,7 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
     }
 
     await DiscoverOnboardingDraftStorage.saveInterestIds(_selectedIds.toList());
-    if (mounted) context.go('/onboarding/discover/relationship-goal');
+    if (mounted) context.go('/onboarding/discover/lifestyle');
   }
 
   void _backToWorkEducation() =>
@@ -130,7 +136,7 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
               children: [
                 OnboardingStepHeader(
                   step: 6,
-                  totalSteps: 9,
+                  totalSteps: 11,
                   onBack: _backToWorkEducation,
                 ),
                 Expanded(child: _buildLoadingOrErrorBody(l10n)),
@@ -148,7 +154,7 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 6,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToWorkEducation,
         errorText: _errorText,
         bottomButton: AppButton(
@@ -190,9 +196,12 @@ class _InterestsStepScreenState extends State<InterestsStepScreen> {
                 runSpacing: 8,
                 children: [
                   for (final interest in group.interests)
-                    _InterestChip(
+                    InterestChip(
                       label: InterestLabels.labelFor(l10n, interest.slug),
                       selected: _selectedIds.contains(interest.id),
+                      disabled:
+                          !_selectedIds.contains(interest.id) &&
+                          _selectedIds.length >= _maximumInterests,
                       onTap: () => _toggle(interest.id),
                     ),
                 ],
@@ -252,47 +261,6 @@ class _InterestCategoryGroup {
 
   final String category;
   final List<Interest> interests;
-}
-
-class _InterestChip extends StatelessWidget {
-  const _InterestChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.pill),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.lilac.withValues(alpha: 0.15)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(AppRadius.pill),
-          border: Border.all(
-            color: selected ? AppColors.lilac : AppColors.border,
-            width: selected ? 1.5 : 1,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-            color: selected ? AppColors.deepViolet : AppColors.textDark,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 /// Marker error sederhana — pesan generik, tidak perlu detail teknis untuk

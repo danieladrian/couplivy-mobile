@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:drift/drift.dart' show Value;
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/models/interest.dart';
-import '../../../core/storage/app_database.dart';
+import '../../../core/storage/interest_cache.dart';
+import '../../../core/storage/interest_cache_factory.dart';
 
 /// Panggil `GET /api/interests` — daftar master data minat untuk render
 /// chip di step Interests. Terpisah dari `DiscoverOnboardingRepository`
@@ -12,17 +12,18 @@ import '../../../core/storage/app_database.dart';
 /// adalah master data umum, bisa dipakai fitur lain di luar onboarding
 /// nanti, mis. Edit Profile).
 ///
-/// DI-CACHE lokal (SQLite via drift, lihat `core/storage/app_database.dart`)
+/// DI-CACHE lokal lewat [InterestCache] (SQLite via drift di native,
+/// in-memory di web — lihat `core/storage/interest_cache_factory.dart`)
 /// — [refreshCache] dipanggil sekali setelah login/register sukses
 /// (lihat `AuthRepository._post`), BUKAN tiap kali step Interests dibuka.
 /// [list] baca dari cache dulu (instan, tanpa network) dan cuma fallback
 /// ke network kalau cache kosong (mis. akun lama sebelum fitur cache ini
-/// ada, atau data lokal terhapus).
+/// ada, atau data lokal terhapus, atau web yang baru di-reload).
 class InterestRepository {
-  InterestRepository(this._dio, this._db);
+  InterestRepository(this._dio, this._cache);
 
   final Dio _dio;
-  final AppDatabase _db;
+  final InterestCache _cache;
 
   /// Dipanggil step Interests — cache-first supaya render instan.
   Future<List<Interest>> list() async {
@@ -63,33 +64,13 @@ class InterestRepository {
     }
   }
 
-  Future<List<Interest>> _readCache() async {
-    final rows = await _db.select(_db.cachedInterests).get();
-    return rows
-        .map(
-          (row) => Interest(id: row.id, slug: row.slug, category: row.category),
-        )
-        .toList();
-  }
+  Future<List<Interest>> _readCache() => _cache.readAll();
 
-  Future<void> _writeCache(List<Interest> interests) async {
-    await _db.batch((batch) {
-      batch.deleteAll(_db.cachedInterests);
-      batch.insertAll(
-        _db.cachedInterests,
-        interests.map(
-          (i) => CachedInterestsCompanion.insert(
-            id: Value(i.id),
-            slug: i.slug,
-            category: Value(i.category),
-          ),
-        ),
-      );
-    });
-  }
+  Future<void> _writeCache(List<Interest> interests) =>
+      _cache.writeAll(interests);
 }
 
 final interestRepository = InterestRepository(
   CouplivyApiClient.instance,
-  appDatabase,
+  createInterestCache(),
 );

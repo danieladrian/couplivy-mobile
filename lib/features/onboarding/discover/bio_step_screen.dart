@@ -19,13 +19,17 @@ const _maxBioLength = 300;
 const _cmPerInch = 2.54;
 const _inchesPerFoot = 12;
 
-/// Step 4/9 onboarding Discover — sumber:
+/// Step 4/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/05-bio.html, diperluas jadi
-/// "Detail Diri" dengan height/ethnicity/wants_children (field yang ADA
+/// "Detail Diri" dengan height/ethnicity/love language (field yang ADA
 /// di skema `profiles` tapi tidak ada di desain HTML asli — keputusan
 /// produk, lihat .ai/rules/architecture.md backend). SEMUA field di sini
 /// WAJIB diisi (tombol Skip dihapus) — keputusan produk, lihat catatan di
 /// .ai/rules/architecture.md.
+///
+/// "Do you want children?" (dulu di sini, boolean 3 pilihan) SUDAH
+/// PINDAH ke step Future (children_preference, 6 opsi) — slotnya
+/// digantikan pertanyaan Love Language (multi-select, max 2).
 ///
 /// Height bisa diinput dalam cm ATAU feet+inches (toggle) — feet+inches
 /// dipakai TERPISAH (bukan feet desimal, mis. "5.7 ft") karena notasi
@@ -53,8 +57,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
   final _heightInchController = TextEditingController();
   String? _ethnicity;
   String? _religion;
-  bool? _wantsChildren;
-  bool _wantsChildrenTouched = false;
+  Set<String> _loveLanguages = {};
   _HeightUnit _heightUnit = _HeightUnit.cm;
   bool _isLoadingDraft = true;
   String? _errorText;
@@ -71,14 +74,8 @@ class _BioStepScreenState extends State<BioStepScreen> {
     final heightCm = await DiscoverOnboardingDraftStorage.readHeightCm();
     final ethnicity = await DiscoverOnboardingDraftStorage.readEthnicity();
     final religion = await DiscoverOnboardingDraftStorage.readReligion();
-    final wantsChildren =
-        await DiscoverOnboardingDraftStorage.readWantsChildren();
-    // "Not sure yet" DISIMPAN sebagai null (sama seperti "belum pernah
-    // disentuh") — draft key wants_children ada/tidaknya dipakai untuk
-    // bedakan keduanya, supaya validasi wajib tidak salah anggap user
-    // yang sudah pilih "Not sure yet" sebagai belum mengisi.
-    final wantsChildrenKeyExists =
-        await DiscoverOnboardingDraftStorage.hasWantsChildrenKey();
+    final loveLanguages =
+        await DiscoverOnboardingDraftStorage.readLoveLanguages();
     final heightUnitPreference =
         await DiscoverOnboardingDraftStorage.readHeightUnitPreference();
 
@@ -91,8 +88,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
       setState(() {
         _ethnicity = ethnicity;
         _religion = religion;
-        _wantsChildren = wantsChildren;
-        _wantsChildrenTouched = wantsChildrenKeyExists;
+        _loveLanguages = loveLanguages.toSet();
         _heightUnit = unit;
         _isLoadingDraft = false;
       });
@@ -189,6 +185,15 @@ class _BioStepScreenState extends State<BioStepScreen> {
     'prefer_not_to_say': l10n.religionPreferNotToSay,
   };
 
+  Map<String, String> _loveLanguageOptions(AppLocalizations l10n) => {
+    'words_of_affirmation': l10n.loveLanguageWordsOfAffirmation,
+    'quality_time': l10n.loveLanguageQualityTime,
+    'acts_of_service': l10n.loveLanguageActsOfService,
+    'physical_touch': l10n.loveLanguagePhysicalTouch,
+    'gifts': l10n.loveLanguageGifts,
+    'dont_know_yet': l10n.loveLanguageDontKnowYet,
+  };
+
   /// Bottom sheet select generik — dipakai Ethnicity DAN Religion (dan
   /// pola yang sama di `work_education_step_screen.dart`/
   /// `preferences_step_screen.dart`). Height DIBATASI + `ListView`
@@ -273,7 +278,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
         heightCm == null ||
         _ethnicity == null ||
         _religion == null ||
-        !_wantsChildrenTouched) {
+        _loveLanguages.isEmpty) {
       setState(() => _errorText = l10n.bioAllFieldsRequiredError);
       return;
     }
@@ -282,7 +287,9 @@ class _BioStepScreenState extends State<BioStepScreen> {
     await DiscoverOnboardingDraftStorage.saveHeightCm(heightCm);
     await DiscoverOnboardingDraftStorage.saveEthnicity(_ethnicity);
     await DiscoverOnboardingDraftStorage.saveReligion(_religion);
-    await DiscoverOnboardingDraftStorage.saveWantsChildren(_wantsChildren);
+    await DiscoverOnboardingDraftStorage.saveLoveLanguages(
+      _loveLanguages.toList(),
+    );
     await DiscoverOnboardingDraftStorage.saveHeightUnitPreference(
       _heightUnit == _HeightUnit.footInch ? 'ft' : 'cm',
     );
@@ -309,7 +316,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 4,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToPhotos,
         errorText: _errorText,
         bottomButton: AppButton(
@@ -447,7 +454,7 @@ class _BioStepScreenState extends State<BioStepScreen> {
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    l10n.bioWantsChildrenLabel,
+                    l10n.bioLoveLanguageLabel,
                     style: const TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w600,
@@ -457,38 +464,28 @@ class _BioStepScreenState extends State<BioStepScreen> {
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
-                    children: [
-                      _ChoiceChipOption(
-                        label: l10n.bioWantsChildrenYes,
-                        selected:
-                            _wantsChildrenTouched && _wantsChildren == true,
-                        onSelected: () => setState(() {
-                          _wantsChildren = true;
-                          _wantsChildrenTouched = true;
-                          _errorText = null;
-                        }),
-                      ),
-                      _ChoiceChipOption(
-                        label: l10n.bioWantsChildrenNo,
-                        selected:
-                            _wantsChildrenTouched && _wantsChildren == false,
-                        onSelected: () => setState(() {
-                          _wantsChildren = false;
-                          _wantsChildrenTouched = true;
-                          _errorText = null;
-                        }),
-                      ),
-                      _ChoiceChipOption(
-                        label: l10n.bioWantsChildrenNotSure,
-                        selected:
-                            _wantsChildrenTouched && _wantsChildren == null,
-                        onSelected: () => setState(() {
-                          _wantsChildren = null;
-                          _wantsChildrenTouched = true;
-                          _errorText = null;
-                        }),
-                      ),
-                    ],
+                    runSpacing: 8,
+                    children: _loveLanguageOptions(l10n).entries.map((entry) {
+                      final selected = _loveLanguages.contains(entry.key);
+                      final disabled = !selected && _loveLanguages.length >= 2;
+                      return Opacity(
+                        opacity: disabled ? 0.4 : 1,
+                        child: _ChoiceChipOption(
+                          label: entry.value,
+                          selected: selected,
+                          onSelected: disabled
+                              ? () {}
+                              : () => setState(() {
+                                  if (selected) {
+                                    _loveLanguages.remove(entry.key);
+                                  } else {
+                                    _loveLanguages.add(entry.key);
+                                  }
+                                  _errorText = null;
+                                }),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),

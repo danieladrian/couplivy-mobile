@@ -6,15 +6,26 @@ import '../../../core/theme/app_colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/onboarding_step_scaffold.dart';
+import '../../../shared/widgets/preference_row.dart';
 import 'discover_onboarding_draft_storage.dart';
 
-/// Step 8/9 onboarding Discover — sumber:
+/// Step 10/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/09-preferences.html.
-/// Gender/Family/Religion/Education preference WAJIB diisi (Continue
-/// disabled sampai semuanya terisi) — keputusan produk, beda dari
-/// implementasi awal yang semuanya optional. Age range TIDAK termasuk
-/// wajib — RangeSlider selalu punya nilai default (25-35), jadi selalu
-/// "terisi" tanpa perlu disentuh user.
+/// Gender WAJIB diisi (single-select, Continue disabled sampai
+/// terpilih). Age range TIDAK termasuk wajib — RangeSlider selalu punya
+/// nilai default (25-35), jadi selalu "terisi" tanpa perlu disentuh
+/// user.
+///
+/// **GANTI TOTAL** — SEMUA field selain Gender/age sekarang MULTI-select
+/// dengan opsi "Open for all" (GANTI "Any"/"Everyone" lama, EXCLUSIVE —
+/// pilih ini otomatis uncheck opsi lain, sama pola "any" yang sudah ada
+/// sebelumnya). `family_preference` lama (kolom tunggal) DIHAPUS TOTAL,
+/// digantikan Children DAN Marriage sebagai 2 field terpisah. 4 field
+/// BARU ditambah: Ethnicity, Drinking, Smoking, Pets — SEMUA multi-select
+/// dengan "Open for all", TANPA opsi "prefer_not_to_say"/"other"/
+/// "neutral" (keputusan produk, khusus preferensi pasangan di step ini —
+/// beda dari field serupa milik profil sendiri di step Bio/Lifestyle/
+/// Future yang TETAP punya opsi itu).
 ///
 /// `age_direction` dan `max_distance_km` ADA di skema `dating_preferences`
 /// tapi TIDAK ADA UI-nya di desain HTML sumber — sengaja tidak diisi di
@@ -26,14 +37,17 @@ class PreferencesStepScreen extends StatefulWidget {
   State<PreferencesStepScreen> createState() => _PreferencesStepScreenState();
 }
 
-const _anyOptionKey = 'any';
-
 class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
   RangeValues _ageRange = const RangeValues(25, 35);
   String? _genderPreference;
-  String? _familyPreference;
+  Set<String> _childrenPreferences = {};
+  Set<String> _marriagePreferences = {};
+  Set<String> _ethnicityPreferences = {};
   Set<String> _religionPreferences = {};
   Set<String> _educationPreferences = {};
+  Set<String> _drinkingPreferences = {};
+  Set<String> _smokingPreferences = {};
+  Set<String> _petPreferences = {};
   bool _isLoadingDraft = true;
 
   @override
@@ -52,30 +66,40 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
           _ageRange = RangeValues(ageMin.toDouble(), ageMax.toDouble());
         }
         _genderPreference = preferences['gender_preference'] as String?;
-        _familyPreference = preferences['family_preference'] as String?;
-        _religionPreferences =
-            (preferences['religion_preference'] as List<dynamic>?)
-                ?.cast<String>()
-                .toSet() ??
-            {};
-        _educationPreferences =
-            (preferences['education_preference'] as List<dynamic>?)
-                ?.cast<String>()
-                .toSet() ??
-            {};
+        _childrenPreferences = _asStringSet(preferences['children_preference']);
+        _marriagePreferences = _asStringSet(preferences['marriage_preference']);
+        _ethnicityPreferences = _asStringSet(
+          preferences['ethnicity_preference'],
+        );
+        _religionPreferences = _asStringSet(preferences['religion_preference']);
+        _educationPreferences = _asStringSet(
+          preferences['education_preference'],
+        );
+        _drinkingPreferences = _asStringSet(preferences['drinking_preference']);
+        _smokingPreferences = _asStringSet(preferences['smoking_preference']);
+        _petPreferences = _asStringSet(preferences['pet_preference']);
         _isLoadingDraft = false;
       });
     }
   }
 
-  // Gender/family/religion/education preference WAJIB diisi — Continue
-  // disabled sampai semuanya terpilih. Age range TIDAK dicek (selalu
-  // punya nilai default).
+  Set<String> _asStringSet(Object? value) =>
+      (value as List<dynamic>?)?.cast<String>().toSet() ?? {};
+
+  // Gender WAJIB diisi — Continue disabled sampai terpilih. SEMUA field
+  // multi-select lain JUGA wajib (min 1 pilihan, termasuk "Open for
+  // all" sebagai pilihan valid) — konsisten field lain di step ini.
+  // Age range TIDAK dicek (selalu punya nilai default).
   bool get _isComplete =>
       _genderPreference != null &&
-      _familyPreference != null &&
+      _childrenPreferences.isNotEmpty &&
+      _marriagePreferences.isNotEmpty &&
+      _ethnicityPreferences.isNotEmpty &&
       _religionPreferences.isNotEmpty &&
-      _educationPreferences.isNotEmpty;
+      _educationPreferences.isNotEmpty &&
+      _drinkingPreferences.isNotEmpty &&
+      _smokingPreferences.isNotEmpty &&
+      _petPreferences.isNotEmpty;
 
   Future<void> _submit() async {
     if (!_isComplete) return;
@@ -84,9 +108,14 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
       'age_min': _ageRange.start.round(),
       'age_max': _ageRange.end.round(),
       'gender_preference': _genderPreference,
-      'family_preference': _familyPreference,
+      'children_preference': _childrenPreferences.toList(),
+      'marriage_preference': _marriagePreferences.toList(),
+      'ethnicity_preference': _ethnicityPreferences.toList(),
       'religion_preference': _religionPreferences.toList(),
       'education_preference': _educationPreferences.toList(),
+      'drinking_preference': _drinkingPreferences.toList(),
+      'smoking_preference': _smokingPreferences.toList(),
+      'pet_preference': _petPreferences.toList(),
     });
     if (mounted) context.go('/onboarding/discover/preview');
   }
@@ -112,30 +141,92 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     final options = {
       'female': l10n.genderFemale,
       'male': l10n.genderMale,
-      'everyone': l10n.preferencesGenderAny,
+      'open_for_all': l10n.preferencesOpenForAll,
     };
-    final selected = await _showPickerSheet(options, _genderPreference);
+    final selected = await showSingleSelectSheet(
+      context,
+      options,
+      _genderPreference,
+    );
     if (selected != null) setState(() => _genderPreference = selected);
   }
 
-  Future<void> _pickFamilyPreference() async {
+  // "open_for_all" SELALU opsi TERAKHIR (beda dari "any" lama yang di
+  // paling atas) — keputusan produk kali ini, opsi spesifik didahulukan.
+  Map<String, String> _childrenOptions(AppLocalizations l10n) => {
+    'want_children': l10n.childrenPreferenceWantChildren,
+    'not_want_children': l10n.childrenPreferenceNotWantChildren,
+    'have_children': l10n.childrenPreferenceHaveChildren,
+    'open_to_children': l10n.childrenPreferenceOpenToChildren,
+    'not_sure': l10n.childrenPreferenceNotSure,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
+
+  Future<void> _pickChildrenPreferences() async {
     final l10n = AppLocalizations.of(context);
-    final options = {
-      'wants_children': l10n.preferencesFamilyWantsChildren,
-      'not_wants_children': l10n.preferencesFamilyNotWantsChildren,
-      'open_to_children': l10n.preferencesFamilyOpenToChildren,
-      'any': l10n.preferencesFamilyAny,
-    };
-    final selected = await _showPickerSheet(options, _familyPreference);
-    if (selected != null) setState(() => _familyPreference = selected);
+    final selected = await showMultiSelectSheet(
+      context,
+      _childrenOptions(l10n),
+      _childrenPreferences,
+    );
+    if (selected != null) setState(() => _childrenPreferences = selected);
   }
 
-  // "any" di PALING ATAS (bukan di akhir) — sesuai permintaan, supaya
-  // opsi paling umum/exclusive langsung terlihat duluan. Sisanya sama
-  // dengan `BioStepScreen._religionOptions` (agama milik user sendiri,
-  // TIDAK ADA "any" di sana — beda konteks, itu bukan preferensi).
+  Map<String, String> _marriageOptions(AppLocalizations l10n) => {
+    'want_marriage': l10n.marriagePreferenceWantMarriage,
+    'open_to_marriage': l10n.marriagePreferenceOpenToMarriage,
+    'not_want_marriage': l10n.marriagePreferenceNotWantMarriage,
+    'not_sure': l10n.marriagePreferenceNotSure,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
+
+  Future<void> _pickMarriagePreferences() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await showMultiSelectSheet(
+      context,
+      _marriageOptions(l10n),
+      _marriagePreferences,
+    );
+    if (selected != null) setState(() => _marriagePreferences = selected);
+  }
+
+  // Enum SAMA dengan `BioStepScreen._ethnicityOptions` MINUS
+  // "other"/"prefer_not_to_say" (tidak masuk akal sebagai preferensi
+  // siapa yang dicari), PLUS "open_for_all".
+  Map<String, String> _ethnicityOptions(AppLocalizations l10n) => {
+    'east_asian': l10n.ethnicityEastAsian,
+    'south_asian': l10n.ethnicitySouthAsian,
+    'southeast_asian': l10n.ethnicitySoutheastAsian,
+    'middle_eastern': l10n.ethnicityMiddleEastern,
+    'black_african': l10n.ethnicityBlackAfrican,
+    'hispanic_latino': l10n.ethnicityHispanicLatino,
+    'white_european': l10n.ethnicityWhiteEuropean,
+    'javanese': l10n.ethnicityJavanese,
+    'sundanese': l10n.ethnicitySundanese,
+    'batak': l10n.ethnicityBatak,
+    'minangkabau': l10n.ethnicityMinangkabau,
+    'balinese': l10n.ethnicityBalinese,
+    'madurese': l10n.ethnicityMadurese,
+    'betawi': l10n.ethnicityBetawi,
+    'bugis': l10n.ethnicityBugis,
+    'dayak': l10n.ethnicityDayak,
+    'papuan': l10n.ethnicityPapuan,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
+
+  Future<void> _pickEthnicityPreferences() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await showMultiSelectSheet(
+      context,
+      _ethnicityOptions(l10n),
+      _ethnicityPreferences,
+    );
+    if (selected != null) setState(() => _ethnicityPreferences = selected);
+  }
+
+  // "other" DIHAPUS (beda dari `religion` milik profil sendiri yang
+  // punya opsi itu) — "open_for_all" GANTI "any" lama.
   Map<String, String> _religionOptions(AppLocalizations l10n) => {
-    'any': l10n.preferencesReligionAny,
     'islam': l10n.religionIslam,
     'christianity': l10n.religionChristianity,
     'catholic': l10n.religionCatholic,
@@ -145,163 +236,95 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
     'judaism': l10n.religionJudaism,
     'sikhism': l10n.religionSikhism,
     'taoism': l10n.religionTaoism,
-    'other': l10n.religionOther,
     'agnostic': l10n.religionAgnostic,
     'atheist': l10n.religionAtheist,
+    'open_for_all': l10n.preferencesOpenForAll,
   };
 
   Future<void> _pickReligionPreferences() async {
     final l10n = AppLocalizations.of(context);
-    final selected = await _showMultiSelectSheet(
+    final selected = await showMultiSelectSheet(
+      context,
       _religionOptions(l10n),
       _religionPreferences,
     );
     if (selected != null) setState(() => _religionPreferences = selected);
   }
 
-  // "any" di PALING ATAS, sisanya jenjang terendah ke tertinggi.
   Map<String, String> _educationOptions(AppLocalizations l10n) => {
-    'any': l10n.educationAny,
     'no_education': l10n.educationNoEducation,
     'elementary': l10n.educationElementary,
     'high_school': l10n.educationHighSchool,
     'bachelor': l10n.educationBachelor,
     'master': l10n.educationMaster,
     'doctorate': l10n.educationDoctorate,
+    'open_for_all': l10n.preferencesOpenForAll,
   };
 
   Future<void> _pickEducationPreferences() async {
     final l10n = AppLocalizations.of(context);
-    final selected = await _showMultiSelectSheet(
+    final selected = await showMultiSelectSheet(
+      context,
       _educationOptions(l10n),
       _educationPreferences,
     );
     if (selected != null) setState(() => _educationPreferences = selected);
   }
 
-  Future<String?> _showPickerSheet(
-    Map<String, String> options,
-    String? current,
-  ) {
-    return showModalBottomSheet<String>(
-      context: context,
-      // Family (4 opsi) bisa lebih tinggi dari layar pendek — tanpa
-      // batas tinggi + scroll, Column overflow ("A RenderFlex
-      // overflowed", baris terakhir terpotong). Pola sama seperti
-      // `BioStepScreen._pickFromOptions`.
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 12),
-              Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    for (final entry in options.entries)
-                      ListTile(
-                        title: Text(entry.value),
-                        trailing: current == entry.key
-                            ? const Icon(
-                                Icons.check,
-                                color: AppColors.deepViolet,
-                              )
-                            : null,
-                        onTap: () => Navigator.of(context).pop(entry.key),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
-        );
-      },
+  // Enum SAMA dengan `LifestyleStepScreen._drinkingOptions` MINUS
+  // "prefer_not_to_say", PLUS "open_for_all".
+  Map<String, String> _drinkingOptions(AppLocalizations l10n) => {
+    'never': l10n.drinkingNever,
+    'occasionally': l10n.drinkingOccasionally,
+    'socially': l10n.drinkingSocially,
+    'regularly': l10n.drinkingRegularly,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
+
+  Future<void> _pickDrinkingPreferences() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await showMultiSelectSheet(
+      context,
+      _drinkingOptions(l10n),
+      _drinkingPreferences,
     );
+    if (selected != null) setState(() => _drinkingPreferences = selected);
   }
 
-  /// Bottom sheet MULTI-select (checkbox) — dipakai Religion & Education
-  /// preference, KEDUANYA bisa pilih lebih dari satu (mis. "Muslim atau
-  /// Christian"). "any" (SELALU opsi pertama, lihat `_religionOptions`/
-  /// `_educationOptions`) bersifat EXCLUSIVE — pilih "any" otomatis
-  /// uncheck yang lain (karena "any" sudah mencakup semua), dan pilih
-  /// opsi spesifik lain otomatis uncheck "any". Mencegah kombinasi
-  /// rancu seperti "Any + Christian" yang secara makna sama saja
-  /// dengan "Any".
-  Future<Set<String>?> _showMultiSelectSheet(
-    Map<String, String> options,
-    Set<String> current,
-  ) {
-    var selection = {...current};
+  Map<String, String> _smokingOptions(AppLocalizations l10n) => {
+    'never': l10n.smokingNever,
+    'occasionally': l10n.smokingOccasionally,
+    'regularly': l10n.smokingRegularly,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
 
-    return showModalBottomSheet<Set<String>>(
-      context: context,
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            void toggle(String key) {
-              setSheetState(() {
-                if (key == _anyOptionKey) {
-                  selection = selection.contains(_anyOptionKey)
-                      ? {}
-                      : {_anyOptionKey};
-                } else if (selection.contains(key)) {
-                  selection.remove(key);
-                } else {
-                  selection
-                    ..remove(_anyOptionKey)
-                    ..add(key);
-                }
-              });
-            }
-
-            return SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 12),
-                  Flexible(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        for (final entry in options.entries)
-                          CheckboxListTile(
-                            title: Text(entry.value),
-                            value: selection.contains(entry.key),
-                            activeColor: AppColors.deepViolet,
-                            controlAffinity: ListTileControlAffinity.leading,
-                            onChanged: (_) => toggle(entry.key),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                    child: AppButton(
-                      label: AppLocalizations.of(context).onboardingContinue,
-                      onPressed: () => Navigator.of(context).pop(selection),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
+  Future<void> _pickSmokingPreferences() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await showMultiSelectSheet(
+      context,
+      _smokingOptions(l10n),
+      _smokingPreferences,
     );
+    if (selected != null) setState(() => _smokingPreferences = selected);
+  }
+
+  // TANPA "neutral" — dianggap setara "open_for_all" untuk preferensi
+  // pasangan (keputusan produk), beda dari `pet_preference` milik
+  // profil sendiri di step Lifestyle yang PUNYA opsi neutral.
+  Map<String, String> _petOptions(AppLocalizations l10n) => {
+    'love_pets': l10n.petPreferenceLovePets,
+    'not_a_fan': l10n.petPreferenceNotAFan,
+    'open_for_all': l10n.preferencesOpenForAll,
+  };
+
+  Future<void> _pickPetPreferences() async {
+    final l10n = AppLocalizations.of(context);
+    final selected = await showMultiSelectSheet(
+      context,
+      _petOptions(l10n),
+      _petPreferences,
+    );
+    if (selected != null) setState(() => _petPreferences = selected);
   }
 
   @override
@@ -314,8 +337,8 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
         if (!didPop) _backToRelationshipGoal();
       },
       child: OnboardingStepScaffold(
-        step: 8,
-        totalSteps: 9,
+        step: 10,
+        totalSteps: 11,
         onBack: _backToRelationshipGoal,
         bottomButton: AppButton(
           label: l10n.onboardingContinue,
@@ -358,44 +381,46 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                     onChanged: (values) => setState(() => _ageRange = values),
                   ),
                   const SizedBox(height: 12),
-                  // Row full-bleed (chevron 0px dari tepi fisik layar)
-                  // SEMPAT dicoba (LayoutBuilder+OverflowBox) tapi
-                  // ternyata rapuh — kombinasi dengan SingleChildScrollView
-                  // (tinggi unbounded) menghasilkan posisi NaN dan
-                  // crash. Dibatalkan — murni permintaan visual, tidak
-                  // ada dampak fungsional, tidak sepadan dengan
-                  // kompleksitas/risiko yang muncul. Row ini ikut
-                  // padding 24px standar `OnboardingStepScaffold`, sama
-                  // seperti elemen lain di halaman.
-                  _PreferenceRow(
+                  PreferenceRow(
                     icon: PhosphorIcons.user(),
                     label: l10n.preferencesGenderLabel,
                     value: _genderPreference != null
                         ? {
                             'female': l10n.genderFemale,
                             'male': l10n.genderMale,
-                            'everyone': l10n.preferencesGenderAny,
+                            'open_for_all': l10n.preferencesOpenForAll,
                           }[_genderPreference]
                         : null,
                     onTap: _pickGenderPreference,
                   ),
-                  _PreferenceRow(
-                    icon: PhosphorIcons.heart(),
-                    label: l10n.preferencesFamilyLabel,
-                    value: _familyPreference != null
-                        ? {
-                            'wants_children':
-                                l10n.preferencesFamilyWantsChildren,
-                            'not_wants_children':
-                                l10n.preferencesFamilyNotWantsChildren,
-                            'open_to_children':
-                                l10n.preferencesFamilyOpenToChildren,
-                            'any': l10n.preferencesFamilyAny,
-                          }[_familyPreference]
-                        : null,
-                    onTap: _pickFamilyPreference,
+                  PreferenceRow(
+                    icon: PhosphorIcons.babyCarriage(),
+                    label: l10n.preferencesChildrenLabel,
+                    value: _summaryFor(
+                      _childrenOptions(l10n),
+                      _childrenPreferences,
+                    ),
+                    onTap: _pickChildrenPreferences,
                   ),
-                  _PreferenceRow(
+                  PreferenceRow(
+                    icon: PhosphorIcons.heartStraight(),
+                    label: l10n.preferencesMarriageLabel,
+                    value: _summaryFor(
+                      _marriageOptions(l10n),
+                      _marriagePreferences,
+                    ),
+                    onTap: _pickMarriagePreferences,
+                  ),
+                  PreferenceRow(
+                    icon: PhosphorIcons.globe(),
+                    label: l10n.preferencesEthnicityLabel,
+                    value: _summaryFor(
+                      _ethnicityOptions(l10n),
+                      _ethnicityPreferences,
+                    ),
+                    onTap: _pickEthnicityPreferences,
+                  ),
+                  PreferenceRow(
                     // handsPraying, BUKAN cross — simbol salib spesifik
                     // Kristen/Katolik, tidak netral untuk agama lain
                     // (lihat riwayat percakapan).
@@ -407,7 +432,7 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                     ),
                     onTap: _pickReligionPreferences,
                   ),
-                  _PreferenceRow(
+                  PreferenceRow(
                     icon: PhosphorIcons.graduationCap(),
                     label: l10n.preferencesEducationLabel,
                     value: _summaryFor(
@@ -416,78 +441,32 @@ class _PreferencesStepScreenState extends State<PreferencesStepScreen> {
                     ),
                     onTap: _pickEducationPreferences,
                   ),
+                  PreferenceRow(
+                    icon: PhosphorIcons.wine(),
+                    label: l10n.preferencesDrinkingLabel,
+                    value: _summaryFor(
+                      _drinkingOptions(l10n),
+                      _drinkingPreferences,
+                    ),
+                    onTap: _pickDrinkingPreferences,
+                  ),
+                  PreferenceRow(
+                    icon: PhosphorIcons.cigarette(),
+                    label: l10n.preferencesSmokingLabel,
+                    value: _summaryFor(
+                      _smokingOptions(l10n),
+                      _smokingPreferences,
+                    ),
+                    onTap: _pickSmokingPreferences,
+                  ),
+                  PreferenceRow(
+                    icon: PhosphorIcons.pawPrint(),
+                    label: l10n.preferencesPetsLabel,
+                    value: _summaryFor(_petOptions(l10n), _petPreferences),
+                    onTap: _pickPetPreferences,
+                  ),
                 ],
               ),
-      ),
-    );
-  }
-}
-
-class _PreferenceRow extends StatelessWidget {
-  const _PreferenceRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
-
-  final PhosphorIconData icon;
-  final String label;
-  final String? value;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        // Full-bleed (chevron 0px dari tepi layar) SEMPAT dicoba tapi
-        // dibatalkan (lihat catatan di `_PreferencesStepScreenState.
-        // build()`) — padding standar mengikuti 24px yang sudah
-        // diterapkan `OnboardingStepScaffold` ke seluruh body.
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 20, color: AppColors.deepViolet),
-            const SizedBox(width: 12),
-            // Lebar TETAP (bukan cuma Text polos) — supaya kolom value +
-            // chevron mulai dari titik X yang SAMA di semua row, terlepas
-            // dari panjang label ("Gender" vs "Family Preferences").
-            // Spacer saja TIDAK CUKUP: dia cuma dorong sisa konten ke
-            // kanan, jadi titik mulainya tetap ikut lebar label.
-            SizedBox(
-              width: 130,
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 14, color: AppColors.textDark),
-              ),
-            ),
-            // Flexible + ellipsis — value bisa jadi ringkasan panjang
-            // untuk field MULTI-select (mis. "Christian, Muslim,
-            // Buddhist"), Text polos tanpa constraint bisa overflow
-            // horizontal.
-            Expanded(
-              child: Text(
-                value ?? '—',
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 4),
-            const Icon(
-              Icons.chevron_right,
-              size: 18,
-              color: AppColors.textSecondary,
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -32,7 +32,7 @@ void main() {
   }
 
   testWidgets(
-    'shows Female, Male, and Prefer not to say options and 2/9 progress',
+    'shows Female, Male, and Prefer not to say options and 2/11 progress',
     (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp.router(
@@ -44,7 +44,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text("What's your gender?"), findsOneWidget);
-      expect(find.text('2/9'), findsOneWidget);
+      expect(find.text('2/11'), findsOneWidget);
       expect(find.text('Female'), findsOneWidget);
       expect(find.text('Male'), findsOneWidget);
       expect(find.text('Prefer not to say'), findsOneWidget);

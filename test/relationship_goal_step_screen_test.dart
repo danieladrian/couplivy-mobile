@@ -16,8 +16,8 @@ void main() {
       initialLocation: '/onboarding/discover/relationship-goal',
       routes: [
         GoRoute(
-          path: '/onboarding/discover/interests',
-          builder: (context, state) => const Scaffold(body: Text('Interests')),
+          path: '/onboarding/discover/future',
+          builder: (context, state) => const Scaffold(body: Text('Future')),
         ),
         GoRoute(
           path: '/onboarding/discover/relationship-goal',
@@ -32,7 +32,7 @@ void main() {
     );
   }
 
-  testWidgets('shows all 4 goal options and 7/9 progress', (
+  testWidgets('shows all 4 goal options and 9/11 progress', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -45,7 +45,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('What are you looking for?'), findsOneWidget);
-    expect(find.text('7/9'), findsOneWidget);
+    expect(find.text('9/11'), findsOneWidget);
     expect(find.text('Serious Dating'), findsOneWidget);
     expect(find.text('Casual Dating'), findsOneWidget);
     expect(find.text('New Connections'), findsOneWidget);

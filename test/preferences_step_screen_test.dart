@@ -31,33 +31,35 @@ void main() {
     );
   }
 
-  // Gender/Family/Religion/Education preference WAJIB diisi — dipakai
-  // beberapa test buat mem-fill semuanya via UI sebelum tap Continue.
+  // Gender (single-select) + 8 field multi-select (semuanya punya "Open
+  // for all") WAJIB diisi — dipakai beberapa test buat mem-fill semuanya
+  // via UI sebelum tap Continue. Pakai "Open for all" untuk semua field
+  // multi-select supaya cukup 1 tap per sheet.
   Future<void> fillAllRequiredPreferences(WidgetTester tester) async {
     await tester.tap(find.text('Gender'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Everyone'));
+    await tester.tap(find.text('Open for all'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Family preference'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Any').first);
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Religion'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Any').last);
-    await tester.tap(find.text('Continue').last);
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Education'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Any').last);
-    await tester.tap(find.text('Continue').last);
-    await tester.pumpAndSettle();
+    for (final label in [
+      'Children',
+      'Marriage',
+      'Ethnicity',
+      'Religion',
+      'Education',
+      'Drinking',
+      'Smoking',
+      'Pets',
+    ]) {
+      await tester.tap(find.text(label));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(CheckboxListTile, 'Open for all'));
+      await tester.tap(find.text('Continue').last);
+      await tester.pumpAndSettle();
+    }
   }
 
-  testWidgets('shows age range and preference rows, 8/9 progress', (
+  testWidgets('shows age range and all preference rows, 10/11 progress', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -70,14 +72,21 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text("Tell us what you're looking for"), findsOneWidget);
-    expect(find.text('8/9'), findsOneWidget);
+    expect(find.text('10/11'), findsOneWidget);
     expect(find.text('25 – 35 years old'), findsOneWidget);
     expect(find.text('Gender'), findsOneWidget);
+    expect(find.text('Children'), findsOneWidget);
+    expect(find.text('Marriage'), findsOneWidget);
+    expect(find.text('Ethnicity'), findsOneWidget);
+    expect(find.text('Religion'), findsOneWidget);
+    expect(find.text('Education'), findsOneWidget);
+    expect(find.text('Drinking'), findsOneWidget);
+    expect(find.text('Smoking'), findsOneWidget);
+    expect(find.text('Pets'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
-    expect(find.text('Save Preferences'), findsNothing);
   });
 
-  testWidgets('Continue disabled until all 4 preferences are picked', (
+  testWidgets('Continue disabled until all 9 preferences are picked', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -96,7 +105,7 @@ void main() {
   });
 
   testWidgets(
-    'picking all 4 preferences then tapping Continue navigates to Preview',
+    'picking all 9 preferences then tapping Continue navigates to Preview',
     (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 1.0;
@@ -146,7 +155,10 @@ void main() {
       expect(find.byType(CheckboxListTile), findsWidgets);
       expect(find.text('Christianity'), findsOneWidget);
       expect(find.text('Islam'), findsOneWidget);
-      expect(find.text('Any'), findsOneWidget);
+      expect(find.text('Open for all'), findsOneWidget);
+      // "other"/"prefer_not_to_say" DIHAPUS dari opsi preferensi ini.
+      expect(find.text('Other'), findsNothing);
+      expect(find.text('Prefer not to say'), findsNothing);
 
       // Pilih 2 opsi sekaligus — summary harus tampilkan keduanya, urutan
       // ikut urutan Map `_religionOptions` (Islam sebelum Christianity),
@@ -164,7 +176,7 @@ void main() {
     },
   );
 
-  testWidgets('Religion "Any" is exclusive with specific options', (
+  testWidgets('Religion "Open for all" is exclusive with specific options', (
     WidgetTester tester,
   ) async {
     tester.view.physicalSize = const Size(1080, 2400);
@@ -183,24 +195,49 @@ void main() {
     await tester.tap(find.text('Religion'));
     await tester.pumpAndSettle();
 
-    // Pilih Christianity dulu, lalu pilih Any — Christianity harus ke-uncheck.
+    // Pilih Christianity dulu, lalu pilih Open for all — Christianity
+    // harus ke-uncheck.
     await tester.tap(find.text('Christianity'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Any'));
+    await tester.tap(find.text('Open for all'));
     await tester.pumpAndSettle();
 
     final christianCheckbox = tester.widget<CheckboxListTile>(
       find.widgetWithText(CheckboxListTile, 'Christianity'),
     );
-    final anyCheckbox = tester.widget<CheckboxListTile>(
-      find.widgetWithText(CheckboxListTile, 'Any'),
+    final openForAllCheckbox = tester.widget<CheckboxListTile>(
+      find.widgetWithText(CheckboxListTile, 'Open for all'),
     );
     expect(christianCheckbox.value, isFalse);
-    expect(anyCheckbox.value, isTrue);
+    expect(openForAllCheckbox.value, isTrue);
 
     await tester.tap(find.text('Continue').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('Any'), findsOneWidget);
+    expect(find.text('Open for all'), findsOneWidget);
+  });
+
+  testWidgets('Pets row has exactly 3 options (love pets, not a fan, open for '
+      'all) — no neutral', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: buildRouter(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Pets'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Love pets'), findsOneWidget);
+    expect(find.text('Not a fan'), findsOneWidget);
+    expect(find.text('Open for all'), findsOneWidget);
+    expect(find.text('Neutral'), findsNothing);
   });
 }

@@ -24,10 +24,7 @@ void main() {
           path: '/gateway-choice',
           builder: (context, state) => const GatewayChoiceScreen(),
         ),
-        GoRoute(
-          path: '/discover',
-          builder: (context, state) => const SizedBox(),
-        ),
+        GoRoute(path: '/main', builder: (context, state) => const SizedBox()),
       ],
     );
   }

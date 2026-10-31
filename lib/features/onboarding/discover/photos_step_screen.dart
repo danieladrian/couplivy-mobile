@@ -16,7 +16,7 @@ import 'discover_onboarding_draft_storage.dart';
 
 const _maxPhotoSlots = 6;
 
-/// Step 3/9 onboarding Discover — sumber:
+/// Step 3/11 onboarding Discover — sumber:
 /// couplivy-docs/flow/01-discover/onboarding/04-photos.html. Required,
 /// minimal 1 foto utama.
 ///
@@ -146,7 +146,7 @@ class _PhotosStepScreenState extends State<PhotosStepScreen> {
       },
       child: OnboardingStepScaffold(
         step: 3,
-        totalSteps: 9,
+        totalSteps: 11,
         onBack: _backToGender,
         errorText: _errorText,
         bottomButton: AppButton(

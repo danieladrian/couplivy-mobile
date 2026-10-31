@@ -27,7 +27,7 @@ void main() {
     );
   }
 
-  testWidgets('shows title, subtitle, and 1/9 progress label', (
+  testWidgets('shows title, subtitle, and 1/11 progress label', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -40,7 +40,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('When were you born?'), findsOneWidget);
-    expect(find.text('1/9'), findsOneWidget);
+    expect(find.text('1/11'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
   });
 

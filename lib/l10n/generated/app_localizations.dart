@@ -632,29 +632,47 @@ abstract class AppLocalizations {
   /// **'Prefer not to say'**
   String get ethnicityPreferNotToSay;
 
-  /// No description provided for @bioWantsChildrenLabel.
+  /// No description provided for @bioLoveLanguageLabel.
   ///
   /// In en, this message translates to:
-  /// **'Do you want children?'**
-  String get bioWantsChildrenLabel;
+  /// **'What is your love language? (max 2)'**
+  String get bioLoveLanguageLabel;
 
-  /// No description provided for @bioWantsChildrenYes.
+  /// No description provided for @loveLanguageWordsOfAffirmation.
   ///
   /// In en, this message translates to:
-  /// **'Yes'**
-  String get bioWantsChildrenYes;
+  /// **'Words of Affirmation'**
+  String get loveLanguageWordsOfAffirmation;
 
-  /// No description provided for @bioWantsChildrenNo.
+  /// No description provided for @loveLanguageQualityTime.
   ///
   /// In en, this message translates to:
-  /// **'No'**
-  String get bioWantsChildrenNo;
+  /// **'Quality Time'**
+  String get loveLanguageQualityTime;
 
-  /// No description provided for @bioWantsChildrenNotSure.
+  /// No description provided for @loveLanguageActsOfService.
   ///
   /// In en, this message translates to:
-  /// **'Not sure yet'**
-  String get bioWantsChildrenNotSure;
+  /// **'Acts of Service'**
+  String get loveLanguageActsOfService;
+
+  /// No description provided for @loveLanguagePhysicalTouch.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Touch'**
+  String get loveLanguagePhysicalTouch;
+
+  /// No description provided for @loveLanguageGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get loveLanguageGifts;
+
+  /// No description provided for @loveLanguageDontKnowYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t know yet'**
+  String get loveLanguageDontKnowYet;
 
   /// No description provided for @bioAllFieldsRequiredError.
   ///
@@ -734,12 +752,6 @@ abstract class AppLocalizations {
   /// **'Doctorate'**
   String get educationDoctorate;
 
-  /// No description provided for @educationAny.
-  ///
-  /// In en, this message translates to:
-  /// **'Any'**
-  String get educationAny;
-
   /// No description provided for @workEducationAllFieldsRequiredError.
   ///
   /// In en, this message translates to:
@@ -761,7 +773,7 @@ abstract class AppLocalizations {
   /// No description provided for @interestsSelectedCount.
   ///
   /// In en, this message translates to:
-  /// **'{count} selected · choose at least 3'**
+  /// **'{count}/5 selected · choose at least 3'**
   String interestsSelectedCount(int count);
 
   /// No description provided for @interestsMinimumError.
@@ -769,6 +781,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose at least 3 interests to continue.'**
   String get interestsMinimumError;
+
+  /// No description provided for @interestsMaximumError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at most 5 interests.'**
+  String get interestsMaximumError;
+
+  /// No description provided for @lifestyleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your lifestyle'**
+  String get lifestyleTitle;
+
+  /// No description provided for @lifestyleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help others get to know your everyday habits.'**
+  String get lifestyleSubtitle;
+
+  /// No description provided for @lifestyleDrinkingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinking'**
+  String get lifestyleDrinkingLabel;
+
+  /// No description provided for @lifestyleSmokingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoking'**
+  String get lifestyleSmokingLabel;
+
+  /// No description provided for @lifestylePetsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get lifestylePetsLabel;
+
+  /// No description provided for @drinkingNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get drinkingNever;
+
+  /// No description provided for @drinkingOccasionally.
+  ///
+  /// In en, this message translates to:
+  /// **'Occasionally'**
+  String get drinkingOccasionally;
+
+  /// No description provided for @drinkingSocially.
+  ///
+  /// In en, this message translates to:
+  /// **'Socially'**
+  String get drinkingSocially;
+
+  /// No description provided for @drinkingRegularly.
+  ///
+  /// In en, this message translates to:
+  /// **'Regularly'**
+  String get drinkingRegularly;
+
+  /// No description provided for @drinkingPreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get drinkingPreferNotToSay;
+
+  /// No description provided for @smokingNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get smokingNever;
+
+  /// No description provided for @smokingOccasionally.
+  ///
+  /// In en, this message translates to:
+  /// **'Occasionally'**
+  String get smokingOccasionally;
+
+  /// No description provided for @smokingRegularly.
+  ///
+  /// In en, this message translates to:
+  /// **'Regularly'**
+  String get smokingRegularly;
+
+  /// No description provided for @smokingPreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get smokingPreferNotToSay;
+
+  /// No description provided for @petPreferenceLovePets.
+  ///
+  /// In en, this message translates to:
+  /// **'Love pets'**
+  String get petPreferenceLovePets;
+
+  /// No description provided for @petPreferenceNeutral.
+  ///
+  /// In en, this message translates to:
+  /// **'Neutral'**
+  String get petPreferenceNeutral;
+
+  /// No description provided for @petPreferenceNotAFan.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a fan'**
+  String get petPreferenceNotAFan;
+
+  /// No description provided for @lifestyleAllFieldsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields to continue.'**
+  String get lifestyleAllFieldsRequiredError;
+
+  /// No description provided for @futureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking ahead'**
+  String get futureTitle;
+
+  /// No description provided for @futureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where you stand on children and marriage.'**
+  String get futureSubtitle;
+
+  /// No description provided for @futureChildrenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Children'**
+  String get futureChildrenLabel;
+
+  /// No description provided for @futureMarriageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Marriage'**
+  String get futureMarriageLabel;
+
+  /// No description provided for @childrenPreferenceWantChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Want children'**
+  String get childrenPreferenceWantChildren;
+
+  /// No description provided for @childrenPreferenceNotWantChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t want children'**
+  String get childrenPreferenceNotWantChildren;
+
+  /// No description provided for @childrenPreferenceHaveChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Have children'**
+  String get childrenPreferenceHaveChildren;
+
+  /// No description provided for @childrenPreferenceOpenToChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to children'**
+  String get childrenPreferenceOpenToChildren;
+
+  /// No description provided for @childrenPreferenceNotSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure'**
+  String get childrenPreferenceNotSure;
+
+  /// No description provided for @childrenPreferencePreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get childrenPreferencePreferNotToSay;
+
+  /// No description provided for @marriagePreferenceWantMarriage.
+  ///
+  /// In en, this message translates to:
+  /// **'Want marriage'**
+  String get marriagePreferenceWantMarriage;
+
+  /// No description provided for @marriagePreferenceOpenToMarriage.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to marriage'**
+  String get marriagePreferenceOpenToMarriage;
+
+  /// No description provided for @marriagePreferenceNotWantMarriage.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t want marriage'**
+  String get marriagePreferenceNotWantMarriage;
+
+  /// No description provided for @marriagePreferenceNotSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure'**
+  String get marriagePreferenceNotSure;
+
+  /// No description provided for @futureAllFieldsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields to continue.'**
+  String get futureAllFieldsRequiredError;
 
   /// No description provided for @interestCategoryFood.
   ///
@@ -1028,47 +1244,35 @@ abstract class AppLocalizations {
   /// **'{min} – {max} years old'**
   String preferencesAgeRangeLabel(int min, int max);
 
+  /// No description provided for @preferencesOpenForAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Open for all'**
+  String get preferencesOpenForAll;
+
   /// No description provided for @preferencesGenderLabel.
   ///
   /// In en, this message translates to:
   /// **'Gender'**
   String get preferencesGenderLabel;
 
-  /// No description provided for @preferencesGenderAny.
+  /// No description provided for @preferencesChildrenLabel.
   ///
   /// In en, this message translates to:
-  /// **'Everyone'**
-  String get preferencesGenderAny;
+  /// **'Children'**
+  String get preferencesChildrenLabel;
 
-  /// No description provided for @preferencesFamilyLabel.
+  /// No description provided for @preferencesMarriageLabel.
   ///
   /// In en, this message translates to:
-  /// **'Family preference'**
-  String get preferencesFamilyLabel;
+  /// **'Marriage'**
+  String get preferencesMarriageLabel;
 
-  /// No description provided for @preferencesFamilyWantsChildren.
+  /// No description provided for @preferencesEthnicityLabel.
   ///
   /// In en, this message translates to:
-  /// **'Wants children'**
-  String get preferencesFamilyWantsChildren;
-
-  /// No description provided for @preferencesFamilyNotWantsChildren.
-  ///
-  /// In en, this message translates to:
-  /// **'Doesn\'t want children'**
-  String get preferencesFamilyNotWantsChildren;
-
-  /// No description provided for @preferencesFamilyOpenToChildren.
-  ///
-  /// In en, this message translates to:
-  /// **'Open to children'**
-  String get preferencesFamilyOpenToChildren;
-
-  /// No description provided for @preferencesFamilyAny.
-  ///
-  /// In en, this message translates to:
-  /// **'Any'**
-  String get preferencesFamilyAny;
+  /// **'Ethnicity'**
+  String get preferencesEthnicityLabel;
 
   /// No description provided for @preferencesReligionLabel.
   ///
@@ -1076,11 +1280,29 @@ abstract class AppLocalizations {
   /// **'Religion'**
   String get preferencesReligionLabel;
 
-  /// No description provided for @preferencesReligionAny.
+  /// No description provided for @preferencesEducationLabel.
   ///
   /// In en, this message translates to:
-  /// **'Any'**
-  String get preferencesReligionAny;
+  /// **'Education'**
+  String get preferencesEducationLabel;
+
+  /// No description provided for @preferencesDrinkingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinking'**
+  String get preferencesDrinkingLabel;
+
+  /// No description provided for @preferencesSmokingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoking'**
+  String get preferencesSmokingLabel;
+
+  /// No description provided for @preferencesPetsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get preferencesPetsLabel;
 
   /// No description provided for @religionIslam.
   ///
@@ -1160,12 +1382,6 @@ abstract class AppLocalizations {
   /// **'Prefer not to say'**
   String get religionPreferNotToSay;
 
-  /// No description provided for @preferencesEducationLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Education'**
-  String get preferencesEducationLabel;
-
   /// No description provided for @previewTitle.
   ///
   /// In en, this message translates to:
@@ -1219,6 +1435,366 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get navProfile;
+
+  /// No description provided for @discoverEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No more profiles right now — check back later or refresh.'**
+  String get discoverEmptyMessage;
+
+  /// No description provided for @discoverRefreshLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Recommendations'**
+  String get discoverRefreshLabel;
+
+  /// No description provided for @discoverDistanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{occupation} · {distanceKm} km'**
+  String discoverDistanceLabel(String occupation, int distanceKm);
+
+  /// No description provided for @discoverCompatibleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPATIBLE'**
+  String get discoverCompatibleLabel;
+
+  /// No description provided for @connectionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connections'**
+  String get connectionsTitle;
+
+  /// No description provided for @connectionsMatchesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get connectionsMatchesTab;
+
+  /// No description provided for @connectionsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches yet — keep exploring Discover!'**
+  String get connectionsEmptyMessage;
+
+  /// No description provided for @connectionsSharedInterestsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You both like {interests}'**
+  String connectionsSharedInterestsLabel(String interests);
+
+  /// No description provided for @chatTypeMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get chatTypeMessageHint;
+
+  /// No description provided for @chatOnlineStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get chatOnlineStatus;
+
+  /// No description provided for @profileCompletenessLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile completeness'**
+  String get profileCompletenessLabel;
+
+  /// No description provided for @profileUpgradeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Couplivy Plus'**
+  String get profileUpgradeTitle;
+
+  /// No description provided for @profileUpgradeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock more ways to connect'**
+  String get profileUpgradeSubtitle;
+
+  /// No description provided for @profileMenuMyProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get profileMenuMyProfile;
+
+  /// No description provided for @profileMenuMyPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'My Preferences'**
+  String get profileMenuMyPreferences;
+
+  /// No description provided for @profileMenuNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileMenuNotifications;
+
+  /// No description provided for @profileMenuPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Visibility'**
+  String get profileMenuPrivacy;
+
+  /// No description provided for @profileMenuSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety & Reporting'**
+  String get profileMenuSafety;
+
+  /// No description provided for @profileMenuAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App Settings'**
+  String get profileMenuAppSettings;
+
+  /// No description provided for @profileMenuTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Privacy'**
+  String get profileMenuTerms;
+
+  /// No description provided for @profileMenuLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get profileMenuLogOut;
+
+  /// No description provided for @profileLogOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get profileLogOutConfirmTitle;
+
+  /// No description provided for @profileLogOutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to log in again to access your account.'**
+  String get profileLogOutConfirmMessage;
+
+  /// No description provided for @profileLogOutConfirmCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileLogOutConfirmCancel;
+
+  /// No description provided for @profileLogOutConfirmConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get profileLogOutConfirmConfirm;
+
+  /// No description provided for @profileComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get profileComingSoonTitle;
+
+  /// No description provided for @profileComingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This section isn\'t ready yet — check back later.'**
+  String get profileComingSoonMessage;
+
+  /// No description provided for @myProfileLoveLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Love language'**
+  String get myProfileLoveLanguageLabel;
+
+  /// No description provided for @myProfileRelationshipGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship goal'**
+  String get myProfileRelationshipGoalLabel;
+
+  /// No description provided for @myPreferencesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Preferences'**
+  String get myPreferencesTitle;
+
+  /// No description provided for @myPreferencesAgeRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Age range'**
+  String get myPreferencesAgeRangeLabel;
+
+  /// No description provided for @myPreferencesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t set your preferences yet.'**
+  String get myPreferencesEmptyMessage;
+
+  /// No description provided for @myProfileAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get myProfileAboutTitle;
+
+  /// No description provided for @myProfileInterestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests'**
+  String get myProfileInterestsTitle;
+
+  /// No description provided for @editLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editLabel;
+
+  /// No description provided for @editProfileSaveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get editProfileSaveLabel;
+
+  /// No description provided for @appSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App Settings'**
+  String get appSettingsTitle;
+
+  /// No description provided for @appSettingsLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get appSettingsLanguageLabel;
+
+  /// No description provided for @appSettingsLanguageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get appSettingsLanguageEnglish;
+
+  /// No description provided for @appSettingsLanguageIndonesian.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesian'**
+  String get appSettingsLanguageIndonesian;
+
+  /// No description provided for @appSettingsVersionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get appSettingsVersionLabel;
+
+  /// No description provided for @termsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Privacy'**
+  String get termsTitle;
+
+  /// No description provided for @termsOfServiceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfServiceLabel;
+
+  /// No description provided for @termsPrivacyPolicyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get termsPrivacyPolicyLabel;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Visibility'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyHideProfileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide my profile'**
+  String get privacyHideProfileLabel;
+
+  /// No description provided for @privacyHideProfileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile won\'t appear in Discover to anyone.'**
+  String get privacyHideProfileDescription;
+
+  /// No description provided for @privacyShowReligionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show religion'**
+  String get privacyShowReligionLabel;
+
+  /// No description provided for @privacyShowReligionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let others see your religion on your profile.'**
+  String get privacyShowReligionDescription;
+
+  /// No description provided for @privacyShowEthnicityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show ethnicity'**
+  String get privacyShowEthnicityLabel;
+
+  /// No description provided for @privacyShowEthnicityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let others see your ethnicity on your profile.'**
+  String get privacyShowEthnicityDescription;
+
+  /// No description provided for @privacyShowHeightWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show height'**
+  String get privacyShowHeightWeightLabel;
+
+  /// No description provided for @privacyShowHeightWeightDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let others see your height on your profile.'**
+  String get privacyShowHeightWeightDescription;
+
+  /// No description provided for @privacyAllowDirectAddLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow direct add'**
+  String get privacyAllowDirectAddLabel;
+
+  /// No description provided for @privacyAllowDirectAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let others add you directly without matching first.'**
+  String get privacyAllowDirectAddDescription;
+
+  /// No description provided for @privacyShowOnlineStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show online status'**
+  String get privacyShowOnlineStatusLabel;
+
+  /// No description provided for @privacyShowOnlineStatusDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let others see when you\'re active.'**
+  String get privacyShowOnlineStatusDescription;
+
+  /// No description provided for @privacyAiConversationAssistantLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AI conversation assistant'**
+  String get privacyAiConversationAssistantLabel;
+
+  /// No description provided for @privacyAiConversationAssistantDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Get AI-suggested icebreakers and replies in chats.'**
+  String get privacyAiConversationAssistantDescription;
+
+  /// No description provided for @privacySaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your changes. Please try again.'**
+  String get privacySaveError;
 }
 
 class _AppLocalizationsDelegate

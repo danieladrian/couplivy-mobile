@@ -2,19 +2,29 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/login_screen.dart';
 import '../features/auth/sign_up_screen.dart';
+import '../features/debug/debug_profile_db_screen.dart';
 import '../features/main_nav/main_navigation_screen.dart';
 import '../features/onboarding/discover/bio_step_screen.dart';
 import '../features/onboarding/discover/dob_step_screen.dart';
+import '../features/onboarding/discover/future_step_screen.dart';
 import '../features/onboarding/discover/gender_step_screen.dart';
 import '../features/onboarding/discover/interests_step_screen.dart';
+import '../features/onboarding/discover/lifestyle_step_screen.dart';
 import '../features/onboarding/discover/photos_step_screen.dart';
 import '../features/onboarding/discover/preferences_step_screen.dart';
 import '../features/onboarding/discover/preview_step_screen.dart';
 import '../features/onboarding/discover/relationship_goal_step_screen.dart';
 import '../features/onboarding/discover/work_education_step_screen.dart';
 import '../features/onboarding/gateway_choice_screen.dart';
+import '../features/profile/app_settings_screen.dart';
+import '../features/profile/my_preferences_screen.dart';
+import '../features/profile/my_profile_screen.dart';
+import '../features/profile/privacy_settings_screen.dart';
+import '../features/profile/terms_screen.dart';
+import '../features/profile/widgets/coming_soon_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/welcome/welcome_screen.dart';
+import '../l10n/generated/app_localizations.dart';
 
 /// Router aplikasi — URL path adalah ID setiap halaman (konvensi proyek,
 /// lihat .ai/rules/architecture.md). Halaman baru = tambah GoRoute baru di
@@ -84,6 +94,16 @@ GoRouter createAppRouter() {
         builder: (context, state) => const InterestsStepScreen(),
       ),
       GoRoute(
+        path: '/onboarding/discover/lifestyle',
+        name: 'onboarding-discover-lifestyle',
+        builder: (context, state) => const LifestyleStepScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/discover/future',
+        name: 'onboarding-discover-future',
+        builder: (context, state) => const FutureStepScreen(),
+      ),
+      GoRoute(
         path: '/onboarding/discover/relationship-goal',
         name: 'onboarding-discover-relationship-goal',
         builder: (context, state) => const RelationshipGoalStepScreen(),
@@ -98,10 +118,73 @@ GoRouter createAppRouter() {
         name: 'onboarding-discover-preview',
         builder: (context, state) => const PreviewStepScreen(),
       ),
+      // Route utama app SETELAH onboarding/login selesai — 3-tab
+      // container (Discover, Connections, Profile, lihat
+      // MainNavigationScreen), BUKAN cuma fitur Discover. Path `/main`
+      // (GANTI dari `/discover` lama — nama lama menyesatkan, seolah
+      // halaman ini cuma fitur Discover padahal isinya 3 tab).
       GoRoute(
-        path: '/discover',
-        name: 'discover',
+        path: '/main',
+        name: 'main',
         builder: (context, state) => const MainNavigationScreen(),
+      ),
+      GoRoute(
+        path: '/profile/my-profile',
+        name: 'profile-my-profile',
+        builder: (context, state) => const MyProfileScreen(),
+      ),
+      GoRoute(
+        path: '/profile/preferences',
+        name: 'profile-preferences',
+        builder: (context, state) => const MyPreferencesScreen(),
+      ),
+      GoRoute(
+        path: '/profile/privacy',
+        name: 'profile-privacy',
+        builder: (context, state) => const PrivacySettingsScreen(),
+      ),
+      GoRoute(
+        path: '/profile/settings',
+        name: 'profile-settings',
+        builder: (context, state) => const AppSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/profile/terms',
+        name: 'profile-terms',
+        builder: (context, state) => const TermsScreen(),
+      ),
+      // Notifications, Safety & Reporting, Upgrade to Plus — TABEL/LOGIC
+      // BELUM ADA sama sekali di backend (beda dari Privacy yang tabelnya
+      // sudah ada), placeholder generik dulu supaya menu tidak dead-end.
+      // Dibangun penuh di sesi terpisah (lihat .ai/rules/architecture.md).
+      GoRoute(
+        path: '/profile/notifications',
+        name: 'profile-notifications',
+        builder: (context, state) => ComingSoonScreen(
+          title: AppLocalizations.of(context).profileMenuNotifications,
+        ),
+      ),
+      GoRoute(
+        path: '/profile/safety',
+        name: 'profile-safety',
+        builder: (context, state) => ComingSoonScreen(
+          title: AppLocalizations.of(context).profileMenuSafety,
+        ),
+      ),
+      GoRoute(
+        path: '/profile/upgrade',
+        name: 'profile-upgrade',
+        builder: (context, state) => ComingSoonScreen(
+          title: AppLocalizations.of(context).profileUpgradeTitle,
+        ),
+      ),
+      // Debug-only — dump mentah ProfileDatabase, dibuka lewat tap badge
+      // route (lihat DebugRouteOverlay). Tidak pernah dinavigasi dari
+      // alur app production manapun.
+      GoRoute(
+        path: '/debug/profile-db',
+        name: 'debug-profile-db',
+        builder: (context, state) => const DebugProfileDbScreen(),
       ),
     ],
   );

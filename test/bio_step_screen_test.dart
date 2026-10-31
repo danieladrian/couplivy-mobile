@@ -45,13 +45,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Tell us about yourself'), findsOneWidget);
-    expect(find.text('4/9'), findsOneWidget);
+    expect(find.text('4/11'), findsOneWidget);
     expect(find.text('Height'), findsOneWidget);
     expect(find.text('Ethnicity'), findsOneWidget);
     expect(find.text('Select ethnicity'), findsOneWidget);
     expect(find.text('Religion'), findsOneWidget);
     expect(find.text('Select religion'), findsOneWidget);
-    expect(find.text('Do you want children?'), findsOneWidget);
+    expect(find.text('What is your love language? (max 2)'), findsOneWidget);
     expect(find.text('Skip'), findsNothing);
     // Unit toggle default cm.
     expect(find.text('cm'), findsOneWidget);
@@ -113,7 +113,7 @@ void main() {
       await tester.tap(find.text('Christianity').last);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Yes'));
+      await tester.tap(find.text('Quality Time'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Continue'));
